@@ -5,14 +5,17 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private ManagerScript gameManager;
 
     //movement
     [SerializeField] private float moveSpeed;
     private Vector2 moveDirection;
+    
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
     }
 
     void Update()
@@ -22,7 +25,16 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+        if (moveDirection.x != 0 || moveDirection.y != 0)
+        {
+            rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+            
+            gameManager.colour += 1f;
+        }
+        else 
+        {
+            rb.velocity = new Vector2(0, 0);
+        }
     }
 
     private void Processinputs()
