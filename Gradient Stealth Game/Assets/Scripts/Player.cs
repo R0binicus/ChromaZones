@@ -9,13 +9,14 @@ public class Player : MonoBehaviour
     private Transform transform;
     private Vector2 origin;
 
-    //movement
+    //movement stuff
     [SerializeField] private float moveSpeed;
     private Vector2 moveDirection;
     
 
     void Start()
     {
+        // Set values and components
         rb = GetComponent<Rigidbody2D>();
         transform = GetComponent<Transform>();
         gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
@@ -29,18 +30,21 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // if player is doing movement inputs, move the player and add to colour time counter
         if (moveDirection.x != 0 || moveDirection.y != 0)
         {
             rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
             
             gameManager.colourTime += 0.5f;
         }
-        else 
+        else // set velocity to zero
         {
             rb.velocity = new Vector2(0, 0);
         }
 
-        gameManager.colourMove = (transform.position.x - origin.x) * (transform.position.y - origin.y);
+        // Multiplies current x and y coordinates together for the colour 
+        // Subtracts the origin coords from the equasion, so the starting position should not affect the colour of the regions
+        gameManager.colourCoords = (transform.position.x - origin.x) * (transform.position.y - origin.y);
     }
 
     private void Processinputs()

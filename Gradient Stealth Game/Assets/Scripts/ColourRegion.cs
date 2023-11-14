@@ -13,7 +13,7 @@ public class ColourRegion : MonoBehaviour
 
     void Start()
     {
-        // Set values
+        // Set values and components
         originalHue = colour;
         gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
         spriteRenderer = GetComponent<SpriteRenderer>();

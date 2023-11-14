@@ -5,7 +5,7 @@ using UnityEngine;
 public class ManagerScript : MonoBehaviour
 {
     public float colour;        // Final colour value for other things to access
-    public float colourMove;    // Colour value taken from the current coords of the player
+    public float colourCoords;    // Colour value taken from the current coords of the player
     public float colourTime;    // Colour value taken from amount of time spent while moving
 
     void Start()
@@ -26,16 +26,16 @@ public class ManagerScript : MonoBehaviour
         }
 
         // Flip colour move coords values back if it goes over/under values
-        if (colourMove > 360f)
+        if (colourCoords > 360f)
         {
-            colourMove = 0;
+            colourCoords = 0;
         }
-        else if (colourMove < 0)
+        else if (colourCoords < 0)
         {
-            colourMove = 360f;
+            colourCoords = 360f;
         }
 
         // Combine the colour values from movement coords and time taken to move
-        colour = colourMove + colourTime;
+        colour = colourCoords + colourTime;
     }
 }
