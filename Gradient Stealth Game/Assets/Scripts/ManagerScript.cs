@@ -4,19 +4,18 @@ using UnityEngine;
 
 public class ManagerScript : MonoBehaviour
 {
-    public float colour;
-    public float colourMove;
-    public float colourTime;
-    // Start is called before the first frame update
+    public float colour;        // Final colour value for other things to access
+    public float colourMove;    // Colour value taken from the current coords of the player
+    public float colourTime;    // Colour value taken from amount of time spent while moving
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        // Flip colour time values back if it goes over/under values
         if (colourTime > 360f)
         {
             colourTime = 0;
@@ -26,6 +25,7 @@ public class ManagerScript : MonoBehaviour
             colourTime = 360f;
         }
 
+        // Flip colour move coords values back if it goes over/under values
         if (colourMove > 360f)
         {
             colourMove = 0;
@@ -35,6 +35,7 @@ public class ManagerScript : MonoBehaviour
             colourMove = 360f;
         }
 
+        // Combine the colour values from movement coords and time taken to move
         colour = colourMove + colourTime;
     }
 }

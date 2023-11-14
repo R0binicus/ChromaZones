@@ -6,53 +6,49 @@ public class ColourRegion : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
     private ManagerScript gameManager;
-    [SerializeField] public float colour;
-    [SerializeField] public float tempColour = 0f;
-    [SerializeField] private float originalColour;
 
-    // Start is called before the first frame update
+    [SerializeField] public float colour;               // Colour from game manager
+    [SerializeField] public float localColour = 0f;     // Colour of this region specifically
+    private float originalHue;                          // Original colour value when the level started
+
     void Start()
     {
-        originalColour = colour;
+        // Set values
+        originalHue = colour;
         gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         colour = gameManager.colour;
-        GetColour();
+        ProcessColour();
         SetColour();
-        //if (tempColour > 360f)
-        //{
-        //    tempColour = colour - ((Mathf.Floor(colour/360f))*360);
-        //}
-        //else if (tempColour < 0)
-        //{
-        //    tempColour = 360f - originalColour;
-        //}
     }
 
-    void GetColour()
+    // Processes the gameManager colour
+    void ProcessColour()
     {
-        tempColour = colour + originalColour;
-        if (tempColour >= 360f)
+        // set local colour value
+        localColour = colour + originalHue;
+        //if local colour value is over 360, change the local colour values back to being under 360 with math
+        if (localColour >= 360f)
         {
-            tempColour = tempColour - ((Mathf.Floor(tempColour/360f))*360);
+            // Mathf.Floor rounds down to the nearest int value
+            // eg. if local colour = 750 
+            // local colour = 750 - ((Mathf.Floor(750/360))*360)
+            // local colour = 750 - ((Mathf.Floor(2.08333))*360)
+            // local colour = 750 - (2*360)
+            // local colour = 750 - 720
+            // local colour = 30
+            localColour = localColour - ((Mathf.Floor(localColour/360f))*360);
         }
-        //else if (colour < 0)
-        //{
-        //    tempColour = 360f - originalColour;
-        //}
-        //else 
-        //{
-        //    tempColour = colour + originalColour;
-        //}
     }
 
+    // Sets the colour of the sprite renderer
     void SetColour()
     {
-        spriteRenderer.color = Color.HSVToRGB(tempColour/360f, 1f, 1f);
+        // used 0.95 because otherwise it hurts my eyes
+        spriteRenderer.color = Color.HSVToRGB(localColour/360f, 0.95f, 0.95f);
     }
 }
