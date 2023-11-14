@@ -39,7 +39,7 @@ public class ColourRegion : MonoBehaviour
         tempColour = colour + originalColour;
         if (tempColour >= 360f)
         {
-            tempColour = tempColour - 360f;
+            tempColour = tempColour - ((Mathf.Floor(tempColour/360f))*360);
         }
         //else if (colour < 0)
         //{

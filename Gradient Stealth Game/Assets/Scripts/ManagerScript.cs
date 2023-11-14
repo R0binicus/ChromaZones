@@ -5,6 +5,8 @@ using UnityEngine;
 public class ManagerScript : MonoBehaviour
 {
     public float colour;
+    public float colourMove;
+    public float colourTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,13 +16,25 @@ public class ManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (colour > 360f)
+        
+        if (colourTime > 360f)
         {
-            colour = 0;
+            colourTime = 0;
         }
-        else if (colour < 0)
+        else if (colourTime < 0)
         {
-            colour = 360f;
+            colourTime = 360f;
         }
+
+        if (colourMove > 360f)
+        {
+            colourMove = 0;
+        }
+        else if (colourMove < 0)
+        {
+            colourMove = 360f;
+        }
+
+        colour = colourMove + colourTime;
     }
 }

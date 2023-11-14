@@ -6,6 +6,8 @@ public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
     private ManagerScript gameManager;
+    private Transform transform;
+    private Vector2 origin;
 
     //movement
     [SerializeField] private float moveSpeed;
@@ -15,7 +17,9 @@ public class Player : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        transform = GetComponent<Transform>();
         gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
+        origin = transform.position;
     }
 
     void Update()
@@ -29,12 +33,14 @@ public class Player : MonoBehaviour
         {
             rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
             
-            gameManager.colour += 1f;
+            gameManager.colourTime += 0.5f;
         }
         else 
         {
             rb.velocity = new Vector2(0, 0);
         }
+
+        gameManager.colourMove = (transform.position.x - origin.x) * (transform.position.y - origin.y);
     }
 
     private void Processinputs()
