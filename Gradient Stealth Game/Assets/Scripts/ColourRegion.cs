@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class ColourRegion : MonoBehaviour
@@ -31,6 +32,8 @@ public class ColourRegion : MonoBehaviour
     {
         // set local colour value
         localColour = colour + originalHue;
+
+        //localColour %= 360f;
         //if local colour value is over 360, change the local colour values back to being under 360 with math
         if (localColour >= 360f)
         {
@@ -41,7 +44,7 @@ public class ColourRegion : MonoBehaviour
             // local colour = 750 - (2*360)
             // local colour = 750 - 720
             // local colour = 30
-            localColour = localColour - ((Mathf.Floor(localColour/360f))*360);
+            localColour = localColour - ((Mathf.Floor(localColour / 360f)) * 360);
         }
     }
 
