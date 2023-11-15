@@ -8,6 +8,7 @@ public class EnemyFieldOfView : MonoBehaviour
     [SerializeField, Range(0, 360)] float _fovAngle;
     [SerializeField] float _fovDist;
     [SerializeField] uint _triangleSlices;
+    [SerializeField] LayerMask _layerToRaycast;
 
     void Start()
     {
@@ -49,6 +50,25 @@ public class EnemyFieldOfView : MonoBehaviour
         mesh.vertices = vertices;
         mesh.uv = uv;
         mesh.triangles = triangles;
+    }
+
+    private void FixedUpdate()
+    {
+        float currentAngle = GetAngleFromVectorFloat(transform.up) + (_fovAngle / 2f);
+        float angleIncrease = _fovAngle / _triangleSlices;
+
+        for (int i = 0; i <= _triangleSlices; i++)
+        {
+            RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(currentAngle), _fovDist, _layerToRaycast);
+
+            // Hit player
+            if (ray.collider != null)
+            {
+                Debug.Log("I CAN SEE YOU!");
+                break;
+            }
+            currentAngle -= angleIncrease;
+        }
     }
 
     Vector3 GetVectorFromAngle(float angle)
