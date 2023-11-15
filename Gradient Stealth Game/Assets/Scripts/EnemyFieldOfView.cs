@@ -82,7 +82,7 @@ public class EnemyFieldOfView : MonoBehaviour
         dir = dir.normalized;
         float n = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        if (n < 0 )
+        if (n < 0)
         {
             n += 360;
         }
