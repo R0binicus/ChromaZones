@@ -725,6 +725,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7245d556e31fd14439dff711d6f76cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DetectionTime: 0
+  HiddenTime: 0
 --- !u!1 &1285439385
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,7 +902,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colour: 0
-  colourCoords: 0
   colourTime: 0
 --- !u!1 &1473442532
 GameObject:
@@ -995,15 +996,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1473442532}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45a292bc8520bc04f907fb70ed9cfac3, type: 3}
+  m_Script: {fileID: 11500000, guid: 44e7e8b8ad0b9ca4ba4608b7dfae0bd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fovAngle: 80
-  _fovDist: 3
-  _triangleSlices: 10
+  _fovAngle: 0
+  _fovDist: 0
+  _triangleSlices: 0
   _layerToRaycast:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
 --- !u!1 &1775092852
 GameObject:
   m_ObjectHideFlags: 0
