@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed;
     private Vector2 moveDirection;
 
-    public float ColourChangeSpeed;
+    public float ColourChangeSpeed = 0.1f;
 
     void Start()
     {
@@ -27,6 +27,14 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (rb.velocity != Vector2.zero)
+        {
+            gameManager.colourTime = 0.5f * ColourChangeSpeed;
+        }
+        else
+        {
+            gameManager.colourTime = 0f;
+        }
         Processinputs();
     }
 
@@ -37,17 +45,17 @@ public class Player : MonoBehaviour
         {
             rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
             
-            gameManager.colourTime += 0.5f * ColourChangeSpeed;
+            //gameManager.colourTime += 0.5f * ColourChangeSpeed;
         }
         else // set velocity to zero
         {
             rb.velocity = new Vector2(0, 0);
         }
 
-        // Multiplies current x and y coordinates together for the colour 
-        // Subtracts the origin coords from the equasion, so the starting position should not affect the colour of the regions
-        gameManager.colourCoords = (transform.position.x - origin.x) * (transform.position.y - origin.y) * ColourChangeSpeed;
-        //gameManager.colourCoords = Vector3.Distance(transform.position, origin) 
+        //// Multiplies current x and y coordinates together for the colour 
+        //// Subtracts the origin coords from the equasion, so the starting position should not affect the colour of the regions
+        //gameManager.colourCoords = (transform.position.x) * (transform.position.y);
+        ////gameManager.colourCoords = Vector3.Distance(transform.position, origin) 
     }
 
     private void Processinputs()
