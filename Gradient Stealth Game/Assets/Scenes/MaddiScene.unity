@@ -999,12 +999,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44e7e8b8ad0b9ca4ba4608b7dfae0bd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fovAngle: 0
-  _fovDist: 0
-  _triangleSlices: 0
+  _fovAngle: 80
+  _fovDist: 3
+  _triangleSlices: 10
   _layerToRaycast:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
 --- !u!1 &1775092852
 GameObject:
   m_ObjectHideFlags: 0
