@@ -5,15 +5,18 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    // Components
     private Rigidbody2D rb;
     private ManagerScript gameManager;
     private Transform transform;
     private Vector2 origin;
 
-    private int regionState;
+    // Regions
+    public int regionState = 0;
+    public int regionLayer = 0;
 
-    //movement stuff
-    [SerializeField] private float moveSpeed;
+    //movement
+    [SerializeField] private float moveSpeed = 3f;
     private Vector2 moveDirection;
 
     public float ColourChangeSpeed = 0.1f;

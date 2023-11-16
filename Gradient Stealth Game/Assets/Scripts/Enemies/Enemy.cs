@@ -22,6 +22,10 @@ public class Enemy : MonoBehaviour
     // Player Ref (TESTING FOR NOW. Will give all enemies player ref when created with enemy manager or something idk)
     [field: SerializeField] public Player Player { get; private set; }
 
+    // Regions
+    public int regionState = 0;
+    public int regionLayer = 0;
+
     private void Awake()
     {
         // Get components

@@ -59,16 +59,16 @@ public class ColourRegion : MonoBehaviour
         switch(localColour) 
         {
             case float x when x < 60f:
-                state = 0;
-            break;
-            case float x when x >= 60f && x < 180f :
                 state = 1;
             break;
-            case float x when x >= 180f && x < 300f :
+            case float x when x >= 60f && x < 180f :
                 state = 2;
             break;
+            case float x when x >= 180f && x < 300f :
+                state = 3;
+            break;
             case float x when x >= 300f && x < 360f :
-                state = 0;
+                state = 1;
             break;
             default:
                 state = 0;
@@ -97,23 +97,80 @@ public class ColourRegion : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider collision)
+    // Set state variable when entering a region
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Player")
+        // Set the object's regionState to be the current
+        // state of the region. Also increment the region
+        // layer by 1.
+        if(collision.tag == "RegionDetector")
         {
-            //Debug.Log("triggered check");
-            //var p = collision.GetComponent<Player>();
-//
-            //if (!alreadyHealed)
-            //{
-            //    checkPoint.Play();
-            //    p.currentCheckpoint = new Vector3(transform.position.x, 1.14f, transform.position.z);
-            //    p.currentHealth = p.currentHealth + healAmount;
-            //    if (p.currentHealth > p.maxHealth) p.currentHealth = p.maxHealth;
-            //    p.healthBar.SetHealth(p.currentHealth);
-            //    alreadyHealed = true;
-            //}
+            if (collision.transform.parent.tag == "Player") 
+            {
+                var player = collision.transform.parent.GetComponent<Player>();
+                player.regionLayer += 1;
+                player.regionState = state;
+            }
+            else if (collision.transform.parent.tag == "Enemy")
+            {
+                var enemy = collision.transform.parent.GetComponent<Enemy>();
+                enemy.regionLayer += 1;
+                enemy.regionState = state;
+            }
+        }
+    }
 
+    // Set state variable whenever it moves inside a region
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        // This should only be useful when the region changes state
+        // while the player or enemy is inside a region
+        if(collision.tag == "RegionDetector")
+        {
+            if (collision.transform.parent.tag == "Player") 
+            {
+                var player = collision.transform.parent.GetComponent<Player>();
+                player.regionState = state;
+            }
+            else if (collision.transform.parent.tag == "Enemy")
+            {
+                var enemy = collision.transform.parent.GetComponent<Enemy>();
+                enemy.regionState = state;
+            }
+        }
+    }
+
+    // Reset state variable if no longer on a region
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.tag == "RegionDetector")
+        {
+            // What this does is reduce a region layer by 1
+            // If region layer is 0, it should be in NO region
+            // so it needs to be manually told to reset the object's
+            // regionState to zero (no region)
+            if (collision.transform.parent.tag == "Player") 
+            {
+                var player = collision.transform.parent.GetComponent<Player>();
+                player.regionLayer -= 1;
+
+                if (player.regionLayer <= 0)
+                {
+                    player.regionLayer = 0;
+                    player.regionState = 0;
+                }
+            }
+            else if (collision.transform.parent.tag == "Enemy")
+            {
+                var enemy = collision.transform.parent.GetComponent<Enemy>();
+                enemy.regionLayer -= 1;
+
+                if (enemy.regionLayer <= 0)
+                {
+                    enemy.regionLayer = 0;
+                    enemy.regionState = 0;
+                }
+            }
         }
     }
 }
