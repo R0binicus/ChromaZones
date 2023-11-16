@@ -2,25 +2,25 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [field: SerializeField] public float DetectionTime { get; protected set; }
-    [field: SerializeField] public float HiddenTime { get; protected set; }
-    [field: SerializeField] public AnimationCurve Velocity { get; protected set; }
+    [field: SerializeField] public float DetectionTime { get; private set; }
+    [field: SerializeField] public float HiddenTime { get; private set; }
+    [field: SerializeField] public AnimationCurve Velocity { get; private set; }
     
     // Components
-    public EnemyFieldOfView FOV { get; protected set; }
-    public EnemyBehaviour EnemyBehaviour { get; protected set; }
-    public Rigidbody2D RB { get; protected set; }
-    public Collider2D Collider { get; protected set; }
+    public EnemyFieldOfView FOV { get; private set; }
+    public EnemyBehaviour EnemyBehaviour { get; private set; }
+    public Rigidbody2D RB { get; private set; }
+    public Collider2D Collider { get; private set; }
 
     // States
-    public StateMachine StateMachine { get; protected set; }
-    public EnemyPatrolState PatrolState { get; protected set; }
-    public EnemyAlertState AlertState { get; protected set; }
-    public EnemyChaseState ChaseState { get; protected set; }
-    public EnemyCaughtState CaughtState { get; protected set; }
+    public StateMachine StateMachine { get; private set; }
+    public EnemyPatrolState PatrolState { get; private set; }
+    public EnemyAlertState AlertState { get; private set; }
+    public EnemyChaseState ChaseState { get; private set; }
+    public EnemyCaughtState CaughtState { get; private set; }
 
     // Player Ref (TESTING FOR NOW. Will give all enemies player ref when created with enemy manager or something idk)
-    [field: SerializeField] public Player Player { get; protected set; }
+    [field: SerializeField] public Player Player { get; private set; }
 
     private void Awake()
     {
