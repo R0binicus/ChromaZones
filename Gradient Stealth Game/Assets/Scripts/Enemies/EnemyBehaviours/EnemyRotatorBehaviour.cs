@@ -39,9 +39,22 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     IEnumerator Rotate()
     {
         Quaternion _currentRot = transform.rotation;
-        Quaternion _endRot = Quaternion.Euler(0f, 0f, 90f);
 
-        while (Mathf.Abs(Quaternion.Angle(_currentRot * _endRot, transform.rotation)) > 0.1f)
+        int signChange = 1;
+
+        // Change type of rotation
+        if (_rotateType == RotateType.Clockwise)
+        {
+            signChange = -1;
+        }
+        else if (_rotateType == RotateType.CounterClockwise)
+        {
+            signChange = 1;
+        }
+
+        Quaternion _endRot = _currentRot * Quaternion.Euler(0f, 0f, 90f * signChange);
+
+        while (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) > 0.1f)
         {
             Debug.Log("Rotating");
             transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _rotateSpeed * Time.deltaTime);

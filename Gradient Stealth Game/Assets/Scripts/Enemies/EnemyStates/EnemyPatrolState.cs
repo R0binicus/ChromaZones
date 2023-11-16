@@ -10,11 +10,12 @@ public class EnemyPatrolState : EnemyState
 
         Enemy.FOV.SetPatrolFOVData();
         Enemy.FOV.CreateFOV();
+        Enemy.EnemyBehaviour.ResetBehaviour();
     }
     public override void LogicUpdate()
     {
         // If player is spotted, transition to AlertState
-        if (Enemy.FOV.PlayerSpotted)
+        if (Enemy.FOV.PlayerSpotted && Enemy.Player.regionState != 3)
         {
             Enemy.StateMachine.ChangeState(Enemy.AlertState);
         }
