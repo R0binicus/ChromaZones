@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 6738880351884405687}
   - component: {fileID: 8955558287477822009}
   - component: {fileID: 5575769905689285172}
-  - component: {fileID: 8677371652448069050}
   - component: {fileID: 5919160109084553962}
+  - component: {fileID: 2644862085642620011}
   m_Layer: 0
   m_Name: EnemyRotator
   m_TagString: Untagged
@@ -161,7 +161,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &8677371652448069050
+--- !u!114 &5919160109084553962
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,7 +170,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1067672982322664781}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e7ba46a04b8dc9488a1c54d7fa294d9, type: 3}
+  m_Script: {fileID: 11500000, guid: b1fa62d4da07d2d45a8ef00d34770abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rotateSpeed: 5
+  _timeToRotate: 0
+  _rotateType: 0
+--- !u!114 &2644862085642620011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067672982322664781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7245d556e31fd14439dff711d6f76cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <DetectionTime>k__BackingField: 5
@@ -200,18 +215,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   <Player>k__BackingField: {fileID: 0}
---- !u!114 &5919160109084553962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1067672982322664781}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1fa62d4da07d2d45a8ef00d34770abc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7546224442143415851
 GameObject:
   m_ObjectHideFlags: 0
