@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public abstract class State
 {
     public virtual void Enter() {}
@@ -7,4 +9,6 @@ public abstract class State
     public virtual void PhysicsUpdate() {}
 
     public virtual void Exit() {}
+
+    public virtual void OnCollisionEnter2D(Collision2D collision) {}
 }

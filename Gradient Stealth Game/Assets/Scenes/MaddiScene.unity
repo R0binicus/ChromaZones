@@ -728,6 +728,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <DetectionTime>k__BackingField: 5
   <HiddenTime>k__BackingField: 0
+  <Velocity>k__BackingField:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 3.4965994
+      value: 9.968914
+      inSlope: 3.957979
+      outSlope: 3.957979
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.1526082
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  <Player>k__BackingField: {fileID: 917934161}
 --- !u!114 &1223872716
 MonoBehaviour:
   m_ObjectHideFlags: 0
