@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     private Transform transform;
     private Vector2 origin;
 
+    private int regionState;
+
     //movement stuff
     [SerializeField] private float moveSpeed;
     private Vector2 moveDirection;
@@ -35,7 +37,7 @@ public class Player : MonoBehaviour
         {
             gameManager.colourTime = 0f;
         }
-        Processinputs();
+        ProcessInputs();
     }
 
     private void FixedUpdate()
@@ -58,7 +60,7 @@ public class Player : MonoBehaviour
         ////gameManager.colourCoords = Vector3.Distance(transform.position, origin) 
     }
 
-    private void Processinputs()
+    private void ProcessInputs()
     {
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
