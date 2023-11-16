@@ -8,6 +8,8 @@ public class EnemyPatrolState : EnemyState
 
     public override void Enter()
     {
+        Debug.Log("Entering Patrol State");
+
         Enemy.FOV.SetPatrolFOVData();
         Enemy.FOV.CreateFOV();
     }

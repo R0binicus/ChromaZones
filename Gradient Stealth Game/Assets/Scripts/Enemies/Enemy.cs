@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] protected float DetectionTime;
-    [SerializeField] protected float HiddenTime;
+    [field: SerializeField] public float DetectionTime { get; protected set; }
+    [field: SerializeField] public float HiddenTime { get; protected set; }
     
     // Components
     public EnemyFieldOfView FOV { get; protected set; }

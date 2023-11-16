@@ -23,9 +23,6 @@ public class EnemyFieldOfView : MonoBehaviour
     float _FOVDist;
     uint _triangleSlices;
 
-    // Components
-    MeshFilter _mesh;
-
     public bool PlayerSpotted { get; private set; }
 
     private void FixedUpdate()
@@ -52,9 +49,9 @@ public class EnemyFieldOfView : MonoBehaviour
         }
     }
 
+    // Creating a custom mesh for the field of view
     public void CreateFOV()
     {
-        // Creating a custom mesh for the field of view
         Mesh mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
 

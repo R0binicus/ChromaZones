@@ -8,4 +8,11 @@ public class EnemyChaseState : EnemyState
     {
 
     }
+
+    public override void Enter()
+    {
+        Debug.Log("Entering Enemy Chase State");
+
+        Enemy.FOV.IsActive(false);
+    }
 }
