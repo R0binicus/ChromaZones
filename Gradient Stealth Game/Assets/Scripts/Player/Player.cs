@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (rb.velocity != Vector2.zero)
+        if (rb.velocity != Vector2.zero && regionState != 3)
         {
             gameManager.colourTime = 0.5f * ColourChangeSpeed;
         }
