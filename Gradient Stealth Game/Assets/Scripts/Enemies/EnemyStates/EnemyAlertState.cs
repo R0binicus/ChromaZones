@@ -8,4 +8,10 @@ public class EnemyAlertState : EnemyState
     {
 
     }
+
+    public override void Enter()
+    {
+        Enemy.FOV.SetAlertFOVData();
+        Enemy.FOV.CreateFOV();
+    }
 }

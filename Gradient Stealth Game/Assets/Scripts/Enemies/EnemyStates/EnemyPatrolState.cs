@@ -6,6 +6,11 @@ public class EnemyPatrolState : EnemyState
 {
     public EnemyPatrolState(Enemy enemy) : base(enemy) {}
 
+    public override void Enter()
+    {
+        Enemy.FOV.SetPatrolFOVData();
+        Enemy.FOV.CreateFOV();
+    }
     public override void LogicUpdate()
     {
         // If player is spotted, transition to AlertState

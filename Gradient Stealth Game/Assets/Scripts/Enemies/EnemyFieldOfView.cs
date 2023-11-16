@@ -5,14 +5,54 @@ using UnityEngine;
 
 public class EnemyFieldOfView : MonoBehaviour
 {
-    [SerializeField, Range(0, 360)] float _fovAngle;
-    [SerializeField] float _fovDist;
-    [SerializeField] uint _triangleSlices;
+    [Header("General Data")]
     [SerializeField] LayerMask _layerToRaycast;
+
+    [Header("Patrol Data")]
+    [SerializeField, Range(0, 360)] float _patrolFOVAngle;
+    [SerializeField] float _patrolFOVDist;
+    [SerializeField] uint _patrolTriangleSlices;
+
+    [Header("Alert Data")]
+    [SerializeField, Range(0, 360)] float _alertFOVAngle;
+    [SerializeField] float _alertFOVDist;
+    [SerializeField] uint _alertTriangleSlices;
+
+    // Internal Data
+    float _FOVAngle;
+    float _FOVDist;
+    uint _triangleSlices;
+
+    // Components
+    MeshFilter _mesh;
 
     public bool PlayerSpotted { get; private set; }
 
-    void Start()
+    private void FixedUpdate()
+    {
+        float currentAngle = GetAngleFromVectorFloat(transform.up) + (_FOVAngle / 2f); // Get starting angle first
+        float angleIncrease = _FOVAngle / _triangleSlices; // Calculate how much to increase angle by
+
+        for (int i = 0; i <= _triangleSlices; i++)
+        {
+            RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(currentAngle), _FOVDist, _layerToRaycast);
+
+            // Hit player
+            if (ray.collider != null)
+            {
+                PlayerSpotted = true;
+                break;
+            }
+            else
+            {
+                PlayerSpotted = false;
+            }
+
+            currentAngle -= angleIncrease; // Increase angle to check next ray
+        }
+    }
+
+    public void CreateFOV()
     {
         // Creating a custom mesh for the field of view
         Mesh mesh = new Mesh();
@@ -24,8 +64,8 @@ public class EnemyFieldOfView : MonoBehaviour
 
         vertices[0] = Vector3.zero; // Origin point
 
-        float currentAngle = GetAngleFromVectorFloat(transform.up) + (_fovAngle / 2f);
-        float angleIncrease = _fovAngle / _triangleSlices;
+        float currentAngle = GetAngleFromVectorFloat(transform.up) + (_FOVAngle / 2f);
+        float angleIncrease = _FOVAngle / _triangleSlices;
 
         int vertexIndex = 1;
         int triangleIndex = 0;
@@ -33,7 +73,7 @@ public class EnemyFieldOfView : MonoBehaviour
         // Create FOV mesh by creating each triangle
         for (int i = 0; i <= _triangleSlices; i++)
         {
-            Vector3 vertex = vertices[0] + GetVectorFromAngle(currentAngle) * _fovDist;
+            Vector3 vertex = vertices[0] + GetVectorFromAngle(currentAngle) * _FOVDist;
             vertices[vertexIndex] = vertex;
 
             if (i > 0)
@@ -54,28 +94,23 @@ public class EnemyFieldOfView : MonoBehaviour
         mesh.triangles = triangles;
     }
 
-    private void FixedUpdate()
+    public void SetPatrolFOVData()
     {
-        float currentAngle = GetAngleFromVectorFloat(transform.up) + (_fovAngle / 2f); // Get starting angle first
-        float angleIncrease = _fovAngle / _triangleSlices; // Calculate how much to increase angle by
+        _FOVAngle = _patrolFOVAngle;
+        _FOVDist = _patrolFOVDist;
+        _triangleSlices = _patrolTriangleSlices;
+    }
 
-        for (int i = 0; i <= _triangleSlices; i++)
-        {
-            RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(currentAngle), _fovDist, _layerToRaycast);
+    public void SetAlertFOVData()
+    {
+        _FOVAngle = _alertFOVAngle;
+        _FOVDist = _alertFOVDist;
+        _triangleSlices = _alertTriangleSlices;
+    }
 
-            // Hit player
-            if (ray.collider != null)
-            {
-                PlayerSpotted = true;
-                break;
-            }
-            else
-            {
-                PlayerSpotted = false;
-            }
-
-            currentAngle -= angleIncrease; // Increase angle to check next ray
-        }
+    public void IsActive(bool flag)
+    {
+        gameObject.SetActive(flag);
     }
 
     Vector3 GetVectorFromAngle(float angle)

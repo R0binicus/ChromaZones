@@ -566,6 +566,7 @@ GameObject:
   - component: {fileID: 1223872712}
   - component: {fileID: 1223872711}
   - component: {fileID: 1223872715}
+  - component: {fileID: 1223872716}
   m_Layer: 0
   m_Name: EnemyRotator
   m_TagString: Untagged
@@ -727,6 +728,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DetectionTime: 0
   HiddenTime: 0
+--- !u!114 &1223872716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223872710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1fa62d4da07d2d45a8ef00d34770abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1285439385
 GameObject:
   m_ObjectHideFlags: 0
@@ -999,12 +1012,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44e7e8b8ad0b9ca4ba4608b7dfae0bd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fovAngle: 80
-  _fovDist: 3
-  _triangleSlices: 10
   _layerToRaycast:
     serializedVersion: 2
     m_Bits: 64
+  _patrolFOVAngle: 80
+  _patrolFOVDist: 3
+  _patrolTriangleSlices: 10
+  _alertFOVAngle: 360
+  _alertFOVDist: 5
+  _alertTriangleSlices: 30
 --- !u!1 &1775092852
 GameObject:
   m_ObjectHideFlags: 0
