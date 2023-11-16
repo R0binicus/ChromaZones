@@ -10,6 +10,8 @@ public class EnemyFieldOfView : MonoBehaviour
     [SerializeField] uint _triangleSlices;
     [SerializeField] LayerMask _layerToRaycast;
 
+    public bool PlayerSpotted { get; private set; }
+
     void Start()
     {
         // Creating a custom mesh for the field of view
@@ -54,8 +56,8 @@ public class EnemyFieldOfView : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float currentAngle = GetAngleFromVectorFloat(transform.up) + (_fovAngle / 2f);
-        float angleIncrease = _fovAngle / _triangleSlices;
+        float currentAngle = GetAngleFromVectorFloat(transform.up) + (_fovAngle / 2f); // Get starting angle first
+        float angleIncrease = _fovAngle / _triangleSlices; // Calculate how much to increase angle by
 
         for (int i = 0; i <= _triangleSlices; i++)
         {
@@ -64,10 +66,15 @@ public class EnemyFieldOfView : MonoBehaviour
             // Hit player
             if (ray.collider != null)
             {
-                Debug.Log("I CAN SEE YOU!");
+                PlayerSpotted = true;
                 break;
             }
-            currentAngle -= angleIncrease;
+            else
+            {
+                PlayerSpotted = false;
+            }
+
+            currentAngle -= angleIncrease; // Increase angle to check next ray
         }
     }
 

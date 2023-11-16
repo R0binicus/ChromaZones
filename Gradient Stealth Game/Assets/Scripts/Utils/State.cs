@@ -1,4 +1,4 @@
-public class State
+public abstract class State
 {
     public virtual void Enter() {}
 
