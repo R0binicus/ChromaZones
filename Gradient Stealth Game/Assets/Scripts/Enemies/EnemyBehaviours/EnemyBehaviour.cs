@@ -3,5 +3,6 @@ using UnityEngine;
 public abstract class EnemyBehaviour : MonoBehaviour
 {
     public abstract void ResetBehaviour();
-    public abstract void ExecuteBehaviour();
+    public abstract void UpdateLogicBehaviour();
+    public abstract void UpdatePhysicsBehaviour();
 }
