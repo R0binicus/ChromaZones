@@ -19,17 +19,18 @@ public class EnemyFieldOfView : MonoBehaviour
     float _FOVAngle;
     float _FOVDist;
     uint _triangleSlices;
+    float _currentAngle;
 
     public bool PlayerSpotted { get; private set; }
 
     private void FixedUpdate()
     {
-        float currentAngle = GetAngleFromVectorFloat(transform.up) + (_FOVAngle / 2f); // Get starting angle first
+        _currentAngle = GetAngleFromVectorFloat(transform.up) + (_FOVAngle / 2f); // Get starting angle first
         float angleIncrease = _FOVAngle / _triangleSlices; // Calculate how much to increase angle by
 
         for (int i = 0; i <= _triangleSlices; i++)
         {
-            RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(currentAngle), _FOVDist, _layerToRaycast);
+            RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(_currentAngle), _FOVDist, _layerToRaycast);
 
             // Hit player
             if (ray.collider != null)
@@ -42,7 +43,7 @@ public class EnemyFieldOfView : MonoBehaviour
                 PlayerSpotted = false;
             }
 
-            currentAngle -= angleIncrease; // Increase angle to check next ray
+            _currentAngle -= angleIncrease; // Increase angle to check next ray
         }
     }
 
@@ -58,7 +59,7 @@ public class EnemyFieldOfView : MonoBehaviour
 
         vertices[0] = Vector3.zero; // Origin point
 
-        float currentAngle = GetAngleFromVectorFloat(transform.up) + (_FOVAngle / 2f);
+        _currentAngle = GetAngleFromVectorFloat(Vector2.up) + (_FOVAngle / 2f);
         float angleIncrease = _FOVAngle / _triangleSlices;
 
         int vertexIndex = 1;
@@ -67,7 +68,7 @@ public class EnemyFieldOfView : MonoBehaviour
         // Create FOV mesh by creating each triangle
         for (int i = 0; i <= _triangleSlices; i++)
         {
-            Vector3 vertex = vertices[0] + GetVectorFromAngle(currentAngle) * _FOVDist;
+            Vector3 vertex = vertices[0] + GetVectorFromAngle(_currentAngle) * _FOVDist;
             vertices[vertexIndex] = vertex;
 
             if (i > 0)
@@ -80,7 +81,7 @@ public class EnemyFieldOfView : MonoBehaviour
             }
 
             vertexIndex++;
-            currentAngle -= angleIncrease;
+            _currentAngle -= angleIncrease;
         }
 
         mesh.vertices = vertices;
