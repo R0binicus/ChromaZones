@@ -38,6 +38,10 @@ public class EnemyPatrolState : EnemyState
 
     public override void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        // If player has attacked them, notify the EnemyManager
+        if (collision.transform.CompareTag("Player"))
+        {
+            Enemy.EnemyManager.PlayerAttacked(Enemy);
+        }
     }
 }

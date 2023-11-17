@@ -8,7 +8,7 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         _enemies = new List<Enemy>();
-        EventManager.EventInitialise(EventType.LOSE);    
+        EventManager.EventInitialise(EventType.LOSE);
     }
 
     private void OnEnable()
@@ -36,5 +36,26 @@ public class EnemyManager : MonoBehaviour
     public void PlayerCaught()
     {
         EventManager.EventTrigger(EventType.LOSE, null);
+    }
+
+    public void PlayerAttacked(Enemy enemy)
+    {
+        enemy.gameObject.SetActive(false);
+        CheckEnemiesLeft();
+    }
+
+    private void CheckEnemiesLeft()
+    {
+        foreach (Enemy enemy in _enemies)
+        {
+            // If an enemy is still active, do not end game
+            if (enemy.gameObject.activeInHierarchy == true)
+            {
+                return;
+            }
+        }
+
+        // Signal game won
+        EventManager.EventTrigger(EventType.WIN, null);
     }
 }
