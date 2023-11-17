@@ -28,9 +28,9 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
 
     private void UpdateWaypoint()
     {
-        if (waypointIndex >= waypoints.Count)
+        if (waypointIndex > waypoints.Count)
         {
-            //waypointIndex = 0;
+            waypointIndex = 0;
             destination = originWaypoint;
         }
 
@@ -53,15 +53,24 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
 
     public override void UpdateLogicBehaviour()
     {
-        Debug.Log(destinationDirection);
-        Debug.Log((destinationDirection - (Vector2)transform.position).magnitude);
-        //GetLocation(destination);
-        if ((destinationDirection - (Vector2)transform.position).magnitude < 0.1f)
+
+        UpdateWaypoint();
+        if ((destination - (Vector2)transform.position).magnitude < 0.1f)
         {
-            //rb.velocity = Vector2.zero;
+            rb.velocity = Vector2.zero;
             waypointIndex++;
             UpdateWaypoint();
         }
+        //transform.rotation = Quaternion.LookRotation(destinationDirection);
+        //transform.LookAt(destinationDirection);
         rb.velocity = destinationDirection;
+    }
+
+    private void RotateTowards(Vector2 target)
+    {        
+        Vector2 direction = (target - (Vector2)transform.position).normalized;
+        var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; 
+        var offset = 90f;
+        transform.rotation = Quaternion.Euler(Vector3.forward * (angle + offset));
     }
 }
