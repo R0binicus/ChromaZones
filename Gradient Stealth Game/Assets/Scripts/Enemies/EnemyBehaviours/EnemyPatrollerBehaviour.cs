@@ -10,6 +10,7 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
     private Vector2 destination;
     private Vector2 destinationDirection;
     public int waypointIndex = 1;
+    public int roationSpeed = 100;
 
     private Rigidbody2D rb;
 
@@ -18,6 +19,14 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
         rb = GetComponent<Rigidbody2D>();
         originWaypoint = transform.position;
         UpdateWaypoint();
+
+        Vector3 offset = (Vector3)destination - transform.position;
+        
+        // Construct a rotation as in the y+ case.
+        Quaternion rotation = Quaternion.LookRotation(Vector3.forward,offset);
+
+        // Apply a compensating rotation that twists x+ to y+ before the rotation above.
+        transform.rotation = rotation * Quaternion.Euler(0, 0, 0);
     }
 
     private void GetLocation(Vector2 point)
@@ -61,13 +70,20 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
             UpdateWaypoint();
         }
 
-        Vector3 offset = (Vector3)destination - transform.position;
-        
-        // Construct a rotation as in the y+ case.
-        Quaternion rotation = Quaternion.LookRotation(Vector3.forward,offset);
+        //Vector3 offset = (Vector3)destination - transform.position;
+        //
+        //// Construct a rotation as in the y+ case.
+        //Quaternion rotation = Quaternion.LookRotation(Vector3.forward,offset);
+//
+        //// Apply a compensating rotation that twists x+ to y+ before the rotation above.
+        //transform.rotation = rotation * Quaternion.Euler(0, 0, 0);
 
-        // Apply a compensating rotation that twists x+ to y+ before the rotation above.
-        transform.rotation = rotation * Quaternion.Euler(0, 0, 0);
+        //destinationDirection
+        Quaternion fullRotatation = Quaternion.LookRotation(transform.forward, destinationDirection);
+        Quaternion lookRot = Quaternion.identity;
+        lookRot.eulerAngles = new Vector3(0,0,fullRotatation.eulerAngles.z);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, roationSpeed * Time.deltaTime);
+
 
         rb.velocity = destinationDirection;
     }
