@@ -22,8 +22,7 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
 
     private void GetLocation(Vector2 point)
     {
-        Vector2 position2d = transform.position;
-        destinationDirection = (point - position2d).normalized;
+        destinationDirection = (point - (Vector2)transform.position).normalized;
     }
 
     private void UpdateWaypoint()
@@ -61,16 +60,15 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
             waypointIndex++;
             UpdateWaypoint();
         }
-        //transform.rotation = Quaternion.LookRotation(destinationDirection);
-        //transform.LookAt(destinationDirection);
-        rb.velocity = destinationDirection;
-    }
 
-    private void RotateTowards(Vector2 target)
-    {        
-        Vector2 direction = (target - (Vector2)transform.position).normalized;
-        var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; 
-        var offset = 90f;
-        transform.rotation = Quaternion.Euler(Vector3.forward * (angle + offset));
+        Vector3 offset = (Vector3)destination - transform.position;
+        
+        // Construct a rotation as in the y+ case.
+        Quaternion rotation = Quaternion.LookRotation(Vector3.forward,offset);
+
+        // Apply a compensating rotation that twists x+ to y+ before the rotation above.
+        transform.rotation = rotation * Quaternion.Euler(0, 0, 0);
+
+        rb.velocity = destinationDirection;
     }
 }
