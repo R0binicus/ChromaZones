@@ -9,43 +9,36 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
     private Vector2 originWaypoint;
     private Vector2 destination;
     private Vector2 destinationDirection;
-    private int waypointIndex = 0;
+    public int waypointIndex = 1;
+
+    private Rigidbody2D rb;
 
     public void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         originWaypoint = transform.position;
+        UpdateWaypoint();
     }
 
-    public void Update()
-    {
-        if (destinationDirection.magnitude < 1)
-        {
-            waypointIndex++;
-            UpdateWaypoint();
-        }
-    }
-
-    private void GetLocation(Vector2 destination)
+    private void GetLocation(Vector2 point)
     {
         Vector2 position2d = transform.position;
-        destinationDirection = destination - position2d;
+        destinationDirection = (point - position2d).normalized;
     }
 
     private void UpdateWaypoint()
     {
         if (waypointIndex >= waypoints.Count)
         {
-            waypointIndex = 0;
-        }
-
-        if (waypointIndex == 0)
-        {
+            //waypointIndex = 0;
             destination = originWaypoint;
         }
-        else 
+
+        if (waypointIndex != 0)
         {
-            destination = waypoints[waypointIndex + 1].transform.position;
+            destination = waypoints[waypointIndex - 1].transform.position;
         }
+        GetLocation(destination);
     }
 
     public override void ResetBehaviour()
@@ -53,8 +46,22 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
 
     }
 
-    public override void ExecuteBehaviour()
+    public override void UpdatePhysicsBehaviour()
     {
-        
+
+    }
+
+    public override void UpdateLogicBehaviour()
+    {
+        Debug.Log(destinationDirection);
+        Debug.Log((destinationDirection - (Vector2)transform.position).magnitude);
+        //GetLocation(destination);
+        if ((destinationDirection - (Vector2)transform.position).magnitude < 0.1f)
+        {
+            //rb.velocity = Vector2.zero;
+            waypointIndex++;
+            UpdateWaypoint();
+        }
+        rb.velocity = destinationDirection;
     }
 }
