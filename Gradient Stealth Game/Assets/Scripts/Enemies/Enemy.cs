@@ -42,6 +42,7 @@ public class Enemy : MonoBehaviour
             _enemyManager = value;
         }
     }
+    
     // Regions
     public int regionState = 0;
     public int regionLayer = 0;

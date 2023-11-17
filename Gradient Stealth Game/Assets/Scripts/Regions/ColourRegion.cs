@@ -131,6 +131,10 @@ public class ColourRegion : MonoBehaviour
             {
                 var player = collision.transform.parent.GetComponent<Player>();
                 player.regionState = state;
+                if (player.regionState == 3)
+                {
+                    player.ChangeSpriteVisibility(0.5f);
+                }
             }
             else if (collision.transform.parent.tag == "Enemy")
             {
@@ -153,6 +157,7 @@ public class ColourRegion : MonoBehaviour
             {
                 var player = collision.transform.parent.GetComponent<Player>();
                 player.regionLayer -= 1;
+                player.ChangeSpriteVisibility(1f);
 
                 if (player.regionLayer <= 0)
                 {

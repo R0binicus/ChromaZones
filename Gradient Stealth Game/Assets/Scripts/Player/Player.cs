@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     // Components
     private Rigidbody2D rb;
     private ManagerScript gameManager;
+    private SpriteRenderer _spriteRenderer;
     private Transform transform;
     private Vector2 origin;
 
@@ -26,6 +27,7 @@ public class Player : MonoBehaviour
         // Set values and components
         rb = GetComponent<Rigidbody2D>();
         transform = GetComponent<Transform>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
         origin = transform.position;
     }
@@ -40,6 +42,7 @@ public class Player : MonoBehaviour
         {
             gameManager.colourTime = 0f;
         }
+
         ProcessInputs();
     }
 
@@ -69,5 +72,13 @@ public class Player : MonoBehaviour
         float moveY = Input.GetAxisRaw("Vertical");
 
         moveDirection = new Vector2(moveX, moveY).normalized;
+    }
+
+    // Change between visible and 'hiding'
+    public void ChangeSpriteVisibility(float val)
+    {
+        Color tmp = _spriteRenderer.color;
+        tmp.a = val;
+        _spriteRenderer.color = tmp;
     }
 }
