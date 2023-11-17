@@ -6,6 +6,7 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
 {
     [Header("Patroller Data")]
     [SerializeField] private List<GameObject> waypoints;
+    [SerializeField] private List<Vector3> waypoints2;
     private Vector2 originWaypoint;
     private Vector2 destination;
     private Vector2 destinationDirection;
@@ -61,7 +62,6 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
 
     public override void UpdateLogicBehaviour()
     {
-
         UpdateWaypoint();
         if ((destination - (Vector2)transform.position).magnitude < 0.1f)
         {
@@ -70,20 +70,10 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
             UpdateWaypoint();
         }
 
-        //Vector3 offset = (Vector3)destination - transform.position;
-        //
-        //// Construct a rotation as in the y+ case.
-        //Quaternion rotation = Quaternion.LookRotation(Vector3.forward,offset);
-//
-        //// Apply a compensating rotation that twists x+ to y+ before the rotation above.
-        //transform.rotation = rotation * Quaternion.Euler(0, 0, 0);
-
-        //destinationDirection
         Quaternion fullRotatation = Quaternion.LookRotation(transform.forward, destinationDirection);
         Quaternion lookRot = Quaternion.identity;
         lookRot.eulerAngles = new Vector3(0,0,fullRotatation.eulerAngles.z);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, roationSpeed * Time.deltaTime);
-
 
         rb.velocity = destinationDirection;
     }

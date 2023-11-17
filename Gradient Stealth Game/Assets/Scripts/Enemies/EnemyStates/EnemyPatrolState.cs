@@ -33,5 +33,6 @@ public class EnemyPatrolState : EnemyState
     public override void Exit()
     {
         Debug.Log("Leaving Patrol State");
+        Enemy.RB.velocity = Vector2.zero;
     }
 }
