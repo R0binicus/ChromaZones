@@ -20,7 +20,19 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 3f;
     private Vector2 moveDirection;
 
+    // Data
     public float ColourChangeSpeed = 0.1f;
+    bool _isDead;
+
+    private void OnEnable()
+    {
+        EventManager.EventSubscribe(EventType.LOSE, Death);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.LOSE, Death);
+    }
 
     void Start()
     {
@@ -30,36 +42,42 @@ public class Player : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
         origin = transform.position;
+        _isDead = false;
     }
 
     void Update()
     {
-        if (rb.velocity != Vector2.zero && regionState != 3)
+        if (!_isDead)
         {
-            gameManager.colourTime = 0.5f * ColourChangeSpeed;
-        }
-        else
-        {
-            gameManager.colourTime = 0f;
-        }
+            if (rb.velocity != Vector2.zero && regionState != 3)
+            {
+                gameManager.colourTime = 0.5f * ColourChangeSpeed;
+            }
+            else
+            {
+                gameManager.colourTime = 0f;
+            }
 
-        ProcessInputs();
+            ProcessInputs();
+        }
     }
 
     private void FixedUpdate()
     {
-        // if player is doing movement inputs, move the player and add to colour time counter
-        if (moveDirection.x != 0 || moveDirection.y != 0)
+        if (!_isDead)
         {
-            rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
-            
-            //gameManager.colourTime += 0.5f * ColourChangeSpeed;
-        }
-        else // set velocity to zero
-        {
-            rb.velocity = new Vector2(0, 0);
-        }
+            // if player is doing movement inputs, move the player and add to colour time counter
+            if (moveDirection.x != 0 || moveDirection.y != 0)
+            {
+                rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
 
+                //gameManager.colourTime += 0.5f * ColourChangeSpeed;
+            }
+            else // set velocity to zero
+            {
+                rb.velocity = new Vector2(0, 0);
+            }
+        }
         //// Multiplies current x and y coordinates together for the colour 
         //// Subtracts the origin coords from the equasion, so the starting position should not affect the colour of the regions
         //gameManager.colourCoords = (transform.position.x) * (transform.position.y);
@@ -80,5 +98,13 @@ public class Player : MonoBehaviour
         Color tmp = _spriteRenderer.color;
         tmp.a = val;
         _spriteRenderer.color = tmp;
+    }
+
+    public void Death(object data)
+    {
+        _isDead = true;
+        // Player colour gets converted to Enemy!!!
+        Color convertedColour = new Color(1f, 0.2983692f, 0.2509804f);
+        _spriteRenderer.color = convertedColour;
     }
 }

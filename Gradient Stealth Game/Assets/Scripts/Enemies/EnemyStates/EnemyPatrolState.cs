@@ -35,4 +35,9 @@ public class EnemyPatrolState : EnemyState
         Debug.Log("Leaving Patrol State");
         Enemy.RB.velocity = Vector2.zero;
     }
+
+    public override void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+    }
 }
