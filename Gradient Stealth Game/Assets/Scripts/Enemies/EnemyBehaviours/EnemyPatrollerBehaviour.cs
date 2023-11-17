@@ -53,7 +53,12 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
 
     }
 
-    public override void ExecuteBehaviour()
+    public override void UpdateLogicBehaviour()
+    {
+        
+    }
+
+    public override void UpdatePhysicsBehaviour()
     {
         
     }
