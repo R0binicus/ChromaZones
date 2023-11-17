@@ -10,5 +10,6 @@ public class EnemyCaughtState : EnemyState
     public override void Enter()
     {
         Debug.Log("Entered Enemy Caught State. You lose.");
+        Enemy.EnemyManager.PlayerCaught();
     }
 }

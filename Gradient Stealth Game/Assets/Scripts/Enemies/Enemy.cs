@@ -19,9 +19,29 @@ public class Enemy : MonoBehaviour
     public EnemyChaseState ChaseState { get; private set; }
     public EnemyCaughtState CaughtState { get; private set; }
 
-    // Player Ref (TESTING FOR NOW. Will give all enemies player ref when created with enemy manager or something idk)
+    // GameObject References
     [field: SerializeField] public Player Player { get; private set; }
+    private EnemyManager _enemyManager;
 
+    public EnemyManager EnemyManager
+    {
+        get
+        {
+            if (_enemyManager != null)
+            {
+                return _enemyManager;
+            }
+            else
+            {
+                Debug.Log("EnemyManager has not been assigned");
+                return null;
+            }
+        }
+        set
+        {
+            _enemyManager = value;
+        }
+    }
     // Regions
     public int regionState = 0;
     public int regionLayer = 0;
@@ -42,6 +62,12 @@ public class Enemy : MonoBehaviour
 
         // Set up state machine
         StateMachine = new StateMachine(PatrolState);
+    }
+
+    private void Start()
+    {
+        // Send Enemy to EnemyManager to be stored in a list and kept track of for win condition
+        EventManager.EventTrigger(EventType.ADD_ENEMY, this);
     }
 
     private void Update()

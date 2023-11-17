@@ -16,6 +16,18 @@ public class UIManager : MonoBehaviour
         DeactivateUI();
     }
 
+    private void OnEnable()
+    {
+        EventManager.EventSubscribe(EventType.LOSE, ShowLosePanel);
+        EventManager.EventSubscribe(EventType.WIN, ShowWinPanel);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.LOSE, ShowLosePanel);
+        EventManager.EventUnsubscribe(EventType.WIN, ShowWinPanel);
+    }
+
     // Button callback to replay game
     public void Replay()
     {
@@ -33,5 +45,17 @@ public class UIManager : MonoBehaviour
         _gameCanvas.SetActive(false);
         _losePanel.SetActive(false);
         _winPanel.SetActive(false);
+    }
+
+    private void ShowLosePanel(object data)
+    {
+        _gameCanvas.SetActive(true);
+        _losePanel.SetActive(true);
+    }
+
+    private void ShowWinPanel(object data)
+    {
+        _gameCanvas.SetActive(true);
+        _winPanel.SetActive(true);
     }
 }
