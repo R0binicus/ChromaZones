@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     public EnemyCaughtState CaughtState { get; private set; }
 
     // GameObject References
-    [field: SerializeField] public Player Player { get; private set; }
+    private Player _player;
     private EnemyManager _enemyManager;
 
     public EnemyManager EnemyManager
@@ -42,7 +42,26 @@ public class Enemy : MonoBehaviour
             _enemyManager = value;
         }
     }
-    
+    public Player Player
+    {
+        get
+        {
+            if (_player != null)
+            {
+                return _player;
+            }
+            else
+            {
+                Debug.Log("Player has not been assigned");
+                return null;
+            }
+        }
+        set
+        {
+            _player = value;
+        }
+    }
+
     // Regions
     public int regionState = 0;
     public int regionLayer = 0;

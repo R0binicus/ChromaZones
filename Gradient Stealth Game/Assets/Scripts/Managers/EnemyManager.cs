@@ -3,9 +3,13 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    // GameObject References
+    [SerializeField] Player _player;
+
+    // Internal Data
     List<Enemy> _enemies; // List of Enemies in the scene
 
-    private void Start()
+    private void Awake()
     {
         _enemies = new List<Enemy>();
         EventManager.EventInitialise(EventType.LOSE);
@@ -28,8 +32,9 @@ public class EnemyManager : MonoBehaviour
         Enemy enemy = data as Enemy;
         if (enemy == null) return;
 
-        // Assign EnemyManager to enemy then add to list of enemies
+        // Assign EnemyManager and Player to enemy then add to list of enemies
         enemy.EnemyManager = this;
+        enemy.Player = _player;
         _enemies.Add(enemy);
     }
 
@@ -38,12 +43,14 @@ public class EnemyManager : MonoBehaviour
         EventManager.EventTrigger(EventType.LOSE, null);
     }
 
+    // Deactivate Enemy that was attacked then check to see how many enemies are left
     public void PlayerAttacked(Enemy enemy)
     {
         enemy.gameObject.SetActive(false);
         CheckEnemiesLeft();
     }
 
+    // Checks to see how many enemies are left
     private void CheckEnemiesLeft()
     {
         foreach (Enemy enemy in _enemies)

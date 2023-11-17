@@ -175,7 +175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rotateSpeed: 50
-  _timeToRotate: 3
+  _timeToRotate: 5
   _rotateType: 0
 --- !u!114 &2644862085642620011
 MonoBehaviour:
@@ -189,7 +189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7245d556e31fd14439dff711d6f76cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DetectionTime>k__BackingField: 5
+  <DetectionTime>k__BackingField: 2
   <HiddenTime>k__BackingField: 0
   <Velocity>k__BackingField:
     serializedVersion: 2
@@ -215,7 +215,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  <Player>k__BackingField: {fileID: 0}
   regionState: 0
   regionLayer: 0
 --- !u!1 &7546224442143415851
@@ -266,12 +265,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _layerToRaycast:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1024
   _patrolFOVAngle: 80
   _patrolFOVDist: 3
   _patrolTriangleSlices: 10
   _alertFOVAngle: 360
-  _alertFOVDist: 5
+  _alertFOVDist: 3
   _alertTriangleSlices: 30
 --- !u!33 &807487434540428561
 MeshFilter:
