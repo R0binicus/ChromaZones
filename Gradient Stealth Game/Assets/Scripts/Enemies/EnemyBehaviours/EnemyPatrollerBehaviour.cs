@@ -5,12 +5,11 @@ using UnityEngine;
 public class EnemyPatrollerBehaviour : EnemyBehaviour
 {
     [Header("Patroller Data")]
-    [SerializeField] private List<GameObject> waypoints;
-    [SerializeField] private List<Vector3> waypoints2;
+    public List<Vector3> waypoints;
     private Vector2 originWaypoint;
     private Vector2 destination;
     private Vector2 destinationDirection;
-    public int waypointIndex = 1;
+    private int waypointIndex = 1;
     public int roationSpeed = 100;
 
     private Rigidbody2D rb;
@@ -45,7 +44,7 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
 
         if (waypointIndex != 0)
         {
-            destination = waypoints[waypointIndex - 1].transform.position;
+            destination = waypoints[waypointIndex - 1];
         }
         GetLocation(destination);
     }
