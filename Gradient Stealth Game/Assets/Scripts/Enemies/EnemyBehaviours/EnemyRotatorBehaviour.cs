@@ -13,6 +13,11 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     // Internal Data
     private float _timer;
 
+    private void Start()
+    {
+        Random.InitState((int)System.DateTime.Now.Ticks);
+    }
+
     public override void ResetBehaviour()
     {
         ResetTimer();
@@ -51,12 +56,15 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         {
             signChange = 1;
         }
+        else if (_rotateType == RotateType.Random)
+        {
+            signChange = Random.Range(0, 2) == 0 ? -1 : 1;
+        }
 
         Quaternion _endRot = _currentRot * Quaternion.Euler(0f, 0f, 90f * signChange);
 
         while (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) > 0.1f)
         {
-            Debug.Log("Rotating");
             transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _rotateSpeed * Time.deltaTime);
             yield return null;
         }
