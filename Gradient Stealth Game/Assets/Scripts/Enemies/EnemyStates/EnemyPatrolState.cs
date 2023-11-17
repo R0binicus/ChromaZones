@@ -21,8 +21,13 @@ public class EnemyPatrolState : EnemyState
         }
         else
         {
-            Enemy.EnemyBehaviour.ExecuteBehaviour();
+            Enemy.EnemyBehaviour.UpdateLogicBehaviour();
         }
+    }
+
+    public override void PhysicsUpdate()
+    {
+        Enemy.EnemyBehaviour.UpdatePhysicsBehaviour();
     }
 
     public override void Exit()

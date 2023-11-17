@@ -23,7 +23,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         ResetTimer();
     }
 
-    public override void ExecuteBehaviour()
+    public override void UpdateLogicBehaviour()
     {
         if (_timer > _timeToRotate)
         {
@@ -34,6 +34,11 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         {
             _timer += Time.deltaTime;
         }
+    }
+
+    public override void UpdatePhysicsBehaviour()
+    {
+        
     }
 
     private void ResetTimer()
