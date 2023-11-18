@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    // Data
+    [field: SerializeField] public float ChaseRotation { get; private set; }
     [field: SerializeField] public float DetectionTime { get; private set; }
     [field: SerializeField] public float HiddenTime { get; private set; }
     [field: SerializeField] public AnimationCurve Velocity { get; private set; }

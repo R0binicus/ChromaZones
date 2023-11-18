@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class EnemyChaseState : EnemyState
 {
@@ -22,6 +23,11 @@ public class EnemyChaseState : EnemyState
     public override void LogicUpdate()
     {
         _moveDir = (Enemy.Player.transform.position - Enemy.transform.position).normalized;
+
+        Quaternion fullRotatation = Quaternion.LookRotation(Enemy.transform.forward, _moveDir);
+        Quaternion lookRot = Quaternion.identity;
+        lookRot.eulerAngles = new Vector3(0, 0, fullRotatation.eulerAngles.z);
+        Enemy.transform.rotation = Quaternion.RotateTowards(Enemy.transform.rotation, lookRot, Enemy.ChaseRotation * Time.deltaTime);
 
         // If player is in their own region
         if (Enemy.Player.regionState == 3)

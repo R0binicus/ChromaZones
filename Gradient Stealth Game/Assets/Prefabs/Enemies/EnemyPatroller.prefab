@@ -175,7 +175,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waypoints:
-  - {x: 0, y: 0, z: 0}
+  - {x: 11.762115, y: 3.055028, z: 0}
+  - {x: 5.70904, y: 1.3960068, z: 0}
   roationSpeed: 100
 --- !u!114 &2644862085642620011
 MonoBehaviour:
@@ -189,6 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7245d556e31fd14439dff711d6f76cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ChaseRotation>k__BackingField: 100
   <DetectionTime>k__BackingField: 5
   <HiddenTime>k__BackingField: 0
   <Velocity>k__BackingField:
@@ -215,7 +217,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  <Player>k__BackingField: {fileID: 0}
   regionState: 0
   regionLayer: 0
 --- !u!1 &7546224442143415851

@@ -158,17 +158,6 @@ Transform:
   - {fileID: 1970520199}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &427583780 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 301580955230167636, guid: 6a4c25d06b435a34f85c6c5b0068391e, type: 3}
-  m_PrefabInstance: {fileID: 593556122}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e248f148310e0d4ebecee21634c90a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -911,58 +900,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1731796247085188736, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: waypointIndex
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1731796247085188736, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: originWaypoint.x
-      value: 2.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 1731796247085188736, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: originWaypoint.y
-      value: 7.68
-      objectReference: {fileID: 0}
-    - target: {fileID: 1731796247085188736, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: waypoints.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1731796247085188736, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: waypoints2.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1731796247085188736, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: waypoints2.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1731796247085188736, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: waypoints.Array.data[0].x
-      value: 11.762115
-      objectReference: {fileID: 0}
-    - target: {fileID: 1731796247085188736, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: waypoints.Array.data[0].y
-      value: 3.055028
-      objectReference: {fileID: 0}
-    - target: {fileID: 1731796247085188736, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: waypoints.Array.data[1].x
-      value: 5.70904
-      objectReference: {fileID: 0}
-    - target: {fileID: 1731796247085188736, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: waypoints.Array.data[1].y
-      value: 1.3960068
-      objectReference: {fileID: 0}
-    - target: {fileID: 1731796247085188736, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: waypoints2.Array.data[0].x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1731796247085188736, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: waypoints2.Array.data[0].y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2644862085642620011, guid: 55542542c69ee584c91eafee47537620, type: 3}
-      propertyPath: <Player>k__BackingField
-      value: 
-      objectReference: {fileID: 427583780}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
