@@ -11,6 +11,7 @@ public class EnemyPatrolState : EnemyState
         Enemy.FOV.SetPatrolFOVData();
         Enemy.FOV.CreateFOV();
         Enemy.EnemyBehaviour.ResetBehaviour();
+        Enemy.DetectedOnce = false;
     }
     public override void LogicUpdate()
     {

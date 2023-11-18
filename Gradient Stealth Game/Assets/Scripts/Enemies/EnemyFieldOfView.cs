@@ -25,7 +25,6 @@ public class EnemyFieldOfView : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log(transform.lossyScale.x);
         _currentAngle = GetAngleFromVectorFloat(transform.up) + ((_FOVAngle)/ 2f); // Get starting angle first
         float angleIncrease = (_FOVAngle) / _triangleSlices; // Calculate how much to increase angle by
 

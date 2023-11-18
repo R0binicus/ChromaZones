@@ -18,6 +18,7 @@ public class EnemyChaseState : EnemyState
         _timer = 0;
         _accelTimer = 0;
         Enemy.FOV.IsActive(false);
+        Enemy.DetectedOnce = true;
     }
 
     public override void LogicUpdate()

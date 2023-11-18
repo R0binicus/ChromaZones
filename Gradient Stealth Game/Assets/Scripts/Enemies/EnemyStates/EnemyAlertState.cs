@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyAlertState : EnemyState
@@ -23,9 +24,20 @@ public class EnemyAlertState : EnemyState
     {
         _timer += Time.deltaTime;
 
-        if (_timer > Enemy.DetectionTime)
+        // If Enemy has come back from ChaseState
+        if (_timer > Enemy.ReDetectionTime && Enemy.DetectedOnce)
         {
             // If player is still within FOV, chase
+            if (Enemy.FOV.PlayerSpotted && Enemy.Player.regionState != 3)
+            {
+                Enemy.StateMachine.ChangeState(Enemy.ChaseState);
+                return;
+            }
+        }
+        
+        if (_timer > Enemy.DetectionTime)
+        {
+            // If Enemy hasn't come back from ChaseState and player is still within FOV, chase
             if (Enemy.FOV.PlayerSpotted && Enemy.Player.regionState != 3)
             {
                 Enemy.StateMachine.ChangeState(Enemy.ChaseState);

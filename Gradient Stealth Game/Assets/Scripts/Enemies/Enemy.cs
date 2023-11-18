@@ -5,6 +5,8 @@ public class Enemy : MonoBehaviour
     // Data
     [field: SerializeField] public float ChaseRotation { get; private set; }
     [field: SerializeField] public float DetectionTime { get; private set; }
+    [field: SerializeField] public float ReDetectionTime { get; private set; } // If has just come from chase state to alert state
+    public bool DetectedOnce { get; set; } // If player has been detected going from chase to alert
     [field: SerializeField] public float HiddenTime { get; private set; }
     [field: SerializeField] public AnimationCurve Velocity { get; private set; }
     [field: SerializeField] public Sprite _hidingSprite;
