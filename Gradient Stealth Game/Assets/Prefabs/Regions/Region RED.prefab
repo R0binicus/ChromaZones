@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2684744048818626931}
   - component: {fileID: 4921310994533087982}
-  - component: {fileID: 4107125923427240077}
+  - component: {fileID: 6187487894690647193}
   - component: {fileID: 6963314093911611723}
   m_Layer: 7
   m_Name: Region RED
@@ -86,8 +86,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &4107125923427240077
-BoxCollider2D:
+--- !u!60 &6187487894690647193
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -128,9 +128,13 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.5, y: 0.5}
+      - {x: -0.5, y: -0.5}
+      - {x: 0.5, y: -0.5}
+      - {x: 0.5, y: 0.5}
+  m_UseDelaunayMesh: 0
 --- !u!114 &6963314093911611723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,5 +148,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionMultiplier: 2
-  localColour: 330
   state: 0

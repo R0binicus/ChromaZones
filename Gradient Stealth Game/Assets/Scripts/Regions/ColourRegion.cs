@@ -11,7 +11,7 @@ public class ColourRegion : MonoBehaviour
     [SerializeField] private float transitionMultiplier = 2f;
 
     private float colourDiff;                           // Colour from game manager
-    [SerializeField] private float localColour;         // Colour of this region specifically
+    private float localColour;         // Colour of this region specifically
     private float originalHue;                          // Original colour value when the level started
 
     public int state;
@@ -19,6 +19,8 @@ public class ColourRegion : MonoBehaviour
     void Start()
     {
         // Set values and components
+        Color.RGBToHSV(GetComponent<SpriteRenderer>().color, out var H, out var S, out var V);
+        localColour = H * 360;
         originalHue = localColour;
         gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -31,8 +33,21 @@ public class ColourRegion : MonoBehaviour
         SetColour();
     }
 
+    //private float ColorToHue(Color inputColor)
+    //{
+    //    int r = inputColor.r;
+    //    int b = inputColor.b;
+    //    int g = inputColor.g;
+//
+    //    
+//
+    //    return inputColor.GetHue;
+    //}
+
+
+
     // Processes the gameManager colour
-    void ProcessColour()
+    private void ProcessColour()
     {
         // set new local colour value
         TransitionZones();
@@ -48,13 +63,13 @@ public class ColourRegion : MonoBehaviour
     }
 
     // Sets the colour of the sprite renderer
-    void SetColour()
+    private void SetColour()
     {
         // used 0.95 because otherwise it hurts my eyes
         spriteRenderer.color = Color.HSVToRGB(localColour/360f, 0.95f, 0.95f);
     }
 
-    void SetStates()
+    private void SetStates()
     {
         switch(localColour) 
         {
@@ -78,7 +93,7 @@ public class ColourRegion : MonoBehaviour
 
     // If local colour value is in a 'transition zone' change the colour witha multiplier,
     // otherwise simply add it to the difference value
-    void TransitionZones()
+    private void TransitionZones()
     {
         switch(localColour) 
         {
