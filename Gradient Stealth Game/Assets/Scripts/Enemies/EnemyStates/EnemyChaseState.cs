@@ -52,9 +52,7 @@ public class EnemyChaseState : EnemyState
 
     public override void PhysicsUpdate()
     {
-        //Enemy.RB.velocity = _moveDir * Enemy.Velocity.Evaluate(_accelTimer);
         Enemy.Agent.SetDestination(Enemy.Player.transform.position);
-
     }
 
     public override void OnCollisionEnter2D(Collision2D collision)
