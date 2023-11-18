@@ -15,6 +15,7 @@ public class EnemyChaseState : EnemyState
     public override void Enter()
     {
         Debug.Log("Entering Enemy Chase State");
+        Enemy.chaseSound.Play();
         _timer = 0;
         _accelTimer = 0;
         Enemy.FOV.IsActive(false);

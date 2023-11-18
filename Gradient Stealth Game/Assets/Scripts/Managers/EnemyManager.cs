@@ -16,10 +16,14 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private string winName = "PlayerWin";
 	private AudioSource winSound;
 
+    [SerializeField] private string loseName = "PlayerLose";
+	private AudioSource loseSound;
+
     private void Awake()
     {
         deathSound = GameObject.Find(deathName).GetComponent<AudioSource>();
         winSound = GameObject.Find(winName).GetComponent<AudioSource>();
+        loseSound = GameObject.Find(loseName).GetComponent<AudioSource>();
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         _enemies = new List<Enemy>();
         EventManager.EventInitialise(EventType.LOSE);
@@ -50,6 +54,7 @@ public class EnemyManager : MonoBehaviour
 
     public void PlayerCaught()
     {
+        loseSound.Play();
         EventManager.EventTrigger(EventType.LOSE, null);
     }
 

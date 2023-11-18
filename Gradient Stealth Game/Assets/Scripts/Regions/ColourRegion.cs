@@ -33,19 +33,6 @@ public class ColourRegion : MonoBehaviour
         SetColour();
     }
 
-    //private float ColorToHue(Color inputColor)
-    //{
-    //    int r = inputColor.r;
-    //    int b = inputColor.b;
-    //    int g = inputColor.g;
-//
-    //    
-//
-    //    return inputColor.GetHue;
-    //}
-
-
-
     // Processes the gameManager colour
     private void ProcessColour()
     {

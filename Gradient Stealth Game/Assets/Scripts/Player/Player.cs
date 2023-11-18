@@ -26,6 +26,13 @@ public class Player : MonoBehaviour
     [SerializeField] Sprite _hidingSprite;
     [SerializeField] Sprite _normalSprite;
 
+    [Header("Sounds")]
+    [SerializeField] private string obscuredName = "PlayerObscured";
+	private AudioSource obscuredSound;
+
+    [SerializeField] private string moveName = "PlayerMove";
+	private AudioSource moveSound;
+
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.LOSE, Death);
@@ -43,6 +50,8 @@ public class Player : MonoBehaviour
         transform = GetComponent<Transform>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
+        obscuredSound = GameObject.Find(obscuredName).GetComponent<AudioSource>();
+        moveSound = GameObject.Find(moveName).GetComponent<AudioSource>();
 
         origin = transform.position;
         _isDead = false;
@@ -74,11 +83,16 @@ public class Player : MonoBehaviour
             if (moveDirection.x != 0 || moveDirection.y != 0)
             {
                 rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+                if (!moveSound.isPlaying)
+                {
+                    moveSound.Play();
+                }
 
                 //gameManager.colourTime += 0.5f * ColourChangeSpeed;
             }
             else // set velocity to zero
             {
+                moveSound.Stop();
                 rb.velocity = new Vector2(0, 0);
             }
         }
@@ -99,6 +113,7 @@ public class Player : MonoBehaviour
     // Change between visible and 'hiding'
     public void HidingSprite()
     {
+        obscuredSound.Play();
         _spriteRenderer.sprite = _hidingSprite;
     }
 

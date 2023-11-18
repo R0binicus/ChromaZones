@@ -7,7 +7,6 @@ public class EnemyPatrolState : EnemyState
     public override void Enter()
     {
         Debug.Log("Entering Patrol State");
-
         Enemy.FOV.SetPatrolFOVData();
         Enemy.FOV.CreateFOV();
         Enemy.EnemyBehaviour.ResetBehaviour();
@@ -18,6 +17,7 @@ public class EnemyPatrolState : EnemyState
         // If player is spotted, transition to AlertState
         if (Enemy.FOV.PlayerSpotted && Enemy.Player.regionState != 3)
         {
+            Enemy.alertSound.Play();
             Enemy.StateMachine.ChangeState(Enemy.AlertState);
         }
         else

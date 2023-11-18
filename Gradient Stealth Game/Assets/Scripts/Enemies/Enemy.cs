@@ -27,6 +27,16 @@ public class Enemy : MonoBehaviour
     public EnemyChaseState ChaseState { get; private set; }
     public EnemyCaughtState CaughtState { get; private set; }
 
+    [Header("Sounds")]
+    [SerializeField] private string alertName = "EnemyAlert";
+	public AudioSource alertSound { get; private set; }
+
+    [SerializeField] private string deAlertName = "EnemyDeAlert";
+	public AudioSource deAlertSound { get; private set; }
+
+    [SerializeField] private string chaseName = "EnemyChase";
+	public AudioSource chaseSound { get; private set; }
+
     // GameObject References
     private Player _player;
     private EnemyManager _enemyManager;
@@ -97,6 +107,11 @@ public class Enemy : MonoBehaviour
         // Set up nav mesh
         Agent.updateRotation = false;
         Agent.updateUpAxis = false;
+
+        // Sounds
+        alertSound = GameObject.Find(alertName).GetComponent<AudioSource>();
+        deAlertSound = GameObject.Find(deAlertName).GetComponent<AudioSource>();
+        chaseSound = GameObject.Find(chaseName).GetComponent<AudioSource>();
     }
 
     private void Start()

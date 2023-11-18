@@ -44,6 +44,7 @@ public class EnemyAlertState : EnemyState
             }
             else
             {
+                Enemy.deAlertSound.Play();
                 Enemy.StateMachine.ChangeState(Enemy.PatrolState);
             }
         }
