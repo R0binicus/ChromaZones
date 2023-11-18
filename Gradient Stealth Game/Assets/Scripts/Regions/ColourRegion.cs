@@ -156,11 +156,21 @@ public class ColourRegion : MonoBehaviour
             {
                 var player = collision.transform.parent.GetComponent<Player>();
                 player.regionState = state;
+
+                if (player.regionState == 3)
+                {
+                    player.HidingSprite();
+                }
             }
             else if (collision.transform.parent.tag == "Enemy")
             {
                 var enemy = collision.transform.parent.GetComponent<Enemy>();
                 enemy.regionState = state;
+
+                if (enemy.regionState == 1)
+                {
+                    enemy.HidingSprite();
+                }
             }
         }
     }
