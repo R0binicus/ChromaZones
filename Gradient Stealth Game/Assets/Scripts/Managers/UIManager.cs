@@ -31,7 +31,8 @@ public class UIManager : MonoBehaviour
     // Button callback to replay game
     public void Replay()
     {
-        SceneManager.LoadScene(1);
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
     }
 
     //Button callback to go back to main menu

@@ -4,13 +4,14 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     // GameObject References
-    [SerializeField] Player _player;
+    private Player _player;
 
     // Internal Data
     List<Enemy> _enemies; // List of Enemies in the scene
 
     private void Awake()
     {
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         _enemies = new List<Enemy>();
         EventManager.EventInitialise(EventType.LOSE);
     }
