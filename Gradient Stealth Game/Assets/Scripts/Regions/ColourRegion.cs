@@ -125,12 +125,22 @@ public class ColourRegion : MonoBehaviour
                 var player = collision.transform.parent.GetComponent<Player>();
                 player.regionLayer += 1;
                 player.regionState = state;
+
+                if (player.regionState == 3)
+                {
+                    player.HidingSprite();
+                }
             }
             else if (collision.transform.parent.tag == "Enemy")
             {
                 var enemy = collision.transform.parent.GetComponent<Enemy>();
                 enemy.regionLayer += 1;
                 enemy.regionState = state;
+
+                if (enemy.regionState == 1)
+                {
+                    enemy.HidingSprite();
+                }
             }
         }
     }
@@ -146,21 +156,11 @@ public class ColourRegion : MonoBehaviour
             {
                 var player = collision.transform.parent.GetComponent<Player>();
                 player.regionState = state;
-                
-                if (player.regionState == 3)
-                {
-                    player.ChangeSpriteVisibility(0.5f);
-                }
             }
             else if (collision.transform.parent.tag == "Enemy")
             {
                 var enemy = collision.transform.parent.GetComponent<Enemy>();
                 enemy.regionState = state;
-
-                if (enemy.regionState == 1)
-                {
-                    enemy.ChangeSpriteVisibility(0.5f);
-                }
             }
         }
     }
@@ -178,7 +178,7 @@ public class ColourRegion : MonoBehaviour
             {
                 var player = collision.transform.parent.GetComponent<Player>();
                 player.regionLayer -= 1;
-                player.ChangeSpriteVisibility(1f);
+                player.NormalSprite();
 
                 if (player.regionLayer <= 0)
                 {
@@ -190,7 +190,7 @@ public class ColourRegion : MonoBehaviour
             {
                 var enemy = collision.transform.parent.GetComponent<Enemy>();
                 enemy.regionLayer -= 1;
-                enemy.ChangeSpriteVisibility(1f);
+                enemy.NormalSprite();
 
                 if (enemy.regionLayer <= 0)
                 {

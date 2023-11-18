@@ -23,6 +23,8 @@ public class Player : MonoBehaviour
     // Data
     public float ColourChangeSpeed = 0.1f;
     bool _isDead;
+    [SerializeField] Sprite _hidingSprite;
+    [SerializeField] Sprite _normalSprite;
 
     private void OnEnable()
     {
@@ -41,8 +43,10 @@ public class Player : MonoBehaviour
         transform = GetComponent<Transform>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
+
         origin = transform.position;
         _isDead = false;
+        _spriteRenderer.sprite = _normalSprite;
     }
 
     void Update()
@@ -93,11 +97,14 @@ public class Player : MonoBehaviour
     }
 
     // Change between visible and 'hiding'
-    public void ChangeSpriteVisibility(float val)
+    public void HidingSprite()
     {
-        Color tmp = _spriteRenderer.color;
-        tmp.a = val;
-        _spriteRenderer.color = tmp;
+        _spriteRenderer.sprite = _hidingSprite;
+    }
+
+    public void NormalSprite()
+    {
+        _spriteRenderer.sprite = _normalSprite;
     }
 
     public void Death(object data)

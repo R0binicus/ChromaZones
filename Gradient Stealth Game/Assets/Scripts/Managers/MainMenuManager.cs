@@ -11,9 +11,6 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] GameObject _mainMenu;
     [SerializeField] GameObject _instructions;
 
-    [SerializeField]
-    float quitDelay = 1f;
-
     private void Awake()
     {
         // If using the Unity editor or development build, enable debug logs
