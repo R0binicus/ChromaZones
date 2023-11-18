@@ -7,6 +7,8 @@ public class Enemy : MonoBehaviour
     [field: SerializeField] public float DetectionTime { get; private set; }
     [field: SerializeField] public float HiddenTime { get; private set; }
     [field: SerializeField] public AnimationCurve Velocity { get; private set; }
+    [field: SerializeField] public Sprite _hidingSprite;
+    [field: SerializeField] public Sprite _normalSprite;
     
     // Components
     public EnemyFieldOfView FOV { get; private set; }
@@ -117,10 +119,13 @@ public class Enemy : MonoBehaviour
     }
 
     // Change between visible and 'hiding'
-    public void ChangeSpriteVisibility(float val)
+    public void HidingSprite()
     {
-        Color tmp = SpriteRenderer.color;
-        tmp.a = val;
-        SpriteRenderer.color = tmp;
+        SpriteRenderer.sprite = _hidingSprite;
+    }
+
+    public void NormalSprite()
+    {
+        SpriteRenderer.sprite = _normalSprite;
     }
 }
