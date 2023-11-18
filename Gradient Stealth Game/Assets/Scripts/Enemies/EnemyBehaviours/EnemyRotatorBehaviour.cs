@@ -36,7 +36,6 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
 
     public override void UpdateLogicBehaviour()
     {
-        Debug.Log((_originWaypoint - (Vector2)transform.position).magnitude);
         if ((_originWaypoint - (Vector2)transform.position).magnitude < 0.05f)
         {
             rb.velocity = Vector2.zero;

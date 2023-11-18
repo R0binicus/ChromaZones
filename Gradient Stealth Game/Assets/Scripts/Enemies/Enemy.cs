@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     public Rigidbody2D RB { get; private set; }
     public Collider2D Collider { get; private set; }
     public SpriteRenderer SpriteRenderer { get; private set; }
+    public UnityEngine.AI.NavMeshAgent Agent { get; private set; }
 
     // States
     public StateMachine StateMachine { get; private set; }
@@ -77,6 +78,8 @@ public class Enemy : MonoBehaviour
         RB = GetComponentInChildren<Rigidbody2D>();
         Collider = GetComponentInChildren<Collider2D>();
         SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        Agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+
 
         // Set up states
         PatrolState = new EnemyPatrolState(this);
@@ -86,6 +89,10 @@ public class Enemy : MonoBehaviour
 
         // Set up state machine
         StateMachine = new StateMachine(PatrolState);
+
+        // Set up nav mesh
+        Agent.updateRotation = false;
+        Agent.updateUpAxis = false;
     }
 
     private void Start()
