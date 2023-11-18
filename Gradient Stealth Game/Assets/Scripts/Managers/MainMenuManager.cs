@@ -9,6 +9,7 @@ using UnityEditor;
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] GameObject _mainMenu;
+    [SerializeField] GameObject _playMenu;
     [SerializeField] GameObject _instructions;
 
     private void Awake()
@@ -19,7 +20,13 @@ public class MainMenuManager : MonoBehaviour
 
     public void PlayButton()
     {
-        SceneManager.LoadScene(1);
+        _mainMenu.SetActive(false);
+        _playMenu.SetActive(true);
+    }
+
+    public void SelectLevelButton(int level)
+    {
+        SceneManager.LoadScene(level);
     }
 
     public void InstructionsButton()
@@ -40,6 +47,9 @@ public class MainMenuManager : MonoBehaviour
     public void BackToMenuButton()
     {
         _instructions.SetActive(false);
+        _playMenu.SetActive(false);
         _mainMenu.SetActive(true);
     }
+
+
 }
