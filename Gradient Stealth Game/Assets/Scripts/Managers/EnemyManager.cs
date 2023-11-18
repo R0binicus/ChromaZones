@@ -9,8 +9,17 @@ public class EnemyManager : MonoBehaviour
     // Internal Data
     List<Enemy> _enemies; // List of Enemies in the scene
 
+    [Header("Sounds")]
+    [SerializeField] private string deathName = "EnemyDeath";
+	private AudioSource deathSound;
+
+    [SerializeField] private string winName = "PlayerWin";
+	private AudioSource winSound;
+
     private void Awake()
     {
+        deathSound = GameObject.Find(deathName).GetComponent<AudioSource>();
+        winSound = GameObject.Find(winName).GetComponent<AudioSource>();
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         _enemies = new List<Enemy>();
         EventManager.EventInitialise(EventType.LOSE);
@@ -47,6 +56,7 @@ public class EnemyManager : MonoBehaviour
     // Deactivate Enemy that was attacked then check to see how many enemies are left
     public void PlayerAttacked(Enemy enemy)
     {
+        deathSound.Play();
         enemy.gameObject.SetActive(false);
         CheckEnemiesLeft();
     }
@@ -64,6 +74,7 @@ public class EnemyManager : MonoBehaviour
         }
 
         // Signal game won
+        winSound.Play();
         EventManager.EventTrigger(EventType.WIN, null);
     }
 }
