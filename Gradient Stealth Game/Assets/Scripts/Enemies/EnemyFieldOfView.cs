@@ -25,12 +25,13 @@ public class EnemyFieldOfView : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _currentAngle = GetAngleFromVectorFloat(transform.up) + (_FOVAngle / 2f); // Get starting angle first
-        float angleIncrease = _FOVAngle / _triangleSlices; // Calculate how much to increase angle by
+        Debug.Log(transform.lossyScale.x);
+        _currentAngle = GetAngleFromVectorFloat(transform.up) + ((_FOVAngle)/ 2f); // Get starting angle first
+        float angleIncrease = (_FOVAngle) / _triangleSlices; // Calculate how much to increase angle by
 
         for (int i = 0; i <= _triangleSlices; i++)
         {
-            RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(_currentAngle), _FOVDist, _layerToRaycast);
+            RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(_currentAngle), (_FOVDist * transform.lossyScale.x), _layerToRaycast);
 
             // Hit player
             if (ray.collider != null)
