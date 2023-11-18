@@ -41,4 +41,14 @@ public class EnemyAlertState : EnemyState
     {
         Debug.Log("Leaving Enemy Alert State");
     }
+
+    // If player touches Enemy whilst in hiding
+    public override void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Check if Player
+        if (collision.gameObject.GetComponent<Player>() != null)
+        {
+            Enemy.StateMachine.ChangeState(Enemy.CaughtState);
+        }
+    }
 }
