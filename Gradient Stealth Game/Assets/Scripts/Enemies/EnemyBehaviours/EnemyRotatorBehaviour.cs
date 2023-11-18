@@ -10,12 +10,23 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     [SerializeField] float _timeToRotate;
     [SerializeField] RotateType _rotateType;
 
+    [Header("Return to start Data")]
+    private Vector2 _originWaypoint;
+    private Vector2 _destinationDirection;
+    private bool _startedRoation = true;
+
+    //Components
+    private Rigidbody2D rb;
+
     // Internal Data
     private float _timer;
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         Random.InitState((int)System.DateTime.Now.Ticks);
+        _originWaypoint = transform.position;
+        GetLocation(_originWaypoint);
     }
 
     public override void ResetBehaviour()
@@ -25,14 +36,42 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
 
     public override void UpdateLogicBehaviour()
     {
-        if (_timer > _timeToRotate)
+        Debug.Log((_originWaypoint - (Vector2)transform.position).magnitude);
+        if ((_originWaypoint - (Vector2)transform.position).magnitude < 0.05f)
         {
-            ResetTimer();
-            StartCoroutine(Rotate());
-        }
-        else
+            rb.velocity = Vector2.zero;
+            if (_startedRoation == false)
+            {
+                Quaternion _currentRot = transform.rotation;
+                Quaternion _endRot = Quaternion.Euler(0f, 0f, 0f);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _rotateSpeed * Time.deltaTime);
+                if (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) < 0.1f)
+                {
+                    _startedRoation = true;
+                }
+            }
+            else
+            {
+                if (_timer > _timeToRotate)
+                {
+                    ResetTimer();
+                    StartCoroutine(Rotate());
+                }
+                else
+                {
+                    _timer += Time.deltaTime;
+                }
+            }
+            
+        } else 
         {
-            _timer += Time.deltaTime;
+            _startedRoation = false;
+            GetLocation(_originWaypoint);
+            Quaternion fullRotatation = Quaternion.LookRotation(transform.forward, _destinationDirection);
+            Quaternion lookRot = Quaternion.identity;
+            lookRot.eulerAngles = new Vector3(0,0,fullRotatation.eulerAngles.z);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, (_rotateSpeed * 2) * Time.deltaTime);
+            rb.velocity = _destinationDirection;
         }
     }
 
@@ -73,5 +112,10 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _rotateSpeed * Time.deltaTime);
             yield return null;
         }
+    }
+
+    private void GetLocation(Vector2 point)
+    {
+        _destinationDirection = (point - (Vector2)transform.position).normalized;
     }
 }
