@@ -37,6 +37,7 @@ public class EnemyChaseState : EnemyState
             if (_timer > Enemy.HiddenTime)
             {
                 _timer = 0;
+                Enemy.Agent.ResetPath();
                 Enemy.RB.velocity = Vector2.zero;
                 Enemy.StateMachine.ChangeState(Enemy.AlertState);
             }
@@ -51,7 +52,9 @@ public class EnemyChaseState : EnemyState
 
     public override void PhysicsUpdate()
     {
-        Enemy.RB.velocity = _moveDir * Enemy.Velocity.Evaluate(_accelTimer);
+        //Enemy.RB.velocity = _moveDir * Enemy.Velocity.Evaluate(_accelTimer);
+        Enemy.Agent.SetDestination(Enemy.Player.transform.position);
+
     }
 
     public override void OnCollisionEnter2D(Collision2D collision)
