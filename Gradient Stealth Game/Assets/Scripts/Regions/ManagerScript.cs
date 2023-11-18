@@ -7,6 +7,12 @@ public class ManagerScript : MonoBehaviour
     public float colour;        // Final colour value for other things to access
     //public float colourCoords;    // Colour value taken from the current coords of the player
     public float colourTime;    // Colour value taken from amount of time spent while moving
+    [SerializeField] private NavMeshPlus.Components.NavMeshSurface surfaceSingle;
+
+    void Start()
+    {
+        surfaceSingle.BuildNavMesh();
+    }
 
     void Update()
     {
