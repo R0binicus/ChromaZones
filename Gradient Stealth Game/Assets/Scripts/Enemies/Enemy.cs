@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    // Data
+    [field: SerializeField] public float ChaseRotation { get; private set; }
     [field: SerializeField] public float DetectionTime { get; private set; }
     [field: SerializeField] public float HiddenTime { get; private set; }
     [field: SerializeField] public AnimationCurve Velocity { get; private set; }
@@ -11,6 +13,7 @@ public class Enemy : MonoBehaviour
     public EnemyBehaviour EnemyBehaviour { get; private set; }
     public Rigidbody2D RB { get; private set; }
     public Collider2D Collider { get; private set; }
+    public SpriteRenderer SpriteRenderer { get; private set; }
 
     // States
     public StateMachine StateMachine { get; private set; }
@@ -73,6 +76,7 @@ public class Enemy : MonoBehaviour
         EnemyBehaviour = GetComponent<EnemyBehaviour>();
         RB = GetComponentInChildren<Rigidbody2D>();
         Collider = GetComponentInChildren<Collider2D>();
+        SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         // Set up states
         PatrolState = new EnemyPatrolState(this);
@@ -103,5 +107,13 @@ public class Enemy : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         StateMachine.CurrentState.OnCollisionEnter2D(collision);
+    }
+
+    // Change between visible and 'hiding'
+    public void ChangeSpriteVisibility(float val)
+    {
+        Color tmp = SpriteRenderer.color;
+        tmp.a = val;
+        SpriteRenderer.color = tmp;
     }
 }
