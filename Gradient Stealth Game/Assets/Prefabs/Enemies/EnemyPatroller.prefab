@@ -192,7 +192,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ChaseRotation>k__BackingField: 100
-  <DetectionTime>k__BackingField: 5
+  <DetectionTime>k__BackingField: 3
+  <ReDetectionTime>k__BackingField: 0.3
   <HiddenTime>k__BackingField: 0
   <Velocity>k__BackingField:
     serializedVersion: 2
@@ -220,6 +221,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   _hidingSprite: {fileID: 7482667652216324306, guid: fc321b8f076fe07439c92eac0d9f2de8, type: 3}
   _normalSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  alertName: EnemyAlert
+  deAlertName: EnemyDeAlert
+  chaseName: EnemyChase
   regionState: 0
   regionLayer: 0
 --- !u!195 &1811330268076981347
