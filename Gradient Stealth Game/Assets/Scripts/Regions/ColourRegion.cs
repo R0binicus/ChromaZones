@@ -17,13 +17,8 @@ public class ColourRegion : MonoBehaviour
 
     public int state;
 
-    bool _isPlayerHiding;
-    bool _isEnemyHiding;
-
     void Start()
     {
-        _isPlayerHiding = false;
-        _isEnemyHiding = false;
         // Set values and components
         Color.RGBToHSV(GetComponent<SpriteRenderer>().color, out var H, out var S, out var V);
         localColour = H * 360;
@@ -118,24 +113,12 @@ public class ColourRegion : MonoBehaviour
                 var player = collision.transform.parent.GetComponent<Player>();
                 player.regionLayer += 1;
                 player.regionState = state;
-
-                if (player.regionState == 3)
-                {
-                    player.HidingSprite();
-                    _isPlayerHiding = true;
-                }
             }
             else if (collision.transform.parent.tag == "Enemy")
             {
                 var enemy = collision.transform.parent.GetComponent<Enemy>();
                 enemy.regionLayer += 1;
                 enemy.regionState = state;
-
-                if (enemy.regionState == 1)
-                {
-                    enemy.HidingSprite();
-                    _isEnemyHiding = true;
-                }
             }
         }
     }
@@ -151,33 +134,11 @@ public class ColourRegion : MonoBehaviour
             {
                 var player = collision.transform.parent.GetComponent<Player>();
                 player.regionState = state;
-
-                if (player.regionState == 3 && !_isPlayerHiding)
-                {
-                    player.HidingSprite();
-                    _isPlayerHiding = true;
-                }
-                else if (player.regionState != 3 && _isPlayerHiding)
-                {
-                    player.NormalSprite();
-                    _isPlayerHiding = false;
-                }
             }
             else if (collision.transform.parent.tag == "Enemy")
             {
                 var enemy = collision.transform.parent.GetComponent<Enemy>();
                 enemy.regionState = state;
-
-                if (enemy.regionState == 1 && !_isEnemyHiding)
-                {
-                    enemy.HidingSprite();
-                    _isEnemyHiding = true;
-                }
-                else if (enemy.regionState != 1 && _isEnemyHiding)
-                {
-                    enemy.NormalSprite();
-                    _isEnemyHiding = false;
-                }
             }
         }
     }
@@ -196,12 +157,6 @@ public class ColourRegion : MonoBehaviour
                 var player = collision.transform.parent.GetComponent<Player>();
                 player.regionLayer -= 1;
 
-                if (_isPlayerHiding)
-                {
-                    player.NormalSprite();
-                    _isPlayerHiding = false;
-                }
-
                 if (player.regionLayer <= 0)
                 {
                     player.regionLayer = 0;
@@ -212,18 +167,6 @@ public class ColourRegion : MonoBehaviour
             {
                 var enemy = collision.transform.parent.GetComponent<Enemy>();
                 enemy.regionLayer -= 1;
-
-                if (_isEnemyHiding)
-                {
-                    enemy.NormalSprite();
-                    _isEnemyHiding = false;
-                }
-
-                if (enemy.regionLayer <= 0)
-                {
-                    enemy.regionLayer = 0;
-                    enemy.regionState = 0;
-                }
             }
         }
     }

@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     // Regions
     public int regionState = 0;
     public int regionLayer = 0;
+    private bool isPlayerHiding = false;
 
     //movement
     [SerializeField] private float moveSpeed = 3f;
@@ -29,10 +30,8 @@ public class Player : MonoBehaviour
     [Header("Sounds")]
     [SerializeField] private string obscuredName = "PlayerObscured";
 	private AudioSource obscuredSound;
-
     [SerializeField] private string visibleName = "PlayerVisible";
 	private AudioSource visibleSound;
-
     [SerializeField] private string moveName = "PlayerMove";
 	private AudioSource moveSound;
 
@@ -76,6 +75,23 @@ public class Player : MonoBehaviour
             }
 
             ProcessInputs();
+        }
+
+        if (regionState == 3)
+        {
+            if (!isPlayerHiding)
+            {
+                HidingSprite();
+                isPlayerHiding = true;
+            }
+        }
+        else 
+        {
+            if (isPlayerHiding)
+            {
+                NormalSprite();
+                isPlayerHiding = false;
+            }
         }
     }
 

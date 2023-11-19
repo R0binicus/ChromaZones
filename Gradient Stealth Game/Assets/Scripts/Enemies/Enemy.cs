@@ -12,6 +12,11 @@ public class Enemy : MonoBehaviour
     [field: SerializeField] public Sprite _hidingSprite;
     [field: SerializeField] public Sprite _normalSprite;
     
+    // Regions
+    public int regionState = 0;
+    public int regionLayer = 0;
+    private bool isEnemyHiding;
+    
     // Components
     public EnemyFieldOfView FOV { get; private set; }
     public EnemyBehaviour EnemyBehaviour { get; private set; }
@@ -80,10 +85,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // Regions
-    public int regionState = 0;
-    public int regionLayer = 0;
-
     private void Awake()
     {
         // Get components
@@ -123,6 +124,23 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         StateMachine.CurrentState.LogicUpdate();
+
+        if (regionState == 1)
+        {
+            if (!isEnemyHiding)
+            {
+                HidingSprite();
+                isEnemyHiding = true;
+            }
+        }
+        else 
+        {
+            if (isEnemyHiding)
+            {
+                NormalSprite();
+                isEnemyHiding = false;
+            }
+        }
     }
 
     private void FixedUpdate()
