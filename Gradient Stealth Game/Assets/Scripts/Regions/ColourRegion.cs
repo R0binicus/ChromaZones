@@ -149,6 +149,10 @@ public class ColourRegion : MonoBehaviour
                 {
                     player.HidingSprite();
                 }
+                else
+                {
+                    player.NormalSprite();
+                }
             }
             else if (collision.transform.parent.tag == "Enemy")
             {
@@ -158,6 +162,10 @@ public class ColourRegion : MonoBehaviour
                 if (enemy.regionState == 1)
                 {
                     enemy.HidingSprite();
+                }
+                else
+                {
+                    enemy.NormalSprite();
                 }
             }
         }
