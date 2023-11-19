@@ -130,9 +130,12 @@ MonoBehaviour:
   regionState: 0
   regionLayer: 0
   moveSpeed: 3
-  ColourChangeSpeed: 0.1
+  ColourChangeSpeed: 0.075
   _hidingSprite: {fileID: 7482667652216324306, guid: fc321b8f076fe07439c92eac0d9f2de8, type: 3}
   _normalSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  obscuredName: PlayerObscured
+  visibleName: PlayerVisible
+  moveName: PlayerMove
 --- !u!61 &4348353519037223968
 BoxCollider2D:
   m_ObjectHideFlags: 0
