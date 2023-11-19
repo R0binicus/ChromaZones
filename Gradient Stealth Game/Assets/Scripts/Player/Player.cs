@@ -30,6 +30,9 @@ public class Player : MonoBehaviour
     [SerializeField] private string obscuredName = "PlayerObscured";
 	private AudioSource obscuredSound;
 
+    [SerializeField] private string visibleName = "PlayerVisible";
+	private AudioSource visibleSound;
+
     [SerializeField] private string moveName = "PlayerMove";
 	private AudioSource moveSound;
 
@@ -51,6 +54,7 @@ public class Player : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
         obscuredSound = GameObject.Find(obscuredName).GetComponent<AudioSource>();
+        visibleSound = GameObject.Find(visibleName).GetComponent<AudioSource>();
         moveSound = GameObject.Find(moveName).GetComponent<AudioSource>();
 
         origin = transform.position;
@@ -119,6 +123,7 @@ public class Player : MonoBehaviour
 
     public void NormalSprite()
     {
+        visibleSound.Play();
         _spriteRenderer.sprite = _normalSprite;
     }
 
