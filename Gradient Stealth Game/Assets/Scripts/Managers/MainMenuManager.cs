@@ -8,14 +8,18 @@ using UnityEditor;
 
 public class MainMenuManager : MonoBehaviour
 {
+    // Menu Panels
     [SerializeField] GameObject _mainMenu;
     [SerializeField] GameObject _playMenu;
     [SerializeField] GameObject _instructions;
+
+    AudioSource _buttonSFXSource;
 
     private void Awake()
     {
         // If using the Unity editor or development build, enable debug logs
         Debug.unityLogger.logEnabled = Debug.isDebugBuild;
+        _buttonSFXSource = GetComponent<AudioSource>();
     }
 
     public void PlayButton()
@@ -50,6 +54,4 @@ public class MainMenuManager : MonoBehaviour
         _playMenu.SetActive(false);
         _mainMenu.SetActive(true);
     }
-
-
 }
