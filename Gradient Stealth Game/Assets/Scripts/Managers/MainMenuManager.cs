@@ -44,7 +44,7 @@ public class MainMenuManager : MonoBehaviour
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
 #else
-		Application.Quit(), quitDelay;
+		Application.Quit();
 #endif
     }
 

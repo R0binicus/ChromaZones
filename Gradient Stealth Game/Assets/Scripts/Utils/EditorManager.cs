@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using UnityEngine;
 using UnityEditor;
 
@@ -53,3 +55,5 @@ public class EditorManager : Editor
 		DrawArrow(m.waypoints[m.waypoints.Count-1], m.transform.position);
 	}
 }
+
+#endif
