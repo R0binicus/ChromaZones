@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.68, y: 4.34, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3828915641979398254}
@@ -192,6 +192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ChaseRotation>k__BackingField: 100
   <DetectionTime>k__BackingField: 2
+  <ReDetectionTime>k__BackingField: 0.3
   <HiddenTime>k__BackingField: 0
   <Velocity>k__BackingField:
     serializedVersion: 2
@@ -219,6 +220,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   _hidingSprite: {fileID: 7482667652216324306, guid: fc321b8f076fe07439c92eac0d9f2de8, type: 3}
   _normalSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  alertName: EnemyAlert
+  deAlertName: EnemyDeAlert
+  chaseName: EnemyChase
   regionState: 0
   regionLayer: 0
 --- !u!195 &2579516656903316743

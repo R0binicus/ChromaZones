@@ -9,6 +9,7 @@ public class ColourRegion : MonoBehaviour
     private ManagerScript gameManager;
 
     [SerializeField] private float transitionMultiplier = 2f;
+    [SerializeField] private float localChangeMultiplier = 1f;
 
     private float colourDiff;                           // Colour from game manager
     private float localColour;         // Colour of this region specifically
@@ -85,16 +86,16 @@ public class ColourRegion : MonoBehaviour
         switch(localColour) 
         {
             case float x when x >= 50f && x < 70f :
-                localColour = localColour + (colourDiff * transitionMultiplier);
+                localColour = localColour + (colourDiff * transitionMultiplier * localChangeMultiplier);
             break;
             case float x when x >= 170f && x < 190f :
-                localColour = localColour + (colourDiff * transitionMultiplier);
+                localColour = localColour + (colourDiff * transitionMultiplier * localChangeMultiplier);
             break;
             case float x when x >= 290f && x < 310f :
-                localColour = localColour + (colourDiff * transitionMultiplier);
+                localColour = localColour + (colourDiff * transitionMultiplier * localChangeMultiplier);
             break;
             default:
-                localColour = localColour + colourDiff;
+                localColour = localColour + (colourDiff * localChangeMultiplier);
             break;
         }
     }
