@@ -115,7 +115,7 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 4
 --- !u!61 &5575769905689285172
@@ -221,11 +221,11 @@ MonoBehaviour:
     m_RotationOrder: 4
   _hidingSprite: {fileID: 7482667652216324306, guid: fc321b8f076fe07439c92eac0d9f2de8, type: 3}
   _normalSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  regionState: 0
+  regionLayer: 0
   alertName: EnemyAlert
   deAlertName: EnemyDeAlert
   chaseName: EnemyChase
-  regionState: 0
-  regionLayer: 0
 --- !u!195 &1811330268076981347
 NavMeshAgent:
   m_ObjectHideFlags: 0
