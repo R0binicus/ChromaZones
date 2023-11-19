@@ -17,7 +17,7 @@ public class UIColourScript : MonoBehaviour
     {
         if (tmpMousePosition != Input.mousePosition)
         {
-            colour = 0.3f;
+            colour = 0.35f;
             tmpMousePosition = Input.mousePosition;
         }
         else
