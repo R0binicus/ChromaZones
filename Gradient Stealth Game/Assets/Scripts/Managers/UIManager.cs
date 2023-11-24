@@ -26,6 +26,13 @@ public class UIManager : MonoBehaviour
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            SceneManager.LoadScene(0);
+        }
+    }
+
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.LOSE, ShowLosePanel);
