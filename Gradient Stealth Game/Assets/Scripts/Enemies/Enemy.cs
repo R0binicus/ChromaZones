@@ -2,36 +2,54 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Data
-    [field: SerializeField] public float ChaseRotation { get; private set; }
+    #region Exposed Data
+    [field: Header("Timers")]
     [field: SerializeField] public float DetectionTime { get; private set; }
     [field: SerializeField] public float ReDetectionTime { get; private set; } // If has just come from chase state to alert state
-    public bool DetectedOnce { get; set; } // If player has been detected going from chase to alert
     [field: SerializeField] public float HiddenTime { get; private set; }
+
+    [field: Header("Movement")]
     [field: SerializeField] public AnimationCurve Velocity { get; private set; }
+    [field: SerializeField] public float ChaseRotation { get; private set; }
+
+    [field: Header("FOV")]
+    [field: SerializeField] public FOVData PatrolFOVData { get; private set; }
+    [field: SerializeField] public FOVData AlertFOVData { get; private set; }
+    
+    [field: Header("Sprites")]
     [field: SerializeField] public Sprite _hidingSprite;
     [field: SerializeField] public Sprite _normalSprite;
-    
-    // Regions
+    #endregion
+
+    #region Internal Data
+    public bool DetectedOnce { get; set; } // If player has been detected going from chase to alert
+    #endregion
+   
+    #region Region Data
+    [Header("Region Debugging")]
     public int regionState = 0;
     public int regionLayer = 0;
     private bool isEnemyHiding;
+    #endregion
     
-    // Components
+    #region Components
     public EnemyFieldOfView FOV { get; private set; }
     public EnemyBehaviour EnemyBehaviour { get; private set; }
     public Rigidbody2D RB { get; private set; }
     public Collider2D Collider { get; private set; }
     public SpriteRenderer SpriteRenderer { get; private set; }
     public UnityEngine.AI.NavMeshAgent Agent { get; private set; }
+    #endregion
 
-    // States
+    #region States
     public StateMachine StateMachine { get; private set; }
     public EnemyPatrolState PatrolState { get; private set; }
     public EnemyAlertState AlertState { get; private set; }
     public EnemyChaseState ChaseState { get; private set; }
     public EnemyCaughtState CaughtState { get; private set; }
+    #endregion
 
+    #region Sounds
     [Header("Sounds")]
     [SerializeField] private string alertName = "EnemyAlert";
 	public AudioSource alertSound { get; private set; }
@@ -41,8 +59,9 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private string chaseName = "EnemyChase";
 	public AudioSource chaseSound { get; private set; }
+    #endregion
 
-    // GameObject References
+    #region GameObject Refs
     private Player _player;
     private EnemyManager _enemyManager;
 
@@ -84,6 +103,7 @@ public class Enemy : MonoBehaviour
             _player = value;
         }
     }
+    #endregion
 
     private void Awake()
     {

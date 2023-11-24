@@ -5,16 +5,6 @@ public class EnemyFieldOfView : MonoBehaviour
     [Header("General Data")]
     [SerializeField] LayerMask _layerToRaycast;
 
-    [Header("Patrol Data")]
-    [SerializeField, Range(0, 360)] float _patrolFOVAngle;
-    [SerializeField] float _patrolFOVDist;
-    [SerializeField] uint _patrolTriangleSlices;
-
-    [Header("Alert Data")]
-    [SerializeField, Range(0, 360)] float _alertFOVAngle;
-    [SerializeField] float _alertFOVDist;
-    [SerializeField] uint _alertTriangleSlices;
-
     // Internal Data
     float _FOVAngle;
     float _FOVDist;
@@ -25,12 +15,12 @@ public class EnemyFieldOfView : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _currentAngle = GetAngleFromVectorFloat(transform.up) + ((_FOVAngle)/ 2f); // Get starting angle first
-        float angleIncrease = (_FOVAngle) / _triangleSlices; // Calculate how much to increase angle by
+        _currentAngle = GetAngleFromVectorFloat(transform.up) + (_FOVAngle / 2f); // Get starting angle first
+        float angleIncrease = _FOVAngle / _triangleSlices; // Calculate how much to increase angle by
 
         for (int i = 0; i <= _triangleSlices; i++)
         {
-            RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(_currentAngle), (_FOVDist * transform.lossyScale.x), _layerToRaycast);
+            RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(_currentAngle), _FOVDist * transform.lossyScale.x, _layerToRaycast);
 
             // Hit player
             if (ray.collider != null)
@@ -89,18 +79,11 @@ public class EnemyFieldOfView : MonoBehaviour
         mesh.triangles = triangles;
     }
 
-    public void SetPatrolFOVData()
+    public void SetFOVData(FOVData data)
     {
-        _FOVAngle = _patrolFOVAngle;
-        _FOVDist = _patrolFOVDist;
-        _triangleSlices = _patrolTriangleSlices;
-    }
-
-    public void SetAlertFOVData()
-    {
-        _FOVAngle = _alertFOVAngle;
-        _FOVDist = _alertFOVDist;
-        _triangleSlices = _alertTriangleSlices;
+        _FOVAngle = data.FOVAngle;
+        _FOVDist = data.FOVDist;
+        _triangleSlices = data.TriangleSlices;
     }
 
     public void IsActive(bool flag)

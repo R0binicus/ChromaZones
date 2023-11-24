@@ -191,7 +191,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7245d556e31fd14439dff711d6f76cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ChaseRotation>k__BackingField: 100
   <DetectionTime>k__BackingField: 1
   <ReDetectionTime>k__BackingField: 0.3
   <HiddenTime>k__BackingField: 0
@@ -219,6 +218,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  <ChaseRotation>k__BackingField: 100
+  <PatrolFOVData>k__BackingField:
+    <FOVAngle>k__BackingField: 80
+    <FOVDist>k__BackingField: 3
+    <TriangleSlices>k__BackingField: 10
+  <AlertFOVData>k__BackingField:
+    <FOVAngle>k__BackingField: 360
+    <FOVDist>k__BackingField: 5
+    <TriangleSlices>k__BackingField: 30
   _hidingSprite: {fileID: 7482667652216324306, guid: fc321b8f076fe07439c92eac0d9f2de8, type: 3}
   _normalSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   regionState: 0
@@ -297,12 +305,6 @@ MonoBehaviour:
   _layerToRaycast:
     serializedVersion: 2
     m_Bits: 1024
-  _patrolFOVAngle: 80
-  _patrolFOVDist: 3
-  _patrolTriangleSlices: 10
-  _alertFOVAngle: 360
-  _alertFOVDist: 3
-  _alertTriangleSlices: 30
 --- !u!33 &807487434540428561
 MeshFilter:
   m_ObjectHideFlags: 0

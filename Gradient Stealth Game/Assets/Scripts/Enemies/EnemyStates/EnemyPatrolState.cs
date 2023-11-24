@@ -7,7 +7,7 @@ public class EnemyPatrolState : EnemyState
     public override void Enter()
     {
         Debug.Log("Entering Patrol State");
-        Enemy.FOV.SetPatrolFOVData();
+        Enemy.FOV.SetFOVData(Enemy.PatrolFOVData);
         Enemy.FOV.CreateFOV();
         Enemy.EnemyBehaviour.ResetBehaviour();
         Enemy.DetectedOnce = false;

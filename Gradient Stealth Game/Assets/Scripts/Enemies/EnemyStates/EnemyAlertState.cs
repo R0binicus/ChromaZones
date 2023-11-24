@@ -15,7 +15,7 @@ public class EnemyAlertState : EnemyState
         Debug.Log("Entering Enemy Alert State");
 
         Enemy.FOV.IsActive(true);
-        Enemy.FOV.SetAlertFOVData();
+        Enemy.FOV.SetFOVData(Enemy.AlertFOVData);
         Enemy.FOV.CreateFOV();
         _timer = 0;
     }
