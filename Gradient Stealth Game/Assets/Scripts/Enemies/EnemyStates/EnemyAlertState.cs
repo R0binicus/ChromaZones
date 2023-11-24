@@ -5,10 +5,7 @@ public class EnemyAlertState : EnemyState
 {
     private float _timer;
 
-    public EnemyAlertState(Enemy enemy) : base(enemy)
-    {
-
-    }
+    public EnemyAlertState(Enemy enemy) : base(enemy) {}
 
     public override void Enter()
     {
@@ -23,21 +20,10 @@ public class EnemyAlertState : EnemyState
     public override void LogicUpdate()
     {
         _timer += Time.deltaTime;
-
-        // If Enemy has come back from ChaseState
-        if (_timer > Enemy.ReDetectionTime && Enemy.DetectedOnce)
-        {
-            // If player is still within FOV, chase
-            if (Enemy.FOV.PlayerSpotted && Enemy.Player.regionState != 3)
-            {
-                Enemy.StateMachine.ChangeState(Enemy.ChaseState);
-                return;
-            }
-        }
         
         if (_timer > Enemy.DetectionTime)
         {
-            // If Enemy hasn't come back from ChaseState and player is still within FOV, chase
+            // If Player is still within FOV and not hiding, chase
             if (Enemy.FOV.PlayerSpotted && Enemy.Player.regionState != 3)
             {
                 Enemy.StateMachine.ChangeState(Enemy.ChaseState);

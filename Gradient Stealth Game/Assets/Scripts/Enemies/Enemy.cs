@@ -5,7 +5,6 @@ public class Enemy : MonoBehaviour
     #region Exposed Data
     [field: Header("Timers")]
     [field: SerializeField] public float DetectionTime { get; private set; }
-    [field: SerializeField] public float ReDetectionTime { get; private set; } // If has just come from chase state to alert state
     [field: SerializeField] public float HiddenTime { get; private set; }
 
     [field: Header("Movement")]
@@ -19,10 +18,6 @@ public class Enemy : MonoBehaviour
     [field: Header("Sprites")]
     [field: SerializeField] public Sprite _hidingSprite;
     [field: SerializeField] public Sprite _normalSprite;
-    #endregion
-
-    #region Internal Data
-    public bool DetectedOnce { get; set; } // If player has been detected going from chase to alert
     #endregion
    
     #region Region Data

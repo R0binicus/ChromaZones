@@ -7,10 +7,7 @@ public class EnemyChaseState : EnemyState
     float _timer;
     float _accelTimer;
 
-    public EnemyChaseState(Enemy enemy) : base(enemy)
-    {
-
-    }
+    public EnemyChaseState(Enemy enemy) : base(enemy) {}
 
     public override void Enter()
     {
@@ -19,7 +16,6 @@ public class EnemyChaseState : EnemyState
         _timer = 0;
         _accelTimer = 0;
         Enemy.FOV.IsActive(false);
-        Enemy.DetectedOnce = true;
     }
 
     public override void LogicUpdate()

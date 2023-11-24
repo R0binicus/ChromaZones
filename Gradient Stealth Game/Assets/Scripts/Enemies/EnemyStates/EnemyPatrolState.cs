@@ -10,7 +10,6 @@ public class EnemyPatrolState : EnemyState
         Enemy.FOV.SetFOVData(Enemy.PatrolFOVData);
         Enemy.FOV.CreateFOV();
         Enemy.EnemyBehaviour.ResetBehaviour();
-        Enemy.DetectedOnce = false;
     }
     public override void LogicUpdate()
     {
@@ -18,7 +17,7 @@ public class EnemyPatrolState : EnemyState
         if (Enemy.FOV.PlayerSpotted && Enemy.Player.regionState != 3)
         {
             Enemy.alertSound.Play();
-            Enemy.StateMachine.ChangeState(Enemy.AlertState);
+            Enemy.StateMachine.ChangeState(Enemy.ChaseState);
         }
         else
         {
