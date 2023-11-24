@@ -56,15 +56,20 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
 
     public override void UpdatePhysicsBehaviour()
     {
+        if ((destination - (Vector2)transform.position).magnitude < 0.01f)
+        {
+            rb.velocity = Vector2.zero;
+        }
 
+        rb.velocity = destinationDirection;
     }
 
     public override void UpdateLogicBehaviour()
     {
         UpdateWaypoint();
-        if ((destination - (Vector2)transform.position).magnitude < 0.1f)
+        if ((destination - (Vector2)transform.position).magnitude < 0.01f)
         {
-            rb.velocity = Vector2.zero;
+            //rb.velocity = Vector2.zero;
             waypointIndex++;
             UpdateWaypoint();
         }
@@ -74,6 +79,6 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
         lookRot.eulerAngles = new Vector3(0,0,fullRotatation.eulerAngles.z);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, roationSpeed * Time.deltaTime);
 
-        rb.velocity = destinationDirection;
+        //rb.velocity = destinationDirection;
     }
 }
