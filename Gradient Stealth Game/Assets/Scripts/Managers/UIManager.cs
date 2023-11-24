@@ -7,14 +7,21 @@ using UnityEngine.SceneManagement;
 public class UIManager : MonoBehaviour
 {
     // UI Panels
+    [Header("Canvases")]
     [SerializeField] GameObject _gameCanvas;
+    [Header("Game Panels")]
     [SerializeField] GameObject _winPanel;
     [SerializeField] GameObject _losePanel;
+    [SerializeField] GameObject _pausePanel;
+    [Header("Buttons")]
     [SerializeField] GameObject _nextLevelButton;
 
     // Scene Tracker
     int _currentSceneIndex;
     int _numOfScenes;
+
+    // Internal Data
+    bool _paused;
 
     private void Awake()
     {
@@ -26,10 +33,17 @@ public class UIManager : MonoBehaviour
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
     }
 
+    private void Start()
+    {
+        Time.timeScale = 1.0f;
+        _paused = false;
+    }
+
     private void Update()
     {
+        // Toggle pause
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            SceneManager.LoadScene(0);
+            TogglePause();
         }
     }
 
@@ -64,6 +78,23 @@ public class UIManager : MonoBehaviour
     public void Quit()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void TogglePause()
+    {
+        _paused = !_paused;
+
+        if (!_paused)
+        {
+            DeactivateUI();
+            Time.timeScale = 1.0f;
+        }
+        else
+        {
+            Time.timeScale = 0.0f;
+            _gameCanvas.SetActive(_paused);
+            _pausePanel.SetActive(_paused);
+        }
     }
 
     private void DeactivateUI()
