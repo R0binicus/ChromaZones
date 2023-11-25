@@ -16,6 +16,7 @@ public class LevelManager : MonoBehaviour
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
 
         // Create level events
+        EventManager.EventInitialise(EventType.SCENE_LOAD);
     }
 
     private void OnEnable()
@@ -23,7 +24,6 @@ public class LevelManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.NEXT_LEVEL, NextLevelHandler);
         EventManager.EventSubscribe(EventType.RESTART_LEVEL, RestartLevelHandler);
         EventManager.EventSubscribe(EventType.QUIT_LEVEL, QuitLevelHandler);
-
     }
 
     private void OnDisable()
@@ -36,22 +36,47 @@ public class LevelManager : MonoBehaviour
     // Listens for when NextLevelButton is pressed
     public void NextLevelHandler(object data)
     {
+        if (data == null)
+        {
+            Debug.LogError("NextLevelHandler did not receive a float as data");
+        }
+
+        float delayTime = (float)data;
+
         if (_currentSceneIndex < _numOfScenes - 1)
         {
-            SceneManager.LoadScene(_currentSceneIndex + 1);
+            StartCoroutine(LoadScene(_currentSceneIndex + 1, delayTime));
         }
     }
 
     // Listens for when ReplayLevelButton is pressed
     public void RestartLevelHandler(object data)
     {
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(currentSceneName);
+        if (data == null)
+        {
+            Debug.LogError("RestartLevelHandler did not receive a float as data");
+        }
+
+        float delayTime = (float)data;
+        StartCoroutine(LoadScene(_currentSceneIndex, delayTime));
     }
 
     // Listens for when UIManager QuitButton is pressed
     public void QuitLevelHandler(object data)
     {
-        SceneManager.LoadScene(0);
+        if (data == null)
+        {
+            Debug.LogError("QuitLevelHandler did not receive a float as data");
+        }
+
+        float delayTime = (float)data;
+        StartCoroutine(LoadScene(0, delayTime));
+    }
+
+    IEnumerator LoadScene(int index, float delayTime)
+    {
+        EventManager.EventTrigger(EventType.SCENE_LOAD, null);
+        yield return new WaitForSeconds(delayTime - 0.1f);
+        SceneManager.LoadScene(index);
     }
 }

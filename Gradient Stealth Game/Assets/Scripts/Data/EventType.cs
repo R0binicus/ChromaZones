@@ -5,5 +5,6 @@ public enum EventType
     ADD_ENEMY,  // Broadcasts an instantiated Enemy to the EnemyManager to add to its list
     RESTART_LEVEL,
     NEXT_LEVEL,
-    QUIT_LEVEL
+    QUIT_LEVEL,
+    SCENE_LOAD
 };

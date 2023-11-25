@@ -13,8 +13,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject _winPanel;
     [SerializeField] GameObject _losePanel;
     [SerializeField] GameObject _pausePanel;
+    [SerializeField] GameObject _buttonsPanel;
     [Header("Buttons")]
     [SerializeField] GameObject _nextLevelButton;
+    [Header("Fading Data")]
+    [SerializeField] Image _fadePanel;
+    [SerializeField] AnimationCurve _fadeInSpeed;
+    [SerializeField] AnimationCurve _fadeOutSpeed;
 
     // Scene Tracker
     int _currentSceneIndex;
@@ -40,6 +45,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        FadeIn();
         Time.timeScale = 1.0f;
         _paused = false;
     }
@@ -56,29 +62,34 @@ public class UIManager : MonoBehaviour
     {
         EventManager.EventSubscribe(EventType.LOSE, ShowLosePanel);
         EventManager.EventSubscribe(EventType.WIN, ShowWinPanel);
+        EventManager.EventSubscribe(EventType.SCENE_LOAD, FadeOut);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.LOSE, ShowLosePanel);
         EventManager.EventUnsubscribe(EventType.WIN, ShowWinPanel);
+        EventManager.EventUnsubscribe(EventType.SCENE_LOAD, FadeOut);
     }
 
     public void NextLevel()
     {
-        EventManager.EventTrigger(EventType.NEXT_LEVEL, null);
+        Time.timeScale = 1.0f;
+        EventManager.EventTrigger(EventType.NEXT_LEVEL, _fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time);
     }
 
     // Button callback to restart level
     public void Restart()
     {
-        EventManager.EventTrigger(EventType.RESTART_LEVEL, null);
+        Time.timeScale = 1.0f;
+        EventManager.EventTrigger(EventType.RESTART_LEVEL, _fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time);
     }
 
     //Button callback to go back to main menu
     public void Quit()
     {
-        EventManager.EventTrigger(EventType.QUIT_LEVEL, null);
+        Time.timeScale = 1.0f;
+        EventManager.EventTrigger(EventType.QUIT_LEVEL, _fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time);
     }
 
     public void TogglePause()
@@ -93,8 +104,10 @@ public class UIManager : MonoBehaviour
         else
         {
             Time.timeScale = 0.0f;
-            _gameCanvas.SetActive(_paused);
-            _pausePanel.SetActive(_paused);
+            _gameCanvas.SetActive(true);
+            _nextLevelButton.SetActive(false);
+            _buttonsPanel.SetActive(true);
+            _pausePanel.SetActive(true);
         }
     }
 
@@ -103,12 +116,14 @@ public class UIManager : MonoBehaviour
         _gameCanvas.SetActive(false);
         _losePanel.SetActive(false);
         _winPanel.SetActive(false);
+        _buttonsPanel.SetActive(false);
         _nextLevelButton.SetActive(false);
     }
 
     private void ShowLosePanel(object data)
     {
         _nextLevelButton.SetActive(false);
+        _buttonsPanel.SetActive(true);
         _gameCanvas.SetActive(true);
         _losePanel.SetActive(true);
     }
@@ -126,11 +141,39 @@ public class UIManager : MonoBehaviour
         }
 
         _gameCanvas.SetActive(true);
+        _buttonsPanel.SetActive(true);
+        _nextLevelButton.SetActive(true);
         _winPanel.SetActive(true);
     }
 
-    IEnumerator FadeIn()
+    // Listens for when a scene is about to change
+    public void FadeOut(object data)
     {
-        yield return null;
+        StartCoroutine(Fade(_fadeOutSpeed, Time.time));
+    }
+
+    public void FadeIn()
+    {
+        StartCoroutine(Fade(_fadeInSpeed, Time.time));
+    }
+
+    IEnumerator Fade(AnimationCurve fadeCurve, float startTime)
+    {
+        _gameCanvas.SetActive(true);
+        _fadePanel.gameObject.SetActive(true);
+
+        while (Time.time - startTime < fadeCurve.keys[fadeCurve.length - 1].time)
+        {
+            _fadePanel.color = new Color(0, 0, 0, Mathf.Lerp
+            (
+                fadeCurve.keys[0].time,
+                fadeCurve.keys[fadeCurve.length - 1].time,
+                fadeCurve.Evaluate(Time.time - startTime)
+            ));
+            yield return null;
+        }
+
+        _fadePanel.gameObject.SetActive(false);
+        _gameCanvas.SetActive(false);
     }
 }
