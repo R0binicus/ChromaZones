@@ -19,6 +19,8 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private string loseName = "PlayerLose";
 	private AudioSource loseSound;
 
+    [SerializeField] private NavMeshPlus.Components.NavMeshSurface surfaceSingle;
+
     private void Awake()
     {
         deathSound = GameObject.Find(deathName).GetComponent<AudioSource>();
@@ -27,6 +29,11 @@ public class EnemyManager : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         _enemies = new List<Enemy>();
         EventManager.EventInitialise(EventType.LOSE);
+    }
+
+    void Start()
+    {
+        surfaceSingle.BuildNavMesh();
     }
 
     private void OnEnable()

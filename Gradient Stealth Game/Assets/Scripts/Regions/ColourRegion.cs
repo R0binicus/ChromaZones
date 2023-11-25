@@ -6,7 +6,7 @@ using UnityEngine;
 public class ColourRegion : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
-    private ManagerScript gameManager;
+    private ColourManager gameManager;
 
     [SerializeField] private float transitionMultiplier = 2f;
     [SerializeField] private float localChangeMultiplier = 1f;
@@ -23,7 +23,7 @@ public class ColourRegion : MonoBehaviour
         Color.RGBToHSV(GetComponent<SpriteRenderer>().color, out var H, out var S, out var V);
         localColour = H * 360;
         originalHue = localColour;
-        gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
+        gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ColourManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
