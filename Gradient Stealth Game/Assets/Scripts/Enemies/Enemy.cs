@@ -139,8 +139,6 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         StateMachine.CurrentState.LogicUpdate();
-
-        
     }
 
     private void FixedUpdate()

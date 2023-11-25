@@ -4,11 +4,23 @@ using UnityEngine;
 
 public class ColourManager : MonoBehaviour
 {
-    public float colour;        // Final colour value for other things to access
+    public float colour;                    // Final colour value for other things to access
+    [SerializeField] private float _colourChangeSpeed = 0.1f;  
+    private bool _changing_bool = false;
 
     void Awake()
     {
         EventManager.EventInitialise(EventType.INIT_COLOUR_MANAGER);
+    }
+
+    private void OnEnable()
+    {
+        EventManager.EventSubscribe(EventType.COLOUR_CHANGE_BOOL, ColourBoolHandler);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.COLOUR_CHANGE_BOOL, ColourBoolHandler);
     }
 
     void Start()
@@ -18,6 +30,22 @@ public class ColourManager : MonoBehaviour
 
     void Update()
     {
+        if (_changing_bool == true)
+        {
+            colour = 0.5f * _colourChangeSpeed;
+        }
+        else
+        {
+            colour = 0f;
+        }
+    }
 
+    private void ColourBoolHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.Log("ColourBoolHandler is null");
+        }
+        _changing_bool = (bool)data;
     }
 }

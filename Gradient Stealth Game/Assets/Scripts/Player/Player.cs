@@ -22,7 +22,8 @@ public class Player : MonoBehaviour
     private Vector2 moveDirection;
 
     // Data
-    public float ColourChangeSpeed = 0.1f;
+    bool _managerBool = false;
+    bool _sentManagerBool = false;
     bool _isDead;
     [SerializeField] Sprite _hidingSprite;
     [SerializeField] Sprite _normalSprite;
@@ -37,6 +38,7 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        EventManager.EventInitialise(EventType.COLOUR_CHANGE_BOOL);
         // Set values and components
         rb = GetComponent<Rigidbody2D>();
         transform = GetComponent<Transform>();
@@ -63,20 +65,51 @@ public class Player : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LOSE, Death);
     }
 
+    void Start()
+    {
+        EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+    }
+
     void Update()
     {
+        //If new bool state has NOT been sent to manager, send it
+        if (_sentManagerBool != _managerBool)
+        {
+            if (!_isDead)
+            {
+                if (rb.velocity != Vector2.zero && regionState != 3)
+                {
+                    EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, true);
+                    _sentManagerBool = true;
+                }
+                else
+                {
+                    EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+                    _sentManagerBool = false;
+                }
+            }
+            else
+            {
+                EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+                _sentManagerBool = false;
+            }
+        }
+
         if (!_isDead)
         {
             if (rb.velocity != Vector2.zero && regionState != 3)
             {
-                _colourManager.colour = 0.5f * ColourChangeSpeed;
+                _managerBool = true;
             }
             else
             {
-                _colourManager.colour = 0f;
+                _managerBool = false;
             }
-
             ProcessInputs();
+        }
+        else
+        {
+            _managerBool = false;
         }
     }
 
