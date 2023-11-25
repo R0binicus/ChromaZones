@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     // Components
     private Rigidbody2D rb;
-    private ManagerScript gameManager;
+    private ColourManager gameManager;
     private SpriteRenderer _spriteRenderer;
     private Transform transform;
     private Vector2 origin;
@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         transform = GetComponent<Transform>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ManagerScript>();
+        gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ColourManager>();
         obscuredSound = GameObject.Find(obscuredName).GetComponent<AudioSource>();
         visibleSound = GameObject.Find(visibleName).GetComponent<AudioSource>();
         moveSound = GameObject.Find(moveName).GetComponent<AudioSource>();
@@ -67,11 +67,11 @@ public class Player : MonoBehaviour
         {
             if (rb.velocity != Vector2.zero && regionState != 3)
             {
-                gameManager.colourTime = 0.5f * ColourChangeSpeed;
+                gameManager.colour = 0.5f * ColourChangeSpeed;
             }
             else
             {
-                gameManager.colourTime = 0f;
+                gameManager.colour = 0f;
             }
 
             ProcessInputs();
@@ -107,8 +107,6 @@ public class Player : MonoBehaviour
                 {
                     moveSound.Play();
                 }
-
-                //gameManager.colourTime += 0.5f * ColourChangeSpeed;
             }
             else // set velocity to zero
             {
