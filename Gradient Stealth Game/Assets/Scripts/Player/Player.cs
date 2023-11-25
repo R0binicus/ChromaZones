@@ -105,7 +105,6 @@ public class Player : MonoBehaviour
             {
                 _managerBool = false;
             }
-            ProcessInputs();
         }
         else
         {
@@ -117,6 +116,7 @@ public class Player : MonoBehaviour
     {
         if (!_isDead)
         {
+            ProcessInputs();
             // if player is doing movement inputs, move the player and add to colour time counter
             if (moveDirection.x != 0 || moveDirection.y != 0)
             {
