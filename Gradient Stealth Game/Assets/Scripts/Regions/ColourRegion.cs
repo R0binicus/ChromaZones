@@ -6,35 +6,48 @@ using UnityEngine;
 public class ColourRegion : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
-    private ColourManager gameManager;
+    private ColourManager _colourManager;
 
     [SerializeField] private float transitionMultiplier = 2f;
     [SerializeField] private float localChangeMultiplier = 1f;
 
-    private float colourDiff;                           // Colour from game manager
-    private float localColour;         // Colour of this region specifically
-    private float originalHue;                          // Original colour value when the level started
+    private float colourDiff;               // Colour from game manager
+    private float localColour;              // Colour of this region specifically
+    private float originalHue;              // Original colour value when the level started
 
-    public int state;
+    public int state = 0;
 
-    void Start()
+    private Player _player;
+    private List<Enemy> _enemies = new List<Enemy>();
+
+    void Awake()
     {
         // Set values and components
         Color.RGBToHSV(GetComponent<SpriteRenderer>().color, out var H, out var S, out var V);
         localColour = H * 360;
         originalHue = localColour;
-        gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ColourManager>();
+        //colourManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ColourManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    private void OnEnable()
+    {
+        EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
     }
 
     void Update()
     {
-        colourDiff = gameManager.colour;
+        colourDiff = _colourManager.colour;
         ProcessColour();
         SetColour();
     }
 
-    // Processes the gameManager colour
+    // Processes the colourManager colour
     private void ProcessColour()
     {
         // set new local colour value
@@ -59,6 +72,7 @@ public class ColourRegion : MonoBehaviour
 
     private void SetStates()
     {
+        int originalState = state;
         switch(localColour) 
         {
             case float x when x < 60f:
@@ -76,6 +90,24 @@ public class ColourRegion : MonoBehaviour
             default:
                 state = 0;
             break;
+        }
+
+        if (originalState != state)
+        {
+            if (_player != null)
+            {
+                //_player.regionState = state;
+                _player.NewState(state);
+            }
+
+            if (_enemies != null)
+            {
+                foreach (Enemy enemy in _enemies)
+                {
+                    //enemy.regionState = state;
+                    enemy.NewState(state);
+                }
+            }
         }
     }
 
@@ -103,22 +135,27 @@ public class ColourRegion : MonoBehaviour
     // Set state variable when entering a region
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //GameObject mainObject = collision.transform.parent.gameObject;
         // Set the object's regionState to be the current
         // state of the region. Also increment the region
         // layer by 1.
         if(collision.tag == "RegionDetector")
         {
-            if (collision.transform.parent.tag == "Player") 
+            GameObject mainObject = collision.transform.parent.gameObject;
+            if (mainObject.tag == "Player") 
             {
-                var player = collision.transform.parent.GetComponent<Player>();
-                player.regionLayer += 1;
-                player.regionState = state;
+                _player = mainObject.GetComponent<Player>();
+                _player.NewState(state);
+                //player.regionLayer += 1;
+                //player.regionState = state;
             }
-            else if (collision.transform.parent.tag == "Enemy")
+            else if (mainObject.tag == "Enemy")
             {
-                var enemy = collision.transform.parent.GetComponent<Enemy>();
-                enemy.regionLayer += 1;
-                enemy.regionState = state;
+                var enemyObject = mainObject.GetComponent<Enemy>();
+                enemyObject.NewState(state);
+                _enemies.Add(enemyObject);
+                //enemy.regionLayer += 1;
+                //enemy.regionState = state;
             }
         }
     }
@@ -133,12 +170,12 @@ public class ColourRegion : MonoBehaviour
             if (collision.transform.parent.tag == "Player") 
             {
                 var player = collision.transform.parent.GetComponent<Player>();
-                player.regionState = state;
+                //player.regionState = state;
             }
             else if (collision.transform.parent.tag == "Enemy")
             {
                 var enemy = collision.transform.parent.GetComponent<Enemy>();
-                enemy.regionState = state;
+                //enemy.regionState = state;
             }
         }
     }
@@ -146,28 +183,42 @@ public class ColourRegion : MonoBehaviour
     // Reset state variable if no longer on a region
     private void OnTriggerExit2D(Collider2D collision)
     {
+        
         if(collision.tag == "RegionDetector")
         {
+            GameObject mainObject = collision.transform.parent.gameObject;
             // What this does is reduce a region layer by 1
             // If region layer is 0, it should be in NO region
             // so it needs to be manually told to reset the object's
             // regionState to zero (no region)
-            if (collision.transform.parent.tag == "Player") 
+            if (mainObject.tag == "Player") 
             {
-                var player = collision.transform.parent.GetComponent<Player>();
-                player.regionLayer -= 1;
+                _player = null;
+                //var player = collision.transform.parent.GetComponent<Player>();
+                //player.regionLayer -= 1;
 
-                if (player.regionLayer <= 0)
-                {
-                    player.regionLayer = 0;
-                    player.regionState = 0;
-                }
+                //if (player.regionLayer <= 0)
+                //{
+                //    player.regionLayer = 0;
+                //    player.regionState = 0;
+                //}
             }
-            else if (collision.transform.parent.tag == "Enemy")
+            else if (mainObject.tag == "Enemy")
             {
-                var enemy = collision.transform.parent.GetComponent<Enemy>();
-                enemy.regionLayer -= 1;
+                _enemies.Remove(mainObject.GetComponent<Enemy>());
+                //var enemy = collision.transform.parent.GetComponent<Enemy>();
+                //enemy.regionLayer -= 1;
             }
         }
+    }
+
+    private void ColourManagerHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.Log("ColourManagerHandler is null");
+        }
+
+        _colourManager = (ColourManager)data;
     }
 }

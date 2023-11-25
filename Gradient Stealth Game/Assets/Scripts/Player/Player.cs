@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     // Components
     private Rigidbody2D rb;
-    private ColourManager gameManager;
+    private ColourManager _colourManager;
     private SpriteRenderer _spriteRenderer;
     private Transform transform;
     private Vector2 origin;
@@ -35,23 +35,13 @@ public class Player : MonoBehaviour
     [SerializeField] private string moveName = "PlayerMove";
 	private AudioSource moveSound;
 
-    private void OnEnable()
-    {
-        EventManager.EventSubscribe(EventType.LOSE, Death);
-    }
-
-    private void OnDisable()
-    {
-        EventManager.EventUnsubscribe(EventType.LOSE, Death);
-    }
-
-    void Start()
+    void Awake()
     {
         // Set values and components
         rb = GetComponent<Rigidbody2D>();
         transform = GetComponent<Transform>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ColourManager>();
+        //_colourManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ColourManager>();
         obscuredSound = GameObject.Find(obscuredName).GetComponent<AudioSource>();
         visibleSound = GameObject.Find(visibleName).GetComponent<AudioSource>();
         moveSound = GameObject.Find(moveName).GetComponent<AudioSource>();
@@ -61,37 +51,32 @@ public class Player : MonoBehaviour
         _spriteRenderer.sprite = _normalSprite;
     }
 
+    private void OnEnable()
+    {
+        EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
+        EventManager.EventSubscribe(EventType.LOSE, Death);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
+        EventManager.EventUnsubscribe(EventType.LOSE, Death);
+    }
+
     void Update()
     {
         if (!_isDead)
         {
             if (rb.velocity != Vector2.zero && regionState != 3)
             {
-                gameManager.colour = 0.5f * ColourChangeSpeed;
+                _colourManager.colour = 0.5f * ColourChangeSpeed;
             }
             else
             {
-                gameManager.colour = 0f;
+                _colourManager.colour = 0f;
             }
 
             ProcessInputs();
-        }
-
-        if (regionState == 3)
-        {
-            if (!isPlayerHiding)
-            {
-                HidingSprite();
-                isPlayerHiding = true;
-            }
-        }
-        else 
-        {
-            if (isPlayerHiding)
-            {
-                NormalSprite();
-                isPlayerHiding = false;
-            }
         }
     }
 
@@ -147,5 +132,36 @@ public class Player : MonoBehaviour
         // Player colour gets converted to Enemy!!!
         Color convertedColour = new Color(1f, 0.2983692f, 0.2509804f);
         _spriteRenderer.color = convertedColour;
+    }
+
+    private void ColourManagerHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.Log("ColourManagerHandler is null");
+        }
+
+        _colourManager = (ColourManager)data;
+    }
+
+    public void NewState(int input)
+    {
+        regionState = input;
+        if (regionState == 3)
+        {
+            if (!isPlayerHiding)
+            {
+                HidingSprite();
+                isPlayerHiding = true;
+            }
+        }
+        else 
+        {
+            if (isPlayerHiding)
+            {
+                NormalSprite();
+                isPlayerHiding = false;
+            }
+        }
     }
 }

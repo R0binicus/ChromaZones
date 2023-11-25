@@ -140,22 +140,7 @@ public class Enemy : MonoBehaviour
     {
         StateMachine.CurrentState.LogicUpdate();
 
-        if (regionState == 1)
-        {
-            if (!isEnemyHiding)
-            {
-                HidingSprite();
-                isEnemyHiding = true;
-            }
-        }
-        else 
-        {
-            if (isEnemyHiding)
-            {
-                NormalSprite();
-                isEnemyHiding = false;
-            }
-        }
+        
     }
 
     private void FixedUpdate()
@@ -177,5 +162,26 @@ public class Enemy : MonoBehaviour
     public void NormalSprite()
     {
         SpriteRenderer.sprite = _normalSprite;
+    }
+
+    public void NewState(int input)
+    {
+        regionState = input;
+        if (regionState == 1)
+        {
+            if (!isEnemyHiding)
+            {
+                HidingSprite();
+                isEnemyHiding = true;
+            }
+        }
+        else 
+        {
+            if (isEnemyHiding)
+            {
+                NormalSprite();
+                isEnemyHiding = false;
+            }
+        }
     }
 }
