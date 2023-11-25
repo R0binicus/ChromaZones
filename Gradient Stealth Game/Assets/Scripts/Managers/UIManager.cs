@@ -31,6 +31,11 @@ public class UIManager : MonoBehaviour
         // Get current Scene index and total number of scenes in game
         _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
+
+        // Create UI events
+        EventManager.EventInitialise(EventType.NEXT_LEVEL);
+        EventManager.EventInitialise(EventType.RESTART_LEVEL);
+        EventManager.EventInitialise(EventType.QUIT_LEVEL);
     }
 
     private void Start()
@@ -61,23 +66,19 @@ public class UIManager : MonoBehaviour
 
     public void NextLevel()
     {
-        if (_currentSceneIndex < _numOfScenes - 1)
-        {
-            SceneManager.LoadScene(_currentSceneIndex + 1);
-        }
+        EventManager.EventTrigger(EventType.NEXT_LEVEL, null);
     }
 
-    // Button callback to replay game
-    public void Replay()
+    // Button callback to restart level
+    public void Restart()
     {
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(currentSceneName);
+        EventManager.EventTrigger(EventType.RESTART_LEVEL, null);
     }
 
     //Button callback to go back to main menu
     public void Quit()
     {
-        SceneManager.LoadScene(0);
+        EventManager.EventTrigger(EventType.QUIT_LEVEL, null);
     }
 
     public void TogglePause()
@@ -126,5 +127,10 @@ public class UIManager : MonoBehaviour
 
         _gameCanvas.SetActive(true);
         _winPanel.SetActive(true);
+    }
+
+    IEnumerator FadeIn()
+    {
+        yield return null;
     }
 }

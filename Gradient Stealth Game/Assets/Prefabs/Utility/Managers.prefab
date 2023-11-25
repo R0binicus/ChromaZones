@@ -914,7 +914,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6846405724911913227}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: Replay
+        m_MethodName: Restart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1650,6 +1650,7 @@ GameObject:
   - component: {fileID: 7058097167574496612}
   - component: {fileID: 6846405724911913227}
   - component: {fileID: 1697484541945695204}
+  - component: {fileID: 5393616797856216509}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Manager
@@ -1723,6 +1724,18 @@ MonoBehaviour:
   deathName: EnemyDeath
   winName: PlayerWin
   loseName: PlayerLose
+--- !u!114 &5393616797856216509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4741909766114637278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4da4396c69eaeeb4ca13f9d3b487f95e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4771182705192684503
 GameObject:
   m_ObjectHideFlags: 0
