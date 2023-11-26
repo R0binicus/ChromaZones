@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-//using UnityEditor.Build;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     //movement
     [SerializeField] private float moveSpeed = 3f;
     private Vector2 moveDirection;
+    public InputAction playerControls;
 
     // Data
     bool _managerBool = false;
@@ -55,12 +56,14 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
+        playerControls.Enable();
         EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventSubscribe(EventType.LOSE, Death);
     }
 
     private void OnDisable()
     {
+        playerControls.Disable();
         EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventUnsubscribe(EventType.LOSE, Death);
     }
@@ -140,10 +143,11 @@ public class Player : MonoBehaviour
 
     private void ProcessInputs()
     {
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveY = Input.GetAxisRaw("Vertical");
+        //float moveX = Input.GetAxisRaw("Horizontal");
+        //float moveY = Input.GetAxisRaw("Vertical");
 
-        moveDirection = new Vector2(moveX, moveY).normalized;
+        //moveDirection = new Vector2(moveX, moveY).normalized;
+        moveDirection = playerControls.ReadValue<Vector2>();
     }
 
     // Change between visible and 'hiding'
