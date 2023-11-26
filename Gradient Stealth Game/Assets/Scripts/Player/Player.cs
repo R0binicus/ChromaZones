@@ -20,11 +20,10 @@ public class Player : MonoBehaviour
     //movement
     [SerializeField] private float moveSpeed = 3f;
     private Vector2 moveDirection;
-    public InputAction playerControls;
+    public PlayerInputActions playerMovement;
+    private InputAction _move;
 
     // Data
-    bool _managerBool = false;
-    bool _sentManagerBool = false;
     bool _isDead;
     [SerializeField] Sprite _hidingSprite;
     [SerializeField] Sprite _normalSprite;
@@ -39,12 +38,12 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        
         EventManager.EventInitialise(EventType.COLOUR_CHANGE_BOOL);
         // Set values and components
         rb = GetComponent<Rigidbody2D>();
         transform = GetComponent<Transform>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        //_colourManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ColourManager>();
         obscuredSound = GameObject.Find(obscuredName).GetComponent<AudioSource>();
         visibleSound = GameObject.Find(visibleName).GetComponent<AudioSource>();
         moveSound = GameObject.Find(moveName).GetComponent<AudioSource>();
@@ -52,18 +51,24 @@ public class Player : MonoBehaviour
         origin = transform.position;
         _isDead = false;
         _spriteRenderer.sprite = _normalSprite;
+
+        playerMovement = new PlayerInputActions();
     }
 
     private void OnEnable()
     {
-        playerControls.Enable();
+        _move = playerMovement.Player.Move;
+        _move.Enable();
+        _move.performed += MovingTrue;
+        _move.canceled += MovingFalse;
+
         EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventSubscribe(EventType.LOSE, Death);
     }
 
     private void OnDisable()
     {
-        playerControls.Disable();
+        _move.Disable();
         EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventUnsubscribe(EventType.LOSE, Death);
     }
@@ -75,44 +80,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        //If new bool state has NOT been sent to manager, send it
-        if (_sentManagerBool != _managerBool)
-        {
-            if (!_isDead)
-            {
-                if (rb.velocity != Vector2.zero && regionState != 3)
-                {
-                    EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, true);
-                    _sentManagerBool = true;
-                }
-                else
-                {
-                    EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
-                    _sentManagerBool = false;
-                }
-            }
-            else
-            {
-                EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
-                _sentManagerBool = false;
-            }
-        }
-
-        if (!_isDead)
-        {
-            if (rb.velocity != Vector2.zero && regionState != 3)
-            {
-                _managerBool = true;
-            }
-            else
-            {
-                _managerBool = false;
-            }
-        }
-        else
-        {
-            _managerBool = false;
-        }
+        //
     }
 
     private void FixedUpdate()
@@ -135,19 +103,11 @@ public class Player : MonoBehaviour
                 rb.velocity = new Vector2(0, 0);
             }
         }
-        //// Multiplies current x and y coordinates together for the colour 
-        //// Subtracts the origin coords from the equasion, so the starting position should not affect the colour of the regions
-        //gameManager.colourCoords = (transform.position.x) * (transform.position.y);
-        ////gameManager.colourCoords = Vector3.Distance(transform.position, origin) 
     }
 
     private void ProcessInputs()
     {
-        //float moveX = Input.GetAxisRaw("Horizontal");
-        //float moveY = Input.GetAxisRaw("Vertical");
-
-        //moveDirection = new Vector2(moveX, moveY).normalized;
-        moveDirection = playerControls.ReadValue<Vector2>();
+        moveDirection = _move.ReadValue<Vector2>();
     }
 
     // Change between visible and 'hiding'
@@ -186,6 +146,7 @@ public class Player : MonoBehaviour
         regionState = input;
         if (regionState == 3)
         {
+            EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
             if (!isPlayerHiding)
             {
                 HidingSprite();
@@ -200,5 +161,22 @@ public class Player : MonoBehaviour
                 isPlayerHiding = false;
             }
         }
+    }
+
+    private void MovingTrue(InputAction.CallbackContext context)
+    {
+        if (regionState == 3)
+        {
+            EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+        }
+        else
+        {
+            EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, true);
+        }
+    }
+
+    private void MovingFalse(InputAction.CallbackContext context)
+    {
+        EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
     }
 }
