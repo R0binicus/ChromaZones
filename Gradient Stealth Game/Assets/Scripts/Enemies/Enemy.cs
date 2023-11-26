@@ -9,6 +9,9 @@ public class Enemy : MonoBehaviour
 
     [field: Header("Movement")]
     [field: SerializeField] public AnimationCurve Velocity { get; private set; }
+    [field: SerializeField] private float WalkSpeed = 1.0f; 
+    [field: SerializeField] private float ChaseSpeed = 2.8f; 
+    private float MoveSpeed; 
     [field: SerializeField] public float ChaseRotation { get; private set; }
 
     [field: Header("FOV")]
@@ -134,6 +137,7 @@ public class Enemy : MonoBehaviour
     {
         // Send Enemy to EnemyManager to be stored in a list and kept track of for win condition
         EventManager.EventTrigger(EventType.ADD_ENEMY, this);
+        SetWalkSpeed();
     }
 
     private void Update()
@@ -160,6 +164,18 @@ public class Enemy : MonoBehaviour
     public void NormalSprite()
     {
         SpriteRenderer.sprite = _normalSprite;
+    }
+
+    public void SetWalkSpeed()
+    {
+        MoveSpeed = WalkSpeed;
+        Agent.speed = MoveSpeed;
+    }
+
+    public void SetChaseSpeed()
+    {
+        MoveSpeed = ChaseSpeed;
+        Agent.speed = MoveSpeed;
     }
 
     public void NewState(int input)

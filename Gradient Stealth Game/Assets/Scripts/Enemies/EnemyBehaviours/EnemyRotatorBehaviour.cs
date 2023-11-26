@@ -19,6 +19,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
 
     //Components
     private Rigidbody2D rb;
+    private UnityEngine.AI.NavMeshAgent Agent;
 
     // Internal Data
     private float _timer;
@@ -26,6 +27,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        Agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
 
     private void Start()
@@ -50,7 +52,8 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         if ((_originWaypoint - (Vector2)transform.position).magnitude < 0.05f)
         {
             // Stay still
-            rb.velocity = Vector2.zero;
+            //rb.velocity = Vector2.zero;
+            Agent.ResetPath();
             
             // If Enemy needs to rotate back to original angle
             if (_rotatingToOrigin)
@@ -86,7 +89,8 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
             Quaternion lookRot = Quaternion.identity;
             lookRot.eulerAngles = new Vector3(0,0,fullRotatation.eulerAngles.z);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, _returnRotateSpeed * Time.deltaTime);
-            rb.velocity = _destinationDirection;
+            //rb.velocity = _destinationDirection;
+            Agent.SetDestination(_originWaypoint);
         }
     }
 

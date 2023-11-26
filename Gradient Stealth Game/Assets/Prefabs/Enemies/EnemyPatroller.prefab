@@ -217,6 +217,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  WalkSpeed: 1
+  ChaseSpeed: 2.8
   <ChaseRotation>k__BackingField: 100
   <PatrolFOVData>k__BackingField:
     <FOVAngle>k__BackingField: 80
@@ -242,7 +244,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1067672982322664781}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 1
   m_Speed: 2.8
   m_Acceleration: 5
   avoidancePriority: 50

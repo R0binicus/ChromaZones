@@ -15,6 +15,7 @@ public class EnemyChaseState : EnemyState
         Enemy.chaseSound.Play();
         _timer = 0;
         _accelTimer = 0;
+        Enemy.SetChaseSpeed();
         Enemy.FOV.IsActive(false);
     }
 
@@ -36,6 +37,7 @@ public class EnemyChaseState : EnemyState
             {
                 _timer = 0;
                 Enemy.Agent.ResetPath();
+                Enemy.SetWalkSpeed();
                 Enemy.RB.velocity = Vector2.zero;
                 Enemy.StateMachine.ChangeState(Enemy.AlertState);
             }

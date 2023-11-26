@@ -10,13 +10,15 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
     private Vector2 destination;
     private Vector2 destinationDirection;
     private int waypointIndex = 1;
-    public int roationSpeed = 100;
+    [SerializeField] private int roationSpeed = 100;
 
     private Rigidbody2D rb;
+    private UnityEngine.AI.NavMeshAgent Agent;
 
     public void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        Agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         originWaypoint = transform.position;
         UpdateWaypoint();
 
@@ -58,10 +60,9 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
     {
         if ((destination - (Vector2)transform.position).magnitude < 0.01f)
         {
-            rb.velocity = Vector2.zero;
+            Agent.ResetPath();
         }
-
-        rb.velocity = destinationDirection;
+        Agent.SetDestination(destination);
     }
 
     public override void UpdateLogicBehaviour()
@@ -69,7 +70,6 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
         UpdateWaypoint();
         if ((destination - (Vector2)transform.position).magnitude < 0.01f)
         {
-            //rb.velocity = Vector2.zero;
             waypointIndex++;
             UpdateWaypoint();
         }
@@ -78,7 +78,5 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
         Quaternion lookRot = Quaternion.identity;
         lookRot.eulerAngles = new Vector3(0,0,fullRotatation.eulerAngles.z);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, roationSpeed * Time.deltaTime);
-
-        //rb.velocity = destinationDirection;
     }
 }
