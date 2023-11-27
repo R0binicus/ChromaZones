@@ -26,7 +26,6 @@ public class ColourRegion : MonoBehaviour
         Color.RGBToHSV(GetComponent<SpriteRenderer>().color, out var H, out var S, out var V);
         localColour = H * 360;
         originalHue = localColour;
-        //colourManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<ColourManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -56,7 +55,6 @@ public class ColourRegion : MonoBehaviour
         //if local colour value is over 360, change the local colour values back to being under 360 with math
         if (localColour >= 360f)
         {
-            //localColour = localColour - ((Mathf.Floor(localColour / 360f)) * 360);
             localColour = 0f;
         }
 
@@ -96,7 +94,6 @@ public class ColourRegion : MonoBehaviour
         {
             if (_player != null)
             {
-                //_player.regionState = state;
                 _player.NewState(state);
             }
 
@@ -104,7 +101,6 @@ public class ColourRegion : MonoBehaviour
             {
                 foreach (Enemy enemy in _enemies)
                 {
-                    //enemy.regionState = state;
                     enemy.NewState(state);
                 }
             }
@@ -135,7 +131,6 @@ public class ColourRegion : MonoBehaviour
     // Set state variable when entering a region
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //GameObject mainObject = collision.transform.parent.gameObject;
         // Set the object's regionState to be the current
         // state of the region. Also increment the region
         // layer by 1.
@@ -146,16 +141,12 @@ public class ColourRegion : MonoBehaviour
             {
                 _player = mainObject.GetComponent<Player>();
                 _player.NewState(state);
-                //player.regionLayer += 1;
-                //player.regionState = state;
             }
             else if (mainObject.tag == "Enemy")
             {
                 var enemyObject = mainObject.GetComponent<Enemy>();
                 enemyObject.NewState(state);
                 _enemies.Add(enemyObject);
-                //enemy.regionLayer += 1;
-                //enemy.regionState = state;
             }
         }
     }
@@ -170,12 +161,10 @@ public class ColourRegion : MonoBehaviour
             if (collision.transform.parent.tag == "Player") 
             {
                 var player = collision.transform.parent.GetComponent<Player>();
-                //player.regionState = state;
             }
             else if (collision.transform.parent.tag == "Enemy")
             {
                 var enemy = collision.transform.parent.GetComponent<Enemy>();
-                //enemy.regionState = state;
             }
         }
     }
@@ -194,20 +183,10 @@ public class ColourRegion : MonoBehaviour
             if (mainObject.tag == "Player") 
             {
                 _player = null;
-                //var player = collision.transform.parent.GetComponent<Player>();
-                //player.regionLayer -= 1;
-
-                //if (player.regionLayer <= 0)
-                //{
-                //    player.regionLayer = 0;
-                //    player.regionState = 0;
-                //}
             }
             else if (mainObject.tag == "Enemy")
             {
                 _enemies.Remove(mainObject.GetComponent<Enemy>());
-                //var enemy = collision.transform.parent.GetComponent<Enemy>();
-                //enemy.regionLayer -= 1;
             }
         }
     }

@@ -20,12 +20,16 @@ public class Player : MonoBehaviour
     //movement
     [SerializeField] private float moveSpeed = 3f;
     private Vector2 moveDirection;
+    private bool _moveBool = false;
+    private bool _noVelocity = false;
 
     // Data
     bool _isDead;
     [SerializeField] Sprite _hidingSprite;
     [SerializeField] Sprite _normalSprite;
+    private bool _isCollidingObstacle = false;
 
+    // Sounds
     [Header("Sounds")]
     [SerializeField] private string obscuredName = "PlayerObscured";
 	private AudioSource obscuredSound;
@@ -80,9 +84,14 @@ public class Player : MonoBehaviour
             // if player is doing movement inputs, move the player and add to colour time counter
             if (moveDirection.x != 0 || moveDirection.y != 0)
             {
-                rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+                //rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+                rb.AddForce(moveDirection * moveSpeed * 2, ForceMode2D.Impulse);
             }
         }
+        //if (_isCollidingObstacle)
+        //{
+        //    
+        //}
     }
 
     // Change between visible and 'hiding'
@@ -144,11 +153,15 @@ public class Player : MonoBehaviour
         {
             Debug.Log("MoveBoolHandler is null");
         }
-
         var moveBool = (bool)data;
+        _moveBool = moveBool;
 
-        if (moveBool)
+        Debug.Log(rb.velocity);
+
+        if (moveBool && rb.velocity != Vector2.zero)
+        //if (moveBool)
         {
+            //Debug.Log(rb.velocity);
             if (regionState == 3)
             {
                 EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
@@ -161,6 +174,12 @@ public class Player : MonoBehaviour
         else
         {
             EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+            //if (_isCollidingObstacle)
+            //{
+            //    //yield return new WaitForSeconds(0.1f);
+            //    //Invoke(nameof(MoveBoolHandler), 1);
+            //    //MoveBoolHandler(_moveBool);
+            //}
         }
     }
 
@@ -179,6 +198,26 @@ public class Player : MonoBehaviour
             {
                 rb.velocity = new Vector2(0, 0);
             }
+        }
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.CompareTag("Obstacle"))
+        {
+            Debug.Log("Collision Enter Obstacle");
+            _isCollidingObstacle = true;
+            MoveBoolHandler(_moveBool);
+        }
+    }
+
+    public void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.transform.CompareTag("Obstacle"))
+        {
+            Debug.Log("Collision Exit Obstacle");
+            _isCollidingObstacle = false;
+            MoveBoolHandler(_moveBool);
         }
     }
 }

@@ -58,7 +58,7 @@ public class EnemyChaseState : EnemyState
     public override void OnCollisionEnter2D(Collision2D collision)
     {
         // Check if Player
-        if (collision.gameObject.GetComponent<Player>() != null)
+        if (collision.transform.CompareTag("Player"))
         {
             Enemy.StateMachine.ChangeState(Enemy.CaughtState);
         }
