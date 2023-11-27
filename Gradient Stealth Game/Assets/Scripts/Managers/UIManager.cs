@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements.Experimental;
+using Unity.Collections;
 
 public class UIManager : MonoBehaviour
 {
@@ -50,14 +52,6 @@ public class UIManager : MonoBehaviour
         _paused = false;
     }
 
-    private void Update()
-    {
-        // // Toggle pause
-        // if (Input.GetKeyDown(KeyCode.Escape)) {
-        //     TogglePause();
-        // }
-    }
-
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.LOSE, ShowLosePanel);
@@ -97,7 +91,7 @@ public class UIManager : MonoBehaviour
     public void TogglePause(object data)
     {
         _paused = !_paused;
-        Debug.Log(_paused);
+        Debug.Log("Dobug");
 
         if (!_paused)
         {
@@ -107,7 +101,6 @@ public class UIManager : MonoBehaviour
         else
         {
             Time.timeScale = 0.0f;
-            _gameCanvas.SetActive(true);
             _nextLevelButton.SetActive(false);
             _buttonsPanel.SetActive(true);
             _pausePanel.SetActive(true);
@@ -116,7 +109,7 @@ public class UIManager : MonoBehaviour
 
     private void DeactivateUI()
     {
-        _gameCanvas.SetActive(false);
+        _pausePanel.SetActive(false);
         _losePanel.SetActive(false);
         _winPanel.SetActive(false);
         _buttonsPanel.SetActive(false);
@@ -127,7 +120,6 @@ public class UIManager : MonoBehaviour
     {
         _nextLevelButton.SetActive(false);
         _buttonsPanel.SetActive(true);
-        _gameCanvas.SetActive(true);
         _losePanel.SetActive(true);
     }
 
@@ -143,7 +135,6 @@ public class UIManager : MonoBehaviour
             _nextLevelButton.SetActive(true);
         }
 
-        _gameCanvas.SetActive(true);
         _buttonsPanel.SetActive(true);
         _nextLevelButton.SetActive(true);
         _winPanel.SetActive(true);
@@ -162,7 +153,6 @@ public class UIManager : MonoBehaviour
 
     IEnumerator Fade(AnimationCurve fadeCurve, float startTime)
     {
-        _gameCanvas.SetActive(true);
         _fadePanel.gameObject.SetActive(true);
 
         while (Time.time - startTime < fadeCurve.keys[fadeCurve.length - 1].time)
@@ -177,6 +167,5 @@ public class UIManager : MonoBehaviour
         }
 
         _fadePanel.gameObject.SetActive(false);
-        _gameCanvas.SetActive(false);
     }
 }

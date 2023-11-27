@@ -9,16 +9,24 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions
     {
         _inputs = new InputActions();
         _inputs.Gameplay.SetCallbacks(this);
-        _inputs.Gameplay.Enable();
 
         EventManager.EventInitialise(EventType.PAUSE_TOGGLE);
         EventManager.EventInitialise(EventType.PLAYER_MOVE_BOOL);
         EventManager.EventInitialise(EventType.PLAYER_MOVE_VECT2D);
     }
 
+    void OnEnable()
+    {
+        _inputs.Gameplay.Enable();
+    }
+
+    void OnDisable()
+    {
+        _inputs.Gameplay.Disable();
+    }
+
     public void OnPauseToggle(InputAction.CallbackContext context)
     {
-        Debug.Log("HEY");
         if (context.started)
         {
             EventManager.EventTrigger(EventType.PAUSE_TOGGLE, null);
@@ -30,13 +38,11 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions
         EventManager.EventTrigger(EventType.PLAYER_MOVE_VECT2D, _inputs.Gameplay.Move.ReadValue<Vector2>());
         if (context.performed)
         {
-            Debug.Log("MovingTrue");
             EventManager.EventTrigger(EventType.PLAYER_MOVE_BOOL, true);
         }
         else
         {
-            Debug.Log("MovingFalse");
-           EventManager.EventTrigger(EventType.PLAYER_MOVE_BOOL, false); 
+            EventManager.EventTrigger(EventType.PLAYER_MOVE_BOOL, false); 
         }
     }
 }
