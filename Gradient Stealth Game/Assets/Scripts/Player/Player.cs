@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventUnsubscribe(EventType.LOSE, Death);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
-        EventManager.EventSubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
+        EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
     }
 
     void Start()
