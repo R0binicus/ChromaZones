@@ -58,11 +58,10 @@ public class Player : MonoBehaviour
     {
         _move = playerMovement.Player.Move;
         _move.Enable();
-        _move.performed += MovingTrue;
-        _move.canceled += MovingFalse;
 
         EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventSubscribe(EventType.LOSE, Death);
+        EventManager.EventSubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
     }
 
     private void OnDisable()
@@ -70,6 +69,7 @@ public class Player : MonoBehaviour
         _move.Disable();
         EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventUnsubscribe(EventType.LOSE, Death);
+        EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
     }
 
     void Start()
@@ -162,20 +162,29 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void MovingTrue(InputAction.CallbackContext context)
+    private void MoveBoolHandler(object data)
     {
-        if (regionState == 3)
+        if (data == null)
         {
-            EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+            Debug.Log("MoveBoolHandler is null");
+        }
+
+        var moveBool = (bool)data;
+
+        if (moveBool)
+        {
+            if (regionState == 3)
+            {
+                EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+            }
+            else
+            {
+                EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, true);
+            }
         }
         else
         {
-            EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, true);
+            EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
         }
-    }
-
-    private void MovingFalse(InputAction.CallbackContext context)
-    {
-        EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
     }
 }

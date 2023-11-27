@@ -58,7 +58,7 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
 
     public override void UpdatePhysicsBehaviour()
     {
-        if ((destination - (Vector2)transform.position).magnitude < 0.01f)
+        if ((destination - (Vector2)transform.position).magnitude < 0.1f)
         {
             Agent.ResetPath();
         }
@@ -68,7 +68,7 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
     public override void UpdateLogicBehaviour()
     {
         UpdateWaypoint();
-        if ((destination - (Vector2)transform.position).magnitude < 0.01f)
+        if ((destination - (Vector2)transform.position).magnitude < 0.1f)
         {
             waypointIndex++;
             UpdateWaypoint();
