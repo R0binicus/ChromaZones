@@ -38,7 +38,6 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
-        
         EventManager.EventInitialise(EventType.COLOUR_CHANGE_BOOL);
         // Set values and components
         rb = GetComponent<Rigidbody2D>();

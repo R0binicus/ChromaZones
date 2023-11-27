@@ -52,10 +52,10 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        // Toggle pause
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            TogglePause();
-        }
+        // // Toggle pause
+        // if (Input.GetKeyDown(KeyCode.Escape)) {
+        //     TogglePause();
+        // }
     }
 
     private void OnEnable()
@@ -63,6 +63,7 @@ public class UIManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.LOSE, ShowLosePanel);
         EventManager.EventSubscribe(EventType.WIN, ShowWinPanel);
         EventManager.EventSubscribe(EventType.SCENE_LOAD, FadeOut);
+        EventManager.EventSubscribe(EventType.PAUSE_TOGGLE, TogglePause);
     }
 
     private void OnDisable()
@@ -70,6 +71,7 @@ public class UIManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LOSE, ShowLosePanel);
         EventManager.EventUnsubscribe(EventType.WIN, ShowWinPanel);
         EventManager.EventUnsubscribe(EventType.SCENE_LOAD, FadeOut);
+        EventManager.EventUnsubscribe(EventType.PAUSE_TOGGLE, TogglePause);
     }
 
     public void NextLevel()
@@ -92,9 +94,10 @@ public class UIManager : MonoBehaviour
         EventManager.EventTrigger(EventType.QUIT_LEVEL, _fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time);
     }
 
-    public void TogglePause()
+    public void TogglePause(object data)
     {
         _paused = !_paused;
+        Debug.Log(_paused);
 
         if (!_paused)
         {

@@ -8,5 +8,6 @@ public enum EventType
     SCENE_LOAD,
     ADD_ENEMY,              // Broadcasts an instantiated Enemy to the EnemyManager to add to its list
     INIT_COLOUR_MANAGER,     // 
-    COLOUR_CHANGE_BOOL     // 
+    COLOUR_CHANGE_BOOL,     // 
+    PAUSE_TOGGLE
 };
