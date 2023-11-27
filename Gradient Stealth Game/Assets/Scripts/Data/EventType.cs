@@ -10,5 +10,6 @@ public enum EventType
     INIT_COLOUR_MANAGER,    // 
     COLOUR_CHANGE_BOOL,     // 
     PAUSE_TOGGLE,
-    PLAYER_MOVE_BOOL
+    PLAYER_MOVE_BOOL,
+    PLAYER_MOVE_VECT2D
 };

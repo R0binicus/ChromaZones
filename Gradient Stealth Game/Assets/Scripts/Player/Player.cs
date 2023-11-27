@@ -20,8 +20,6 @@ public class Player : MonoBehaviour
     //movement
     [SerializeField] private float moveSpeed = 3f;
     private Vector2 moveDirection;
-    public PlayerInputActions playerMovement;
-    private InputAction _move;
 
     // Data
     bool _isDead;
@@ -33,8 +31,6 @@ public class Player : MonoBehaviour
 	private AudioSource obscuredSound;
     [SerializeField] private string visibleName = "PlayerVisible";
 	private AudioSource visibleSound;
-    [SerializeField] private string moveName = "PlayerMove";
-	private AudioSource moveSound;
 
     void Awake()
     {
@@ -45,31 +41,26 @@ public class Player : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         obscuredSound = GameObject.Find(obscuredName).GetComponent<AudioSource>();
         visibleSound = GameObject.Find(visibleName).GetComponent<AudioSource>();
-        moveSound = GameObject.Find(moveName).GetComponent<AudioSource>();
 
         origin = transform.position;
         _isDead = false;
         _spriteRenderer.sprite = _normalSprite;
-
-        playerMovement = new PlayerInputActions();
     }
 
     private void OnEnable()
     {
-        _move = playerMovement.Player.Move;
-        _move.Enable();
-
         EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventSubscribe(EventType.LOSE, Death);
         EventManager.EventSubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
+        EventManager.EventSubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
     }
 
     private void OnDisable()
     {
-        _move.Disable();
         EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventUnsubscribe(EventType.LOSE, Death);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
+        EventManager.EventSubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
     }
 
     void Start()
@@ -86,27 +77,12 @@ public class Player : MonoBehaviour
     {
         if (!_isDead)
         {
-            ProcessInputs();
             // if player is doing movement inputs, move the player and add to colour time counter
             if (moveDirection.x != 0 || moveDirection.y != 0)
             {
                 rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
-                if (!moveSound.isPlaying)
-                {
-                    moveSound.Play();
-                }
-            }
-            else // set velocity to zero
-            {
-                moveSound.Stop();
-                rb.velocity = new Vector2(0, 0);
             }
         }
-    }
-
-    private void ProcessInputs()
-    {
-        moveDirection = _move.ReadValue<Vector2>();
     }
 
     // Change between visible and 'hiding'
@@ -185,6 +161,24 @@ public class Player : MonoBehaviour
         else
         {
             EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+        }
+    }
+
+    private void MoveVect2DHandler(object data)
+    {
+
+        if (data == null)
+        {
+            Debug.Log("MoveBoolHandler is null");
+        }
+
+        if (!_isDead)
+        {
+            moveDirection = (Vector2)data;
+            if (moveDirection == Vector2.zero)
+            {
+                rb.velocity = new Vector2(0, 0);
+            }
         }
     }
 }

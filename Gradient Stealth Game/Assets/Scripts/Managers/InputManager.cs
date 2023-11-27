@@ -15,6 +15,7 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions
 
         EventManager.EventInitialise(EventType.PAUSE_TOGGLE);
         EventManager.EventInitialise(EventType.PLAYER_MOVE_BOOL);
+        EventManager.EventInitialise(EventType.PLAYER_MOVE_VECT2D);
     }
 
     public void OnPauseToggle(InputAction.CallbackContext context)
@@ -28,31 +29,16 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        //Debug.Log("OnMove");
-        //if (context.started)
-        //{
-        //    //EventManager.EventTrigger(EventType.PAUSE_TOGGLE, null);
-        //}
+        EventManager.EventTrigger(EventType.PLAYER_MOVE_VECT2D, _inputs.Gameplay.Move.ReadValue<Vector2>());
     }
 
     private void MovingTrue(InputAction.CallbackContext context)
     {
-        Debug.Log("MovingTrue");
         EventManager.EventTrigger(EventType.PLAYER_MOVE_BOOL, true);
-        //if (regionState == 3)
-        //{
-        //    EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
-        //}
-        //else
-        //{
-        //    EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, true);
-        //}
     }
 
     private void MovingFalse(InputAction.CallbackContext context)
     {
-        Debug.Log("MovingFalse");
         EventManager.EventTrigger(EventType.PLAYER_MOVE_BOOL, false);
-        //EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
     }
 }
