@@ -5,25 +5,25 @@ using UnityEngine.InputSystem;
 
 public class UIColourScript : MonoBehaviour
 {
-    public float colour;        // Final colour value for other things to access
+    public float Colour;        // Final colour value for other things to access
 
-    private Vector2 tmpMousePosition;
+    private Vector2 _tmpMousePosition;
 
     void Start()
     {
-        tmpMousePosition = Mouse.current.position.ReadValue();
+        _tmpMousePosition = Mouse.current.position.ReadValue();
     }
 
     void Update()
     {
-        if (tmpMousePosition != Mouse.current.position.ReadValue())
+        if (_tmpMousePosition != Mouse.current.position.ReadValue())
         {
-            colour = 0.35f;
-            tmpMousePosition = Mouse.current.position.ReadValue();
+            Colour = 0.35f;
+            _tmpMousePosition = Mouse.current.position.ReadValue();
         }
         else
         {
-            colour = 0f;
+            Colour = 0f;
         }
     }
 }
