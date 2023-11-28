@@ -21,7 +21,6 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 3f;
     private Vector2 moveDirection;
     private bool _moveBool = false;
-    private bool _noVelocity = false;
 
     // Data
     bool _isDead;
@@ -65,6 +64,7 @@ public class Player : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LOSE, Death);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
+        StopAllCoroutines();
     }
 
     void Start()
@@ -156,12 +156,19 @@ public class Player : MonoBehaviour
         var moveBool = (bool)data;
         _moveBool = moveBool;
 
-        Debug.Log(rb.velocity);
+        StartCoroutine(EventCoroutine(moveBool));
+    }
+
+    private IEnumerator EventCoroutine(bool moveBool)
+    {
+
+        if (_isCollidingObstacle)
+        {
+            yield return new WaitForSeconds(0.2f);
+        }
 
         if (moveBool && rb.velocity != Vector2.zero)
-        //if (moveBool)
         {
-            //Debug.Log(rb.velocity);
             if (regionState == 3)
             {
                 EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
@@ -174,12 +181,6 @@ public class Player : MonoBehaviour
         else
         {
             EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
-            //if (_isCollidingObstacle)
-            //{
-            //    //yield return new WaitForSeconds(0.1f);
-            //    //Invoke(nameof(MoveBoolHandler), 1);
-            //    //MoveBoolHandler(_moveBool);
-            //}
         }
     }
 
@@ -205,7 +206,6 @@ public class Player : MonoBehaviour
     {
         if (collision.transform.CompareTag("Obstacle"))
         {
-            Debug.Log("Collision Enter Obstacle");
             _isCollidingObstacle = true;
             MoveBoolHandler(_moveBool);
         }
@@ -215,7 +215,6 @@ public class Player : MonoBehaviour
     {
         if (collision.transform.CompareTag("Obstacle"))
         {
-            Debug.Log("Collision Exit Obstacle");
             _isCollidingObstacle = false;
             MoveBoolHandler(_moveBool);
         }
