@@ -25,9 +25,8 @@ public class Enemy : MonoBehaviour
    
     #region Region Data
     [Header("Region Debugging")]
-    public int regionState = 0;
-    public int regionLayer = 0;
-    private bool isEnemyHiding;
+    public int RegionState = 0;
+    private bool _isEnemyHiding;
     #endregion
     
     #region Components
@@ -113,7 +112,6 @@ public class Enemy : MonoBehaviour
         SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         Agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
-
         // Set up states
         PatrolState = new EnemyPatrolState(this);
         AlertState = new EnemyAlertState(this);
@@ -180,21 +178,21 @@ public class Enemy : MonoBehaviour
 
     public void NewState(int input)
     {
-        regionState = input;
-        if (regionState == 1)
+        RegionState = input;
+        if (RegionState == 1)
         {
-            if (!isEnemyHiding)
+            if (!_isEnemyHiding)
             {
                 HidingSprite();
-                isEnemyHiding = true;
+                _isEnemyHiding = true;
             }
         }
         else 
         {
-            if (isEnemyHiding)
+            if (_isEnemyHiding)
             {
                 NormalSprite();
-                isEnemyHiding = false;
+                _isEnemyHiding = false;
             }
         }
     }

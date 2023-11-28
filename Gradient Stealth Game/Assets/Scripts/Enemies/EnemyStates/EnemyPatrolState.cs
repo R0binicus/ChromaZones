@@ -14,7 +14,7 @@ public class EnemyPatrolState : EnemyState
     public override void LogicUpdate()
     {
         // If player is spotted, transition to AlertState
-        if (Enemy.FOV.PlayerSpotted && Enemy.Player.regionState != 3)
+        if (Enemy.FOV.PlayerSpotted && Enemy.Player.RegionState != 3)
         {
             Enemy.alertSound.Play();
             Enemy.StateMachine.ChangeState(Enemy.ChaseState);
@@ -40,12 +40,12 @@ public class EnemyPatrolState : EnemyState
     public override void OnCollisionEnter2D(Collision2D collision)
     {
         // If player has attacked Enemy and Enemy is not in their region, notify the EnemyManager
-        if (collision.transform.CompareTag("Player") && Enemy.regionState != 1)
+        if (collision.transform.CompareTag("Player") && Enemy.RegionState != 1)
         {
             Enemy.EnemyManager.PlayerAttacked(Enemy);
         }
         // Else if player has attacked Enemy and Enemy is in their region, call game over
-        else if (collision.transform.CompareTag("Player") && Enemy.regionState == 1)
+        else if (collision.transform.CompareTag("Player") && Enemy.RegionState == 1)
         {
             Enemy.StateMachine.ChangeState(Enemy.CaughtState);
         }

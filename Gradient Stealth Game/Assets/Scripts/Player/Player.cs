@@ -6,16 +6,14 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     // Components
-    private Rigidbody2D rb;
+    private Rigidbody2D _rb;
     private ColourManager _colourManager;
     private SpriteRenderer _spriteRenderer;
-    private Transform transform;
-    private Vector2 origin;
+    private Transform _transform;
 
     // Regions
-    public int regionState = 0;
-    public int regionLayer = 0;
-    private bool isPlayerHiding = false;
+    public int RegionState = 0;
+    private bool _isPlayerHiding = false;
 
     //movement
     [SerializeField] private float _moveSpeed = 3f;
@@ -26,29 +24,28 @@ public class Player : MonoBehaviour
     private bool _moveBool = false;
 
     // Data
-    bool _isDead;
-    [SerializeField] Sprite _hidingSprite;
-    [SerializeField] Sprite _normalSprite;
+    private bool _isDead;
+    [SerializeField] private Sprite _hidingSprite;
+    [SerializeField] private Sprite _normalSprite;
     private bool _isCollidingObstacle = false;
 
     // Sounds
     [Header("Sounds")]
-    [SerializeField] private string obscuredName = "PlayerObscured";
-	private AudioSource obscuredSound;
-    [SerializeField] private string visibleName = "PlayerVisible";
-	private AudioSource visibleSound;
+    [SerializeField] private string _obscuredName = "PlayerObscured";
+	private AudioSource _obscuredSound;
+    [SerializeField] private string _visibleName = "PlayerVisible";
+	private AudioSource _visibleSound;
 
     void Awake()
     {
         EventManager.EventInitialise(EventType.COLOUR_CHANGE_BOOL);
         // Set values and components
-        rb = GetComponent<Rigidbody2D>();
-        transform = GetComponent<Transform>();
+        _rb = GetComponent<Rigidbody2D>();
+        _transform = GetComponent<Transform>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        obscuredSound = GameObject.Find(obscuredName).GetComponent<AudioSource>();
-        visibleSound = GameObject.Find(visibleName).GetComponent<AudioSource>();
+        _obscuredSound = GameObject.Find(_obscuredName).GetComponent<AudioSource>();
+        _visibleSound = GameObject.Find(_visibleName).GetComponent<AudioSource>();
 
-        origin = transform.position;
         _isDead = false;
         _spriteRenderer.sprite = _normalSprite;
     }
@@ -84,18 +81,11 @@ public class Player : MonoBehaviour
     {
         if (!_isDead)
         {
-            // // if player is doing movement inputs, move the player and add to colour time counter
-            // if (moveDirection.x != 0 || moveDirection.y != 0)
-            // {
-            //     //rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
-            //     rb.AddForce(moveDirection * moveSpeed * 2, ForceMode2D.Impulse);
-            // }
-
             // Calculate desired velocity
             float targetVelocity = _moveDirection.magnitude * _moveSpeed;
 
             // Find diff between desired velocity and current velocity
-            float velocityDif = targetVelocity - rb.velocity.magnitude;
+            float velocityDif = targetVelocity - _rb.velocity.magnitude;
 
             // Check whether to accel or deccel
             float accelRate = (Mathf.Abs(targetVelocity) > 0.01f) ? _moveAccel :
@@ -105,24 +95,20 @@ public class Player : MonoBehaviour
             float movementForce = Mathf.Pow(Mathf.Abs(velocityDif) * accelRate, _velocityPower)
                 * Mathf.Sign(velocityDif);
 
-            rb.AddForce(movementForce * _moveDirection);
+            _rb.AddForce(movementForce * _moveDirection, ForceMode2D.Impulse);
         }
-        //if (_isCollidingObstacle)
-        //{
-        //    
-        //}
     }
 
     // Change between visible and 'hiding'
     public void HidingSprite()
     {
-        obscuredSound.Play();
+        _obscuredSound.Play();
         _spriteRenderer.sprite = _hidingSprite;
     }
 
     public void NormalSprite()
     {
-        visibleSound.Play();
+        _visibleSound.Play();
         _spriteRenderer.sprite = _normalSprite;
     }
 
@@ -146,22 +132,22 @@ public class Player : MonoBehaviour
 
     public void NewState(int input)
     {
-        regionState = input;
-        if (regionState == 3)
+        RegionState = input;
+        if (RegionState == 3)
         {
             EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
-            if (!isPlayerHiding)
+            if (!_isPlayerHiding)
             {
                 HidingSprite();
-                isPlayerHiding = true;
+                _isPlayerHiding = true;
             }
         }
         else 
         {
-            if (isPlayerHiding)
+            if (_isPlayerHiding)
             {
                 NormalSprite();
-                isPlayerHiding = false;
+                _isPlayerHiding = false;
             }
         }
     }
@@ -186,9 +172,9 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
 
-        if (moveBool && rb.velocity != Vector2.zero)
+        if (moveBool && _rb.velocity != Vector2.zero)
         {
-            if (regionState == 3)
+            if (RegionState == 3)
             {
                 EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
             }
@@ -216,7 +202,7 @@ public class Player : MonoBehaviour
             _moveDirection = (Vector2)data;
             if (_moveDirection == Vector2.zero)
             {
-                rb.velocity = new Vector2(0, 0);
+                _rb.velocity = new Vector2(0, 0);
             }
         }
     }

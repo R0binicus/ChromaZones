@@ -129,61 +129,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   regionState: 0
   regionLayer: 0
-  moveSpeed: 3
-  playerControls:
-    m_Name: Player Controls
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 14d76564-ea90-421f-b81e-f7b39eab0430
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: WASD
-      m_Id: 7f5de3e3-3368-47f4-9651-ce79dd352e84
-      m_Path: 2DVector
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Player Controls
-      m_Flags: 4
-    - m_Name: up
-      m_Id: c5a17833-346d-4a96-8e64-7a41d4fc220c
-      m_Path: <Keyboard>/w
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Player Controls
-      m_Flags: 8
-    - m_Name: down
-      m_Id: 414990b6-8120-4b24-b7af-632bb8432bf1
-      m_Path: <Keyboard>/s
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Player Controls
-      m_Flags: 8
-    - m_Name: left
-      m_Id: d680fbde-02da-44dd-813d-a5dc45982deb
-      m_Path: <Keyboard>/a
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Player Controls
-      m_Flags: 8
-    - m_Name: right
-      m_Id: 7c72a451-eeb0-4d68-9a11-72cc819ace81
-      m_Path: <Keyboard>/d
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Player Controls
-      m_Flags: 8
-    m_Flags: 0
+  _moveSpeed: 3.25
+  _velocityPower: 2
+  _moveAccel: 3
+  _moveDecel: 20
   _hidingSprite: {fileID: 7482667652216324306, guid: fc321b8f076fe07439c92eac0d9f2de8, type: 3}
   _normalSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   obscuredName: PlayerObscured
   visibleName: PlayerVisible
-  moveName: PlayerMove
 --- !u!61 &4348353519037223968
 BoxCollider2D:
   m_ObjectHideFlags: 0

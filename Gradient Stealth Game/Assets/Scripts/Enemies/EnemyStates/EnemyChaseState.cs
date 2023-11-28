@@ -29,7 +29,7 @@ public class EnemyChaseState : EnemyState
         Enemy.transform.rotation = Quaternion.RotateTowards(Enemy.transform.rotation, lookRot, Enemy.ChaseRotation * Time.deltaTime);
 
         // If player is in their own region
-        if (Enemy.Player.regionState == 3)
+        if (Enemy.Player.RegionState == 3)
         {
             // If player has been hidden in their region for a certain amount of time
             // Change to AlertState

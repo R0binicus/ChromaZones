@@ -24,7 +24,7 @@ public class EnemyAlertState : EnemyState
         if (_timer > Enemy.DetectionTime)
         {
             // If Player is still within FOV and not hiding, chase
-            if (Enemy.FOV.PlayerSpotted && Enemy.Player.regionState != 3)
+            if (Enemy.FOV.PlayerSpotted && Enemy.Player.RegionState != 3)
             {
                 Enemy.StateMachine.ChangeState(Enemy.ChaseState);
             }
