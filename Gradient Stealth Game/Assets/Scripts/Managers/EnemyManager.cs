@@ -62,6 +62,16 @@ public class EnemyManager : MonoBehaviour
     public void PlayerCaught()
     {
         loseSound.Play();
+
+        // Change all enemies to caught state
+        foreach (Enemy enemy in _enemies)
+        {
+            if (enemy.gameObject.activeInHierarchy == true && enemy.StateMachine.CurrentState != enemy.CaughtState)
+            {
+                enemy.StateMachine.ChangeState(enemy.CaughtState);
+            }
+        }
+
         EventManager.EventTrigger(EventType.LOSE, null);
     }
 
