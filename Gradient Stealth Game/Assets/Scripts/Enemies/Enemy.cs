@@ -9,9 +9,9 @@ public class Enemy : MonoBehaviour
 
     [field: Header("Movement")]
     [field: SerializeField] public AnimationCurve Velocity { get; private set; }
-    [field: SerializeField] private float WalkSpeed = 1.0f; 
-    [field: SerializeField] private float ChaseSpeed = 2.8f; 
-    private float MoveSpeed; 
+    [field: SerializeField] private float _walkSpeed = 1.0f; 
+    [field: SerializeField] private float _chaseSpeed = 2.8f; 
+    private float _moveSpeed; 
     [field: SerializeField] public float ChaseRotation { get; private set; }
 
     [field: Header("FOV")]
@@ -168,14 +168,14 @@ public class Enemy : MonoBehaviour
 
     public void SetWalkSpeed()
     {
-        MoveSpeed = WalkSpeed;
-        Agent.speed = MoveSpeed;
+        _moveSpeed = _walkSpeed;
+        Agent.speed = _moveSpeed;
     }
 
     public void SetChaseSpeed()
     {
-        MoveSpeed = ChaseSpeed;
-        Agent.speed = MoveSpeed;
+        _moveSpeed = _chaseSpeed;
+        Agent.speed = _moveSpeed;
     }
 
     public void NewState(int input)
