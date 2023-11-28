@@ -18,8 +18,11 @@ public class Player : MonoBehaviour
     private bool isPlayerHiding = false;
 
     //movement
-    [SerializeField] private float moveSpeed = 3f;
-    private Vector2 moveDirection;
+    [SerializeField] private float _moveSpeed = 3f;
+    [SerializeField] private float _velocityPower;
+    [SerializeField] private float _moveAccel;
+    [SerializeField] private float _moveDecel;
+    private Vector2 _moveDirection;
     private bool _moveBool = false;
 
     // Data
@@ -81,12 +84,28 @@ public class Player : MonoBehaviour
     {
         if (!_isDead)
         {
-            // if player is doing movement inputs, move the player and add to colour time counter
-            if (moveDirection.x != 0 || moveDirection.y != 0)
-            {
-                //rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
-                rb.AddForce(moveDirection * moveSpeed * 2, ForceMode2D.Impulse);
-            }
+            // // if player is doing movement inputs, move the player and add to colour time counter
+            // if (moveDirection.x != 0 || moveDirection.y != 0)
+            // {
+            //     //rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+            //     rb.AddForce(moveDirection * moveSpeed * 2, ForceMode2D.Impulse);
+            // }
+
+            // Calculate desired velocity
+            float targetVelocity = _moveDirection.magnitude * _moveSpeed;
+
+            // Find diff between desired velocity and current velocity
+            float velocityDif = targetVelocity - rb.velocity.magnitude;
+
+            // Check whether to accel or deccel
+            float accelRate = (Mathf.Abs(targetVelocity) > 0.01f) ? _moveAccel :
+                _moveDecel;
+
+            // Calc force by multiplying accel and velocity diff, and applying velocity power
+            float movementForce = Mathf.Pow(Mathf.Abs(velocityDif) * accelRate, _velocityPower)
+                * Mathf.Sign(velocityDif);
+
+            rb.AddForce(movementForce * _moveDirection);
         }
         //if (_isCollidingObstacle)
         //{
@@ -194,8 +213,8 @@ public class Player : MonoBehaviour
 
         if (!_isDead)
         {
-            moveDirection = (Vector2)data;
-            if (moveDirection == Vector2.zero)
+            _moveDirection = (Vector2)data;
+            if (_moveDirection == Vector2.zero)
             {
                 rb.velocity = new Vector2(0, 0);
             }

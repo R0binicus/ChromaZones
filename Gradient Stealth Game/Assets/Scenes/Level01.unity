@@ -422,6 +422,22 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 301580955230167636, guid: 6a4c25d06b435a34f85c6c5b0068391e, type: 3}
+      propertyPath: _moveAccel
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 301580955230167636, guid: 6a4c25d06b435a34f85c6c5b0068391e, type: 3}
+      propertyPath: _moveDecel
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 301580955230167636, guid: 6a4c25d06b435a34f85c6c5b0068391e, type: 3}
+      propertyPath: _moveSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 301580955230167636, guid: 6a4c25d06b435a34f85c6c5b0068391e, type: 3}
+      propertyPath: _velocityPower
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 301580955230167636, guid: 6a4c25d06b435a34f85c6c5b0068391e, type: 3}
       propertyPath: playerMovement.m_Id
       value: 214184fa-aeb1-4adc-b553-c32834b6b5ce
       objectReference: {fileID: 0}
