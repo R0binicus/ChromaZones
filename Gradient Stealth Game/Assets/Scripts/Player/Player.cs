@@ -64,6 +64,7 @@ public class Player : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LOSE, Death);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
+        StopAllCoroutines();
     }
 
     void Start()
@@ -165,10 +166,6 @@ public class Player : MonoBehaviour
         {
             yield return new WaitForSeconds(0.2f);
         }
-        else
-        {
-            yield return null;
-        }
 
         if (moveBool && rb.velocity != Vector2.zero)
         {
@@ -209,7 +206,6 @@ public class Player : MonoBehaviour
     {
         if (collision.transform.CompareTag("Obstacle"))
         {
-            Debug.Log("Collision Enter Obstacle");
             _isCollidingObstacle = true;
             MoveBoolHandler(_moveBool);
         }
@@ -219,7 +215,6 @@ public class Player : MonoBehaviour
     {
         if (collision.transform.CompareTag("Obstacle"))
         {
-            Debug.Log("Collision Exit Obstacle");
             _isCollidingObstacle = false;
             MoveBoolHandler(_moveBool);
         }
