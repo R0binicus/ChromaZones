@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[ExecuteAlways]
 public class Enemy : MonoBehaviour
 {
     #region Exposed Data
@@ -142,9 +143,25 @@ public class Enemy : MonoBehaviour
         SetWalkSpeed();
     }
 
+    // Runs when changes are made in the editor for the FOV
+    private void OnValidate()
+    {
+        if (FOV == null)
+        {
+            FOV = GetComponentInChildren<EnemyFieldOfView>();
+        }
+
+        FOV.SetFOVData(PatrolFOVData);
+        FOV.CreateFOV();
+    }
+
     private void Update()
     {
-        StateMachine.CurrentState.LogicUpdate();
+        // To ensure the editor does not execute update
+        if (Application.IsPlaying(gameObject))
+        {
+            StateMachine.CurrentState.LogicUpdate();
+        }
     }
 
     private void FixedUpdate()
