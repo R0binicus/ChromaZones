@@ -19,13 +19,16 @@ public class Enemy : MonoBehaviour
     [field: SerializeField] public FOVData AlertFOVData { get; private set; }
     
     [field: Header("Sprites")]
-    [field: SerializeField] public Sprite _hidingSprite;
-    [field: SerializeField] public Sprite _normalSprite;
+    [field: SerializeField] private Sprite _hidingSprite;
+    [field: SerializeField] private Sprite _normalSprite;
+    [field: SerializeField] private Sprite _invulnerableSprite;
     #endregion
    
     #region Region Data
-    [Header("Region Debugging")]
+    [Header("Region Data")]
     public int RegionState = 0;
+
+    public bool InvulnerableState = false;
     private bool _isEnemyHiding;
     #endregion
     
@@ -164,6 +167,11 @@ public class Enemy : MonoBehaviour
         SpriteRenderer.sprite = _normalSprite;
     }
 
+    public void InvulnerableSprite()
+    {
+        SpriteRenderer.sprite = _invulnerableSprite;
+    }
+
     public void SetWalkSpeed()
     {
         _moveSpeed = _walkSpeed;
@@ -179,21 +187,55 @@ public class Enemy : MonoBehaviour
     public void NewState(int input)
     {
         RegionState = input;
-        if (RegionState == 1)
+        if (!InvulnerableState)
         {
-            if (!_isEnemyHiding)
+            if (RegionState == 1)
             {
-                HidingSprite();
-                _isEnemyHiding = true;
+                if (!_isEnemyHiding)
+                {
+                    HidingSprite();
+                    _isEnemyHiding = true;
+                }
+            }
+            else 
+            {
+                if (_isEnemyHiding)
+                {
+                    NormalSprite();
+                    _isEnemyHiding = false;
+                }
             }
         }
         else 
         {
-            if (_isEnemyHiding)
+            InvulnerableSprite();
+        }
+    }
+
+    public void NewState()
+    {
+        if (!InvulnerableState)
+        {
+            if (RegionState == 1)
             {
-                NormalSprite();
-                _isEnemyHiding = false;
+                if (!_isEnemyHiding)
+                {
+                    HidingSprite();
+                    _isEnemyHiding = true;
+                }
             }
+            else 
+            {
+                if (_isEnemyHiding)
+                {
+                    NormalSprite();
+                    _isEnemyHiding = false;
+                }
+            }
+        }
+        else 
+        {
+            InvulnerableSprite();
         }
     }
 }
