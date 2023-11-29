@@ -6,6 +6,8 @@ public class PressurePlate : MonoBehaviour
 {
     [field: SerializeField] private int _assignmentCode = 0;
 
+    private bool _activated = false;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -20,17 +22,24 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "RegionDetector")
+        if (!_activated && _assignmentCode != 0)
         {
-            GameObject mainObject = collision.transform.parent.gameObject;
-
-            if (mainObject.tag == "Enemy") 
+            if(collision.tag == "RegionDetector")
             {
-                if (_assignmentCode != 0) 
+                GameObject mainObject = collision.transform.parent.gameObject;
+
+                if (mainObject.tag == "Enemy") 
                 {
-                    EventManager.EventTrigger(EventType.ASSIGNMENT_CODE_TRIGGER, _assignmentCode);
+                    ActivatePlate();
                 }
             }
         }
+    }
+
+    private void ActivatePlate()
+    {
+        _activated = true;
+        EventManager.EventTrigger(EventType.ASSIGNMENT_CODE_TRIGGER, _assignmentCode);
+        GetComponent<SpriteRenderer>().color = Color.HSVToRGB(0f, 0f, 0.5f);
     }
 }

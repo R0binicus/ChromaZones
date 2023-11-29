@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
     public bool InvulnerableState = false;
 
     [field: SerializeField] private int _assignmentCode = 0;
-    public bool _isEnemyHiding;
+    private bool _isEnemyHiding;
     #endregion
     
     #region Components
@@ -245,23 +245,18 @@ public class Enemy : MonoBehaviour
 
     private void AssignmentCodeHandler(object data)
     {
-        Debug.Log("EVENT RECIEVED");
         if (data == null)
         {
-            Debug.Log("AssignmentCodeHandler is null");
+            Debug.Log("Enemy AssignmentCodeHandler is null");
         }
 
-        int triggerCode = (int)data;
-        if (_assignmentCode == triggerCode)
+        if (_assignmentCode == (int)data)
         {
-            Debug.Log("IT WORKS");
-            InvulnerableState = false;
-
             if (RegionState != 1)
             {
                 _isEnemyHiding = !_isEnemyHiding;
             }
-            //_isEnemyHiding = true;
+            InvulnerableState = false;
             NewState(RegionState);
         }
     }

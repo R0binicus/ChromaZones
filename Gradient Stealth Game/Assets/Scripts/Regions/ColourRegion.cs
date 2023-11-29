@@ -33,11 +33,16 @@ public class ColourRegion : MonoBehaviour
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
+        if (_assignmentCode != 0)
+        {
+            EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
+        }
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
+        EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
     }
 
     void Update()
@@ -200,5 +205,18 @@ public class ColourRegion : MonoBehaviour
         }
 
         _colourManager = (ColourManager)data;
+    }
+
+    private void AssignmentCodeHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.Log("ColourRegion AssignmentCodeHandler is null");
+        }
+
+        if (_assignmentCode == (int)data)
+        {
+            //this.gameObject.SetActive(false);
+        }
     }
 }
