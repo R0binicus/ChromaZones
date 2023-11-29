@@ -5,17 +5,18 @@ using UnityEngine;
 
 public class ColourRegion : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
+    private SpriteRenderer _spriteRenderer;
     private ColourManager _colourManager;
 
-    [SerializeField] private float transitionMultiplier = 2f;
-    [SerializeField] private float localChangeMultiplier = 1f;
+    [SerializeField] private float _transitionMultiplier = 2f;
+    [SerializeField] private float _localChangeMultiplier = 1f;
+    [SerializeField] private int _assignmentCode = 0;
 
-    private float colourDiff;               // Colour from game manager
-    private float localColour;              // Colour of this region specifically
-    private float originalHue;              // Original colour value when the level started
+    private float _colourDiff;               // Colour from game manager
+    private float _localColour;              // Colour of this region specifically
+    private float _originalHue;              // Original colour value when the level started
 
-    public int state = 0;
+    public int State = 0;
 
     private Player _player;
     private List<Enemy> _enemies = new List<Enemy>();
@@ -24,9 +25,9 @@ public class ColourRegion : MonoBehaviour
     {
         // Set values and components
         Color.RGBToHSV(GetComponent<SpriteRenderer>().color, out var H, out var S, out var V);
-        localColour = H * 360;
-        originalHue = localColour;
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        _localColour = H * 360;
+        _originalHue = _localColour;
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void OnEnable()
@@ -41,7 +42,7 @@ public class ColourRegion : MonoBehaviour
 
     void Update()
     {
-        colourDiff = _colourManager.colour;
+        _colourDiff = _colourManager.colour;
         ProcessColour();
         SetColour();
     }
@@ -53,9 +54,9 @@ public class ColourRegion : MonoBehaviour
         TransitionZones();
 
         //if local colour value is over 360, change the local colour values back to being under 360 with math
-        if (localColour >= 360f)
+        if (_localColour >= 360f)
         {
-            localColour = 0f;
+            _localColour = 0f;
         }
 
         SetStates();
@@ -65,43 +66,43 @@ public class ColourRegion : MonoBehaviour
     private void SetColour()
     {
         // used 0.95 because otherwise it hurts my eyes
-        spriteRenderer.color = Color.HSVToRGB(localColour/360f, 0.95f, 0.95f);
+        _spriteRenderer.color = Color.HSVToRGB(_localColour/360f, 0.95f, 0.95f);
     }
 
     private void SetStates()
     {
-        int originalState = state;
-        switch(localColour) 
+        int originalState = State;
+        switch(_localColour) 
         {
             case float x when x < 60f:
-                state = 1;
+                State = 1;
             break;
             case float x when x >= 60f && x < 180f :
-                state = 2;
+                State = 2;
             break;
             case float x when x >= 180f && x < 300f :
-                state = 3;
+                State = 3;
             break;
             case float x when x >= 300f && x < 360f :
-                state = 1;
+                State = 1;
             break;
             default:
-                state = 0;
+                State = 0;
             break;
         }
 
-        if (originalState != state)
+        if (originalState != State)
         {
             if (_player != null)
             {
-                _player.NewState(state);
+                _player.NewState(State);
             }
 
             if (_enemies != null)
             {
                 foreach (Enemy enemy in _enemies)
                 {
-                    enemy.NewState(state);
+                    enemy.NewState(State);
                 }
             }
         }
@@ -111,19 +112,19 @@ public class ColourRegion : MonoBehaviour
     // otherwise simply add it to the difference value
     private void TransitionZones()
     {
-        switch(localColour) 
+        switch(_localColour) 
         {
             case float x when x >= 50f && x < 70f :
-                localColour = localColour + (colourDiff * transitionMultiplier * localChangeMultiplier);
+                _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
             break;
             case float x when x >= 170f && x < 190f :
-                localColour = localColour + (colourDiff * transitionMultiplier * localChangeMultiplier);
+                _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
             break;
             case float x when x >= 290f && x < 310f :
-                localColour = localColour + (colourDiff * transitionMultiplier * localChangeMultiplier);
+                _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
             break;
             default:
-                localColour = localColour + (colourDiff * localChangeMultiplier);
+                _localColour = _localColour + (_colourDiff * _localChangeMultiplier);
             break;
         }
     }
@@ -140,12 +141,12 @@ public class ColourRegion : MonoBehaviour
             if (mainObject.tag == "Player") 
             {
                 _player = mainObject.GetComponent<Player>();
-                _player.NewState(state);
+                _player.NewState(State);
             }
             else if (mainObject.tag == "Enemy")
             {
                 var enemyObject = mainObject.GetComponent<Enemy>();
-                enemyObject.NewState(state);
+                enemyObject.NewState(State);
                 _enemies.Add(enemyObject);
             }
         }

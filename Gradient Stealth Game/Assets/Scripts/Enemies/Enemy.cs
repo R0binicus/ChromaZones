@@ -27,8 +27,9 @@ public class Enemy : MonoBehaviour
     #region Region Data
     [Header("Region Data")]
     public int RegionState = 0;
-
     public bool InvulnerableState = false;
+
+    [field: SerializeField] private int _assignmentCode = 0;
     private bool _isEnemyHiding;
     #endregion
     
