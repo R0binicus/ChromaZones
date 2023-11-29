@@ -16,10 +16,16 @@ public class ColourRegion : MonoBehaviour
     private float _localColour;              // Colour of this region specifically
     private float _originalHue;              // Original colour value when the level started
 
+    [SerializeField] private bool _disabledColourChange = false;
+
     public int State = 0;
 
     private Player _player;
     private List<Enemy> _enemies = new List<Enemy>();
+
+    [field: Header("Sprites")]
+    [field: SerializeField] private Sprite _disabledSprite;
+    [field: SerializeField] private Sprite _normalSprite;
 
     void Awake()
     {
@@ -28,6 +34,11 @@ public class ColourRegion : MonoBehaviour
         _localColour = H * 360;
         _originalHue = _localColour;
         _spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (_disabledColourChange)
+        {
+            DisabledSprite();
+        }
     }
 
     private void OnEnable()
@@ -47,7 +58,10 @@ public class ColourRegion : MonoBehaviour
 
     void Update()
     {
-        _colourDiff = _colourManager.colour;
+        if (!_disabledColourChange)
+        {
+            _colourDiff = _colourManager.colour;
+        }
         ProcessColour();
         SetColour();
     }
@@ -216,7 +230,19 @@ public class ColourRegion : MonoBehaviour
 
         if (_assignmentCode == (int)data)
         {
-            //this.gameObject.SetActive(false);
+            _localColour = _originalHue;
+            _disabledColourChange = false;
+            NormalSprite();
         }
+    }
+
+    public void DisabledSprite()
+    {
+        _spriteRenderer.sprite = _disabledSprite;
+    }
+
+    public void NormalSprite()
+    {
+        _spriteRenderer.sprite = _normalSprite;
     }
 }

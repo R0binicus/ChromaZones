@@ -79,7 +79,7 @@ SpriteRenderer:
   m_Color: {r: 0.7899183, g: 0.04705882, b: 0.9490196, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 2
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -125,7 +125,7 @@ PolygonCollider2D:
     oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Points:
@@ -150,4 +150,7 @@ MonoBehaviour:
   _transitionMultiplier: 2
   _localChangeMultiplier: 1
   _assignmentCode: 0
+  _disabledColourChange: 0
   State: 0
+  _disabledSprite: {fileID: 21300000, guid: 79730117c52cb5b48b16c4f54b8bea2c, type: 3}
+  _normalSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
