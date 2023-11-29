@@ -29,6 +29,7 @@ public class EnemyManager : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         _enemies = new List<Enemy>();
         EventManager.EventInitialise(EventType.LOSE);
+        EventManager.EventInitialise(EventType.ASSIGNMENT_CODE_TRIGGER);
     }
 
     void Start()

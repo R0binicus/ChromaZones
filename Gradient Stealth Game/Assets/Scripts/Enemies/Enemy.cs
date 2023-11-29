@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
     public bool InvulnerableState = false;
 
     [field: SerializeField] private int _assignmentCode = 0;
-    private bool _isEnemyHiding;
+    public bool _isEnemyHiding;
     #endregion
     
     #region Components
@@ -136,6 +136,19 @@ public class Enemy : MonoBehaviour
         chaseSound = GameObject.Find(chaseName).GetComponent<AudioSource>();
     }
 
+    private void OnEnable()
+    {
+        if (_assignmentCode != 0)
+        {
+            EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
+        }
+    }
+
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
+    }
+
     private void Start()
     {
         // Send Enemy to EnemyManager to be stored in a list and kept track of for win condition
@@ -230,30 +243,26 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void NewState()
+    private void AssignmentCodeHandler(object data)
     {
-        if (!InvulnerableState)
+        Debug.Log("EVENT RECIEVED");
+        if (data == null)
         {
-            if (RegionState == 1)
-            {
-                if (!_isEnemyHiding)
-                {
-                    HidingSprite();
-                    _isEnemyHiding = true;
-                }
-            }
-            else 
-            {
-                if (_isEnemyHiding)
-                {
-                    NormalSprite();
-                    _isEnemyHiding = false;
-                }
-            }
+            Debug.Log("AssignmentCodeHandler is null");
         }
-        else 
+
+        int triggerCode = (int)data;
+        if (_assignmentCode == triggerCode)
         {
-            InvulnerableSprite();
+            Debug.Log("IT WORKS");
+            InvulnerableState = false;
+
+            if (RegionState != 1)
+            {
+                _isEnemyHiding = !_isEnemyHiding;
+            }
+            //_isEnemyHiding = true;
+            NewState(RegionState);
         }
     }
 }
