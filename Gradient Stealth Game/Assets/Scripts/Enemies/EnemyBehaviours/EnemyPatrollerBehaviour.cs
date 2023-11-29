@@ -48,6 +48,7 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
         {
             destination = waypoints[waypointIndex - 1];
         }
+        Debug.Log(destination);
         GetLocation(destination);
     }
 
@@ -67,16 +68,18 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
 
     public override void UpdateLogicBehaviour()
     {
-        UpdateWaypoint();
+        Debug.Log(waypointIndex);
+        //UpdateWaypoint();
         if ((destination - (Vector2)transform.position).magnitude < 0.1f)
         {
             waypointIndex++;
             UpdateWaypoint();
         }
+        Debug.Log(waypointIndex);
 
-        Quaternion fullRotatation = Quaternion.LookRotation(transform.forward, destinationDirection);
-        Quaternion lookRot = Quaternion.identity;
-        lookRot.eulerAngles = new Vector3(0,0,fullRotatation.eulerAngles.z);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, roationSpeed * Time.deltaTime);
+        //Quaternion fullRotatation = Quaternion.LookRotation(transform.forward, destinationDirection);
+        //Quaternion lookRot = Quaternion.identity;
+        //lookRot.eulerAngles = new Vector3(0,0,fullRotatation.eulerAngles.z);
+        //transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, roationSpeed * Time.deltaTime);
     }
 }

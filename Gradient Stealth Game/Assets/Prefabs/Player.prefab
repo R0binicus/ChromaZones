@@ -127,16 +127,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e248f148310e0d4ebecee21634c90a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  regionState: 0
-  regionLayer: 0
+  RegionState: 0
   _moveSpeed: 3.25
   _velocityPower: 2
   _moveAccel: 3
-  _moveDecel: 20
+  _moveDecel: 10
   _hidingSprite: {fileID: 7482667652216324306, guid: fc321b8f076fe07439c92eac0d9f2de8, type: 3}
   _normalSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  obscuredName: PlayerObscured
-  visibleName: PlayerVisible
+  _obscuredName: PlayerObscured
+  _visibleName: PlayerVisible
 --- !u!61 &4348353519037223968
 BoxCollider2D:
   m_ObjectHideFlags: 0
