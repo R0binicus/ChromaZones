@@ -40,14 +40,22 @@ public class EnemyPatrolState : EnemyState
     public override void OnCollisionEnter2D(Collision2D collision)
     {
         // If player has attacked Enemy and Enemy is not in their region, notify the EnemyManager
-        if (collision.transform.CompareTag("Player") && Enemy.RegionState != 1)
+        if (collision.transform.CompareTag("Player") && Enemy.RegionState != 1 && !Enemy.InvulnerableState)
         {
             Enemy.EnemyManager.PlayerAttacked(Enemy);
+        }
+        if (collision.transform.CompareTag("Player") && Enemy.RegionState != 1 && Enemy.InvulnerableState)
+        {
+            Enemy.StateMachine.ChangeState(Enemy.CaughtState);
         }
         // Else if player has attacked Enemy and Enemy is in their region, call game over
         else if (collision.transform.CompareTag("Player") && Enemy.RegionState == 1)
         {
             Enemy.StateMachine.ChangeState(Enemy.CaughtState);
+        }
+        else
+        {
+            Debug.Log("WTF EnemyPatrolState");
         }
     }
 }
