@@ -31,6 +31,7 @@ public class EnemyManager : MonoBehaviour
         _enemies = new List<Enemy>();
         EventManager.EventInitialise(EventType.LOSE);
         EventManager.EventInitialise(EventType.ASSIGNMENT_CODE_TRIGGER);
+        EventManager.EventInitialise(EventType.AREA_CHASE_TRIGGER);
     }
 
     void Start()
@@ -41,11 +42,13 @@ public class EnemyManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.ADD_ENEMY, AddEnemy);
+        EventManager.EventSubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.ADD_ENEMY, AddEnemy);
+        EventManager.EventUnsubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
     }
 
     // Receives Enemies that are instantiated within the level to keep track of for win condition
@@ -61,11 +64,29 @@ public class EnemyManager : MonoBehaviour
         _enemies.Add(enemy);
     }
 
-    public void AlertNearbyEnemies(Vector3 centre, float AlertOthersRadius)
+    public void AlertNearbyEnemies(Vector3 centre, float AlertOthersRadius = 3f)
     {
         foreach (Enemy enemy in _enemies)
         {
             if ((centre - enemy.transform.position).magnitude < AlertOthersRadius)
+            {
+                enemy.StateMachine.ChangeState(enemy.ChaseState);
+            }
+        }
+    }
+
+    public void AlertNearbyEnemies(object data)
+    {
+        if (data == null)
+        {
+            Debug.Log("AlertNearbyEnemies is null");
+        }
+
+        var centre = (Vector3)data;
+
+        foreach (Enemy enemy in _enemies)
+        {
+            if ((centre - enemy.transform.position).magnitude < 3f)
             {
                 enemy.StateMachine.ChangeState(enemy.ChaseState);
             }

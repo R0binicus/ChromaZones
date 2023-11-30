@@ -10,6 +10,7 @@ public enum EventType
     INIT_COLOUR_MANAGER,    // 
     COLOUR_CHANGE_BOOL,     // 
     ASSIGNMENT_CODE_TRIGGER,     // 
+    AREA_CHASE_TRIGGER,     // 
     PAUSE_TOGGLE,
     PLAYER_MOVE_BOOL,
     PLAYER_MOVE_VECT2D
