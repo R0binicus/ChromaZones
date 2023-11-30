@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     [field: SerializeField] public float ChaseRotation { get; private set; }
 
     [field: Header("FOV")]
+    [field: SerializeField] public float AlertOthersRadius { get; private set; } = 3f;
     [field: SerializeField] public FOVData PatrolFOVData { get; private set; }
     [field: SerializeField] public FOVData AlertFOVData { get; private set; }
     

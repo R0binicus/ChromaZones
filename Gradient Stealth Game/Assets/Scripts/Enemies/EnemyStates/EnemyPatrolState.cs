@@ -18,6 +18,7 @@ public class EnemyPatrolState : EnemyState
         {
             Enemy.alertSound.Play();
             Enemy.StateMachine.ChangeState(Enemy.ChaseState);
+            Enemy.EnemyManager.AlertNearbyEnemies(Enemy.transform.position, Enemy.AlertOthersRadius);
         }
         else
         {

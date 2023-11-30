@@ -60,6 +60,17 @@ public class EnemyManager : MonoBehaviour
         _enemies.Add(enemy);
     }
 
+    public void AlertNearbyEnemies(Vector3 centre, float AlertOthersRadius)
+    {
+        foreach (Enemy enemy in _enemies)
+        {
+            if ((centre - enemy.transform.position).magnitude < AlertOthersRadius)
+            {
+                enemy.StateMachine.ChangeState(enemy.ChaseState);
+            }
+        }
+    }
+
     public void PlayerCaught()
     {
         loseSound.Play();
