@@ -1,4 +1,8 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+
+public enum TwoFOVTypes { HORIZONTAL, VERTICAL }
 
 [ExecuteAlways]
 public class Enemy : MonoBehaviour
@@ -35,7 +39,7 @@ public class Enemy : MonoBehaviour
     #endregion
     
     #region Components
-    public EnemyFieldOfView FOV { get; private set; }
+    public EnemyFieldOfView[] FOVs { get; private set; }
     public EnemyBehaviour EnemyBehaviour { get; private set; }
     public Rigidbody2D RB { get; private set; }
     public Collider2D Collider { get; private set; }
@@ -110,7 +114,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         // Get components
-        FOV = GetComponentInChildren<EnemyFieldOfView>();
+        FOVs = GetComponentsInChildren<EnemyFieldOfView>();
         EnemyBehaviour = GetComponent<EnemyBehaviour>();
         RB = GetComponentInChildren<Rigidbody2D>();
         Collider = GetComponentInChildren<Collider2D>();
@@ -146,13 +150,16 @@ public class Enemy : MonoBehaviour
     // Runs when changes are made in the editor for the FOV
     private void OnValidate()
     {
-        if (FOV == null)
+        if (FOVs == null)
         {
-            FOV = GetComponentInChildren<EnemyFieldOfView>();
+            FOVs = GetComponentsInChildren<EnemyFieldOfView>();
         }
 
-        FOV.SetFOVData(PatrolFOVData);
-        FOV.CreateFOV();
+        foreach (EnemyFieldOfView fov in FOVs)
+        {
+            fov.SetFOVData(PatrolFOVData);
+            fov.CreateFOV();
+        }
     }
 
     private void Update()
@@ -172,6 +179,74 @@ public class Enemy : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         StateMachine.CurrentState.OnCollisionEnter2D(collision);
+    }
+
+    public bool PlayerSpotted()
+    {
+        foreach (EnemyFieldOfView fov in FOVs)
+        {
+            if (fov.PlayerSpotted)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Decide whether to activate all or one FOV
+    public void FOVsIsActive(bool isActive, bool isAlerted)
+    {
+        // Activate (all?) FOVs
+        if (isActive)
+        {
+            // If is alerted, no need to have all FOVs active, just one
+            if (isAlerted)
+            {
+                ActivateAllFOVs(false);
+                FOVs[0].IsActive(true);
+            }
+            else
+            {
+                ActivateAllFOVs(true);
+            }
+        }
+        // Deactivate all FOVs
+        else
+        {
+            ActivateAllFOVs(false);
+        }
+    }
+
+    private void ActivateAllFOVs(bool flag)
+    {
+        foreach (EnemyFieldOfView fov in FOVs)
+        {
+            fov.IsActive(flag);
+        }
+    }
+
+    // Set (all?) FOV Data
+    public void SetFOVsData(FOVData data)
+    {
+        foreach (EnemyFieldOfView fov in FOVs)
+        {
+            if (fov.gameObject.activeInHierarchy)
+            {
+                fov.SetFOVData(data);
+            }
+        }
+    }
+
+    public void CreateFOVs()
+    {
+        foreach (EnemyFieldOfView fov in FOVs)
+        {
+            if (fov.gameObject.activeInHierarchy)
+            {
+                fov.CreateFOV();
+            }
+        }
     }
 
     // Change between visible and 'hiding'

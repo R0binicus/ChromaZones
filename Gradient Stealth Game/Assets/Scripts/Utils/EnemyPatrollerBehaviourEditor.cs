@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(EnemyPatrollerBehaviour))]
-public class EditorManager : Editor
+public class EnemyPatrollerBehaviourEditor : Editor
 {
 	void DrawArrow(Vector3 start, Vector3 end)
 	{

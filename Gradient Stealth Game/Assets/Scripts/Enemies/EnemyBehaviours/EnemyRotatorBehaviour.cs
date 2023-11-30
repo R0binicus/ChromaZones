@@ -58,6 +58,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
             // If Enemy needs to rotate back to original angle
             if (_rotatingToOrigin)
             {
+                Debug.Log("HEY");
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, _originAngle, _returnRotateSpeed * Time.deltaTime);
 
                 if (Mathf.Abs(Quaternion.Angle(_originAngle, transform.rotation)) < 0.1f)

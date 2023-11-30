@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyFieldOfView : MonoBehaviour
 {
     [Header("General Data")]
-    [SerializeField] LayerMask _layerToRaycast;
+    LayerMask _layerToRaycast;
 
     // Internal Data
     float _FOVAngle;
@@ -12,6 +13,11 @@ public class EnemyFieldOfView : MonoBehaviour
     float _currentAngle;
 
     public bool PlayerSpotted { get; private set; }
+
+    private void Awake()
+    {
+        _layerToRaycast = LayerMask.GetMask("Player");
+    }
 
     private void FixedUpdate()
     {

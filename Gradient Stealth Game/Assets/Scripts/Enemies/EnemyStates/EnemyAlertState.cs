@@ -9,11 +9,11 @@ public class EnemyAlertState : EnemyState
 
     public override void Enter()
     {
-        Debug.Log("Entering Enemy Alert State");
+        //Debug.Log("Entering Enemy Alert State");
 
-        Enemy.FOV.IsActive(true);
-        Enemy.FOV.SetFOVData(Enemy.AlertFOVData);
-        Enemy.FOV.CreateFOV();
+        Enemy.FOVsIsActive(true, true);
+        Enemy.SetFOVsData(Enemy.AlertFOVData);
+        Enemy.CreateFOVs();
         _timer = 0;
     }
 
@@ -24,7 +24,7 @@ public class EnemyAlertState : EnemyState
         if (_timer > Enemy.DetectionTime)
         {
             // If Player is still within FOV and not hiding, chase
-            if (Enemy.FOV.PlayerSpotted && Enemy.Player.RegionState != 3)
+            if (Enemy.PlayerSpotted() && Enemy.Player.RegionState != 3)
             {
                 Enemy.StateMachine.ChangeState(Enemy.ChaseState);
             }
@@ -38,7 +38,7 @@ public class EnemyAlertState : EnemyState
 
     public override void Exit()
     {
-        Debug.Log("Leaving Enemy Alert State");
+        //Debug.Log("Leaving Enemy Alert State");
     }
 
     // If player touches Enemy whilst in hiding
