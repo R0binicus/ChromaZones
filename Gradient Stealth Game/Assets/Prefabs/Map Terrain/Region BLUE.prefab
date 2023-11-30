@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8641863942218337497}
   - component: {fileID: 2780308861980203326}
-  - component: {fileID: 7900179120319595197}
+  - component: {fileID: 5422770081340710902}
   - component: {fileID: 9032322993663659875}
   m_Layer: 7
   m_Name: Region BLUE
@@ -86,8 +86,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!60 &7900179120319595197
-PolygonCollider2D:
+--- !u!61 &5422770081340710902
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -128,13 +128,9 @@ PolygonCollider2D:
     drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.5, y: 0.5}
-      - {x: -0.5, y: -0.5}
-      - {x: 0.5, y: -0.5}
-      - {x: 0.5, y: 0.5}
-  m_UseDelaunayMesh: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!114 &9032322993663659875
 MonoBehaviour:
   m_ObjectHideFlags: 0

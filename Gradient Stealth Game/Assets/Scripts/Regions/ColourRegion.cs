@@ -6,6 +6,7 @@ using UnityEngine;
 public class ColourRegion : MonoBehaviour
 {
     private SpriteRenderer _spriteRenderer;
+    private BoxCollider2D _boxCollider;
     private ColourManager _colourManager;
 
     [SerializeField] private float _transitionMultiplier = 2f;
@@ -29,11 +30,14 @@ public class ColourRegion : MonoBehaviour
 
     void Awake()
     {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _boxCollider = GetComponent<BoxCollider2D>();
+        _boxCollider.size = new Vector2(_spriteRenderer.size.x, _boxCollider.size.y);
         // Set values and components
         Color.RGBToHSV(GetComponent<SpriteRenderer>().color, out var H, out var S, out var V);
         _localColour = H * 360;
         _originalHue = _localColour;
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        
 
         if (_disabledColourChange)
         {
