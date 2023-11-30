@@ -6,6 +6,7 @@ using UnityEngine;
 public class ColourRegion : MonoBehaviour
 {
     private SpriteRenderer _spriteRenderer;
+    private BoxCollider2D _boxCollider;
     private ColourManager _colourManager;
 
     [SerializeField] private float _transitionMultiplier = 2f;
@@ -16,33 +17,56 @@ public class ColourRegion : MonoBehaviour
     private float _localColour;              // Colour of this region specifically
     private float _originalHue;              // Original colour value when the level started
 
+    [SerializeField] private bool _disabledColourChange = false;
+
     public int State = 0;
 
     private Player _player;
     private List<Enemy> _enemies = new List<Enemy>();
 
+    [field: Header("Sprites")]
+    [field: SerializeField] private Sprite _disabledSprite;
+    [field: SerializeField] private Sprite _normalSprite;
+
     void Awake()
     {
+        
+        
         // Set values and components
         Color.RGBToHSV(GetComponent<SpriteRenderer>().color, out var H, out var S, out var V);
         _localColour = H * 360;
         _originalHue = _localColour;
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _boxCollider = GetComponent<BoxCollider2D>();
+        _boxCollider.size = new Vector2(_spriteRenderer.size.x, _boxCollider.size.y);
+        
+        if (_disabledColourChange)
+        {
+            DisabledSprite();
+        }
     }
 
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
+        if (_assignmentCode != 0)
+        {
+            EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
+        }
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
+        EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
     }
 
     void Update()
     {
-        _colourDiff = _colourManager.colour;
+        if (!_disabledColourChange)
+        {
+            _colourDiff = _colourManager.colour;
+        }
         ProcessColour();
         SetColour();
     }
@@ -200,5 +224,30 @@ public class ColourRegion : MonoBehaviour
         }
 
         _colourManager = (ColourManager)data;
+    }
+
+    private void AssignmentCodeHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.Log("ColourRegion AssignmentCodeHandler is null");
+        }
+
+        if (_assignmentCode == (int)data)
+        {
+            _localColour = _originalHue;
+            _disabledColourChange = false;
+            NormalSprite();
+        }
+    }
+
+    public void DisabledSprite()
+    {
+        _spriteRenderer.sprite = _disabledSprite;
+    }
+
+    public void NormalSprite()
+    {
+        _spriteRenderer.sprite = _normalSprite;
     }
 }

@@ -31,6 +31,7 @@ public class EnemyManager : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         _enemies = new List<Enemy>();
         EventManager.EventInitialise(EventType.LOSE);
+        EventManager.EventInitialise(EventType.ASSIGNMENT_CODE_TRIGGER);
     }
 
     void Start()
@@ -59,6 +60,17 @@ public class EnemyManager : MonoBehaviour
         enemy.EnemyManager = this;
         enemy.Player = _player;
         _enemies.Add(enemy);
+    }
+
+    public void AlertNearbyEnemies(Vector3 centre, float AlertOthersRadius)
+    {
+        foreach (Enemy enemy in _enemies)
+        {
+            if ((centre - enemy.transform.position).magnitude < AlertOthersRadius)
+            {
+                enemy.StateMachine.ChangeState(enemy.ChaseState);
+            }
+        }
     }
 
     public void PlayerCaught()

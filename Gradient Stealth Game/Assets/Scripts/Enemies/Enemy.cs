@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     [field: SerializeField] public float ChaseRotation { get; private set; }
 
     [field: Header("FOV")]
+    [field: SerializeField] public float AlertOthersRadius { get; private set; } = 3f;
     [field: SerializeField] public FOVData PatrolFOVData { get; private set; }
     [field: SerializeField] public FOVData AlertFOVData { get; private set; }
     
@@ -138,6 +139,19 @@ public class Enemy : MonoBehaviour
         alertSound = GameObject.Find(alertName).GetComponent<AudioSource>();
         deAlertSound = GameObject.Find(deAlertName).GetComponent<AudioSource>();
         chaseSound = GameObject.Find(chaseName).GetComponent<AudioSource>();
+    }
+
+    private void OnEnable()
+    {
+        if (_assignmentCode != 0)
+        {
+            EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
+        }
+    }
+
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
     }
 
     private void Start()
@@ -305,30 +319,21 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void NewState()
+    private void AssignmentCodeHandler(object data)
     {
-        if (!InvulnerableState)
+        if (data == null)
         {
-            if (RegionState == 1)
-            {
-                if (!_isEnemyHiding)
-                {
-                    HidingSprite();
-                    _isEnemyHiding = true;
-                }
-            }
-            else 
-            {
-                if (_isEnemyHiding)
-                {
-                    NormalSprite();
-                    _isEnemyHiding = false;
-                }
-            }
+            Debug.Log("Enemy AssignmentCodeHandler is null");
         }
-        else 
+
+        if (_assignmentCode == (int)data)
         {
-            InvulnerableSprite();
+            if (RegionState != 1)
+            {
+                _isEnemyHiding = !_isEnemyHiding;
+            }
+            InvulnerableState = false;
+            NewState(RegionState);
         }
     }
 }
