@@ -349,12 +349,18 @@ public class Enemy : MonoBehaviour
     public void CheckWalls()
     {
         Vector2 playerDir = _player.transform.position - transform.position;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDir, Mathf.Infinity, LayerMask.GetMask("Obstacle"));
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDir, 3f, LayerMask.GetMask("Obstacle"));
         
         // If ray doesn't hit an obstacle, chase player
-        if (hit.collider == null)
+        if (hit.collider == null && StateMachine.CurrentState != CaughtState && StateMachine.CurrentState != CaughtState)
         {
+            //Debug.Log(StateMachine.CurrentState);
+            chaseSound.Play(); 
             StateMachine.ChangeState(ChaseState);
+        }
+        else
+        {
+            //Debug.Log(hit.collider);
         }
     }
 }

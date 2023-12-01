@@ -12,7 +12,7 @@ public class EnemyChaseState : EnemyState
     public override void Enter()
     {
         //Debug.Log("Entering Enemy Chase State");
-        Enemy.chaseSound.Play();
+        //Enemy.chaseSound.Play();
         _timer = 0;
         _accelTimer = 0;
         Enemy.SetChaseSpeed();

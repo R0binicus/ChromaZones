@@ -5,10 +5,9 @@ using UnityEngine;
 public class BasicProjectile : MonoBehaviour
 {
     [Header("Projectile Variables")]
-    public float LifeTime;
+    private float _lifeTime;
     private float _timer;
-    public float Speed;
-    public float AlertOthersRadius = 3f;
+    private float _speed;
 
     public ShooterTurret TurretParent;
 
@@ -21,7 +20,7 @@ public class BasicProjectile : MonoBehaviour
 
     public void OnEnable()
     {
-        _timer = LifeTime;
+        _timer = _lifeTime;
     }
 
     public void OnDisable()
@@ -59,6 +58,12 @@ public class BasicProjectile : MonoBehaviour
     {
         transform.position = spawnpoint.position;
         gameObject.SetActive(true);
-        _rb.velocity = transform.up * Speed;
+        _rb.velocity = transform.up * _speed;
+    }
+
+    public void SetProjectileData(ProjectileData projectileData)
+    {
+        _lifeTime = projectileData.LifeTime;
+        _speed = projectileData.Speed;
     }
 }
