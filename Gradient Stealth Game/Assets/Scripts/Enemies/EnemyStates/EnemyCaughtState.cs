@@ -10,7 +10,6 @@ public class EnemyCaughtState : EnemyState
 
     public override void Enter()
     {
-        Debug.Log("Entered Enemy Caught State. You lose.");
         Enemy.Agent.isStopped = true;
         Enemy.EnemyManager.PlayerCaught();
     }

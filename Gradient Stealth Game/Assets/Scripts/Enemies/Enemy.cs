@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using Unity.Mathematics;
 using UnityEngine;
 
 public enum TwoFOVTypes { HORIZONTAL, VERTICAL }
@@ -334,6 +334,18 @@ public class Enemy : MonoBehaviour
             }
             InvulnerableState = false;
             NewState(RegionState);
+        }
+    }
+
+    public void CheckWalls()
+    {
+        Vector2 playerDir = _player.transform.position - transform.position;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDir, Mathf.Infinity, LayerMask.GetMask("Obstacle"));
+        
+        // If ray doesn't hit an obstacle, chase player
+        if (hit.collider == null)
+        {
+            StateMachine.ChangeState(ChaseState);
         }
     }
 }

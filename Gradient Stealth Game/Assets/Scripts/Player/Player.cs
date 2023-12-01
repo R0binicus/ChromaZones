@@ -166,7 +166,6 @@ public class Player : MonoBehaviour
 
     private IEnumerator EventCoroutine(bool moveBool)
     {
-
         if (_isCollidingObstacle)
         {
             yield return new WaitForSeconds(0.2f);

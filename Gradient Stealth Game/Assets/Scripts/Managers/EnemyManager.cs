@@ -70,7 +70,8 @@ public class EnemyManager : MonoBehaviour
         {
             if ((centre - enemy.transform.position).magnitude < AlertOthersRadius)
             {
-                enemy.StateMachine.ChangeState(enemy.ChaseState);
+                //enemy.StateMachine.ChangeState(enemy.ChaseState);
+                enemy.CheckWalls();
             }
         }
     }
@@ -88,7 +89,8 @@ public class EnemyManager : MonoBehaviour
         {
             if ((centre - enemy.transform.position).magnitude < 3f)
             {
-                enemy.StateMachine.ChangeState(enemy.ChaseState);
+                //enemy.StateMachine.ChangeState(enemy.ChaseState);
+                enemy.CheckWalls();
             }
         }
     }
