@@ -79,7 +79,6 @@ public class EnemyManager : MonoBehaviour
         {
             if ((centre - enemy.transform.position).magnitude < alertOthersRadius)
             {
-                //enemy.StateMachine.ChangeState(enemy.ChaseState);
                 enemy.CheckWalls();
             }
         }
