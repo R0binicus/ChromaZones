@@ -20,6 +20,8 @@ public class Enemy : MonoBehaviour
     [field: SerializeField] public float ChaseRotation { get; private set; }
 
     [field: Header("FOV")]
+
+    private AlertData _alertData;
     [field: SerializeField] public float AlertOthersRadius { get; private set; } = 3f;
     [field: SerializeField] public FOVData PatrolFOVData { get; private set; }
     [field: SerializeField] public FOVData AlertFOVData { get; private set; }
@@ -159,6 +161,7 @@ public class Enemy : MonoBehaviour
         // Send Enemy to EnemyManager to be stored in a list and kept track of for win condition
         EventManager.EventTrigger(EventType.ADD_ENEMY, this);
         SetWalkSpeed();
+        _alertData = new AlertData(transform.position, AlertOthersRadius);
     }
 
     // Runs when changes are made in the editor for the FOV
@@ -335,6 +338,12 @@ public class Enemy : MonoBehaviour
             InvulnerableState = false;
             NewState(RegionState);
         }
+    }
+
+    public void EnemyAlertNearbyEnemies()
+    {
+        _alertData.Centre = transform.position;
+        EnemyManager.AlertNearbyEnemies(_alertData);
     }
 
     public void CheckWalls()

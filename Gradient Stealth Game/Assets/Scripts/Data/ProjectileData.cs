@@ -4,14 +4,14 @@ using UnityEngine;
 [System.Serializable]
 public class ProjectileData
 {
-    [field:SerializeField, Range(0, 360)] public float FOVAngle { get; private set; }
-    [field:SerializeField] public float FOVDist { get; private set; }
-    [field:SerializeField] public uint TriangleSlices { get; private set; }
+    [field:SerializeField] public float Speed { get; private set; }
+    [field:SerializeField] public float LifeTime { get; private set; }
+    [field:SerializeField] public float AlertOthersRadius { get; private set; }
 
-    public ProjectileData(float FOVAngle, float FOVDist, uint TriangleSlices)
+    public ProjectileData(float Speed, float LifeTime, float AlertOthersRadius)
     {
-        this.FOVAngle = FOVAngle;
-        this.FOVDist = FOVDist;
-        this.TriangleSlices = TriangleSlices;
+        this.Speed = Speed;
+        this.LifeTime = LifeTime;
+        this.AlertOthersRadius = AlertOthersRadius;
     }
 }

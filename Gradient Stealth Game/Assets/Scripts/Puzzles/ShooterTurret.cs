@@ -19,7 +19,7 @@ public class ShooterTurret : MonoBehaviour
     [SerializeField] private float _projectileSpeed;
     [SerializeField] private float _alertOthersRadius = 3f;
 
-    
+    [field: SerializeField] public ProjectileData ProjectileData { get; private set; }
 
     private void Start()
     {
