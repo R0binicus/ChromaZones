@@ -10,6 +10,8 @@ public class BasicProjectile : MonoBehaviour
     public float Speed;
     public float AlertOthersRadius = 3f;
 
+    public ShooterTurret TurretParent;
+
     private Rigidbody2D _rb;
 
     public void Awake()
@@ -43,9 +45,8 @@ public class BasicProjectile : MonoBehaviour
         {
             if (collision.gameObject.GetComponent<Player>().RegionState != 3)
             {
-                AlertData data = new AlertData(transform.position, AlertOthersRadius);
+                TurretParent.AlertOthers(transform.position);
                 gameObject.SetActive(false);
-                EventManager.EventTrigger(EventType.AREA_CHASE_TRIGGER, data);
             }
         }
         else if (collision.tag == "Obstacle")
