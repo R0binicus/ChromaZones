@@ -10,6 +10,8 @@ public class ShooterTurret : MonoBehaviour
     [SerializeField] private float _fireCD = 0f;
     private List<GameObject> _projectiles;
 
+    private AlertData _alertData;
+
 
     [Header("Projectile Stats")]
     [SerializeField] private GameObject _proj;
@@ -17,15 +19,21 @@ public class ShooterTurret : MonoBehaviour
     [SerializeField] private float _projectileSpeed;
     [SerializeField] private float _alertOthersRadius = 3f;
 
+    
+
     private void Start()
     {
+        _alertData = new AlertData(transform.position, _alertOthersRadius);
         _projectiles = ObjectPooler.CreateObjectPool(_maxPoolNum, _proj, transform);
+        
         foreach (GameObject obj in _projectiles)
         {
             //obj.transform.rotation = Quaternion.identity;
             BasicProjectile projectile = obj.GetComponent<BasicProjectile>();
             projectile.Speed = _projectileSpeed;
             projectile.LifeTime = _projectileLifeTime;
+            projectile.AlertOthersRadius = _alertOthersRadius;
+            projectile.TurretParent = this;
         }
     }
 
@@ -50,5 +58,11 @@ public class ShooterTurret : MonoBehaviour
         }
 
         obj.GetComponent<BasicProjectile>().Go(transform);
+    }
+
+    public void AlertOthers(Vector3 Centre)
+    {
+        _alertData.Centre = Centre;
+        EventManager.EventTrigger(EventType.AREA_CHASE_TRIGGER, _alertData);
     }
 }

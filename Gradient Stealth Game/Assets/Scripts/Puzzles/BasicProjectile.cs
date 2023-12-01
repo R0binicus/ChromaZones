@@ -10,6 +10,8 @@ public class BasicProjectile : MonoBehaviour
     public float Speed;
     public float AlertOthersRadius = 3f;
 
+    public ShooterTurret TurretParent;
+
     private Rigidbody2D _rb;
 
     public void Awake()
@@ -37,19 +39,14 @@ public class BasicProjectile : MonoBehaviour
         }
     }
 
-    public void FixedUpdate()
-    {
-        _rb.velocity = _rb.velocity.normalized * Speed; //Continue in current direction.
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
         {
             if (collision.gameObject.GetComponent<Player>().RegionState != 3)
             {
+                TurretParent.AlertOthers(transform.position);
                 gameObject.SetActive(false);
-                EventManager.EventTrigger(EventType.AREA_CHASE_TRIGGER, transform.position);
             }
         }
         else if (collision.tag == "Obstacle")
@@ -62,6 +59,6 @@ public class BasicProjectile : MonoBehaviour
     {
         transform.position = spawnpoint.position;
         gameObject.SetActive(true);
-        _rb.velocity = transform.forward * Speed;
+        _rb.velocity = transform.up * Speed;
     }
 }
