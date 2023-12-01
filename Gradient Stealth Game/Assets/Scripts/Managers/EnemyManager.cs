@@ -43,12 +43,18 @@ public class EnemyManager : MonoBehaviour
     {
         EventManager.EventSubscribe(EventType.ADD_ENEMY, AddEnemy);
         EventManager.EventSubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
+        EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.ADD_ENEMY, AddEnemy);
         EventManager.EventUnsubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
+    }
+
+    private void AssignmentCodeHandler(object data)
+    {
+        //surfaceSingle.BuildNavMesh();
     }
 
     // Receives Enemies that are instantiated within the level to keep track of for win condition

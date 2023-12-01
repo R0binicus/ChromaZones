@@ -231,8 +231,15 @@ public class ColourRegion : MonoBehaviour
         if (_assignmentCode == (int)data)
         {
             _localColour = _originalHue;
-            _disabledColourChange = false;
-            NormalSprite();
+            _disabledColourChange = !_disabledColourChange;
+            if (_disabledColourChange)
+            {
+                DisabledSprite();
+            }
+            else
+            {
+                NormalSprite();
+            }
         }
     }
 

@@ -306,6 +306,7 @@ public class Enemy : MonoBehaviour
                     HidingSprite();
                     _isEnemyHiding = true;
                 }
+                else {HidingSprite();}
             }
             else 
             {
@@ -314,6 +315,7 @@ public class Enemy : MonoBehaviour
                     NormalSprite();
                     _isEnemyHiding = false;
                 }
+                else {NormalSprite();}
             }
         }
         else 
@@ -335,7 +337,7 @@ public class Enemy : MonoBehaviour
             {
                 _isEnemyHiding = !_isEnemyHiding;
             }
-            InvulnerableState = false;
+            InvulnerableState = !InvulnerableState;
             NewState(RegionState);
         }
     }
