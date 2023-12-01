@@ -71,6 +71,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
                 if (_timer > _timeToRotate)
                 {
                     ResetTimer();
+                    StopAllCoroutines();
                     StartCoroutine(Rotate());
                 }
                 else
