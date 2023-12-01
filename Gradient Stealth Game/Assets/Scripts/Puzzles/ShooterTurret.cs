@@ -26,6 +26,7 @@ public class ShooterTurret : MonoBehaviour
             BasicProjectile projectile = obj.GetComponent<BasicProjectile>();
             projectile.Speed = _projectileSpeed;
             projectile.LifeTime = _projectileLifeTime;
+            projectile.AlertOthersRadius = _alertOthersRadius;
         }
     }
 

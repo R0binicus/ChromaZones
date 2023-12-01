@@ -64,17 +64,6 @@ public class EnemyManager : MonoBehaviour
         _enemies.Add(enemy);
     }
 
-    public void AlertNearbyEnemies(Vector3 centre, float AlertOthersRadius = 3f)
-    {
-        foreach (Enemy enemy in _enemies)
-        {
-            if ((centre - enemy.transform.position).magnitude < AlertOthersRadius)
-            {
-                enemy.StateMachine.ChangeState(enemy.ChaseState);
-            }
-        }
-    }
-
     public void AlertNearbyEnemies(object data)
     {
         if (data == null)
@@ -82,11 +71,13 @@ public class EnemyManager : MonoBehaviour
             Debug.Log("AlertNearbyEnemies is null");
         }
 
-        var centre = (Vector3)data;
+        var data2 = (AlertData)data;
+        var centre = data2.Centre;
+        var alertOthersRadius = data2.AlertOthersRadius;
 
         foreach (Enemy enemy in _enemies)
         {
-            if ((centre - enemy.transform.position).magnitude < 3f)
+            if ((centre - enemy.transform.position).magnitude < alertOthersRadius)
             {
                 enemy.StateMachine.ChangeState(enemy.ChaseState);
             }

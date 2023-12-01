@@ -37,19 +37,15 @@ public class BasicProjectile : MonoBehaviour
         }
     }
 
-    public void FixedUpdate()
-    {
-        _rb.velocity = _rb.velocity.normalized * Speed; //Continue in current direction.
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
         {
             if (collision.gameObject.GetComponent<Player>().RegionState != 3)
             {
+                AlertData data = new AlertData(transform.position, AlertOthersRadius);
                 gameObject.SetActive(false);
-                EventManager.EventTrigger(EventType.AREA_CHASE_TRIGGER, transform.position);
+                EventManager.EventTrigger(EventType.AREA_CHASE_TRIGGER, data);
             }
         }
         else if (collision.tag == "Obstacle")
@@ -62,6 +58,6 @@ public class BasicProjectile : MonoBehaviour
     {
         transform.position = spawnpoint.position;
         gameObject.SetActive(true);
-        _rb.velocity = transform.forward * Speed;
+        _rb.velocity = transform.up * Speed;
     }
 }
