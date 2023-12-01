@@ -5,13 +5,12 @@ using UnityEngine;
 public class BasicProjectile : MonoBehaviour
 {
     [Header("Projectile Variables")]
-    public float lifeTime;
-    private float _lifeTimer;
-    public float speed;
+    public float LifeTime;
+    private float _timer;
+    public float Speed;
+    public float AlertOthersRadius = 3f;
 
     private Rigidbody2D _rb;
-
-    [field: SerializeField] private float _alertOthersRadius = 3f;
 
     public void Awake()
     {
@@ -20,7 +19,7 @@ public class BasicProjectile : MonoBehaviour
 
     public void OnEnable()
     {
-        _lifeTimer = lifeTime;
+        _timer = LifeTime;
     }
 
     public void OnDisable()
@@ -31,8 +30,8 @@ public class BasicProjectile : MonoBehaviour
     public void Update()
     {
         //Destroy projectiles that fly off screen
-        _lifeTimer -= Time.deltaTime;
-        if (_lifeTimer <= 0)
+        _timer -= Time.deltaTime;
+        if (_timer <= 0)
         {
             gameObject.SetActive(false);
         }
@@ -40,7 +39,7 @@ public class BasicProjectile : MonoBehaviour
 
     public void FixedUpdate()
     {
-        _rb.velocity = _rb.velocity.normalized * speed; //Continue in current direction.
+        _rb.velocity = _rb.velocity.normalized * Speed; //Continue in current direction.
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -53,13 +52,16 @@ public class BasicProjectile : MonoBehaviour
                 EventManager.EventTrigger(EventType.AREA_CHASE_TRIGGER, transform.position);
             }
         }
+        else if (collision.tag == "Obstacle")
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     public void Go(Transform spawnpoint)
     {
         transform.position = spawnpoint.position;
         gameObject.SetActive(true);
-        //var projectile = Instantiate(proj, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z), Quaternion.identity);
-        _rb.velocity = transform.forward * speed;
+        _rb.velocity = transform.forward * Speed;
     }
 }
