@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoorScript : MonoBehaviour
+public class Door : MonoBehaviour
 {
 
     [field: SerializeField] private int _assignmentCode = 0;
@@ -56,5 +56,10 @@ public class DoorScript : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
     }
 }
