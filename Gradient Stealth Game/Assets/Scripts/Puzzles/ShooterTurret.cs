@@ -75,9 +75,9 @@ public class ShooterTurret : MonoBehaviour
         obj.GetComponent<BasicProjectile>().Go(transform);
     }
 
-    public void AlertOthers(Vector3 Centre)
+    public void AlertOthers(Vector3 centre)
     {
-        _alertData.Centre = Centre;
+        _alertData.Centre = centre;
         EventManager.EventTrigger(EventType.AREA_CHASE_TRIGGER, _alertData);
     }
 

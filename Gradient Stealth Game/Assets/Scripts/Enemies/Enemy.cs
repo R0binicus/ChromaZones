@@ -353,11 +353,14 @@ public class Enemy : MonoBehaviour
         Vector2 playerDir = _player.transform.position - transform.position;
         RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDir, 3f, LayerMask.GetMask("Obstacle", "Player"));
 
-        // If ray hits player first, chase. Otherwise, it has hit an obstacle - do not chase
-        if (hit.collider.CompareTag("Player") && StateMachine.CurrentState != CaughtState && StateMachine.CurrentState != CaughtState)
+        if (hit)
         {
-            chaseSound.Play(); 
-            StateMachine.ChangeState(ChaseState);
+            // If ray hits player first, chase. Otherwise, it has hit an obstacle - do not chase
+            if (hit.collider.CompareTag("Player") && StateMachine.CurrentState != CaughtState && StateMachine.CurrentState != CaughtState)
+            {
+                chaseSound.Play(); 
+                StateMachine.ChangeState(ChaseState);
+            }
         }
     }
 }
