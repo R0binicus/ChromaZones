@@ -67,6 +67,11 @@ public class Player : MonoBehaviour
         StopAllCoroutines();
     }
 
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+
     void Start()
     {
         EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
@@ -161,7 +166,10 @@ public class Player : MonoBehaviour
         var moveBool = (bool)data;
         _moveBool = moveBool;
 
-        StartCoroutine(EventCoroutine(moveBool));
+        if (!_isDead)
+        {
+            StartCoroutine(EventCoroutine(moveBool));
+        }
     }
 
     private IEnumerator EventCoroutine(bool moveBool)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NavMeshPlus.Components;
 
 public class Door : MonoBehaviour
 {
@@ -11,16 +12,19 @@ public class Door : MonoBehaviour
     // Components
     private SpriteRenderer _spriteRenderer;
     private BoxCollider2D _box;
+    private NavMeshModifier _navMod;
 
     // Start is called before the first frame update
     void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _box = GetComponentInChildren<BoxCollider2D>();
+        _navMod = GetComponentInChildren<NavMeshModifier>();
         if (_closed)
         {
             _spriteRenderer.enabled = false;
             _box.enabled = false;
+            _navMod.enabled = true;
             gameObject.tag = "Untagged";
             gameObject.layer = 0;
         }
@@ -51,21 +55,21 @@ public class Door : MonoBehaviour
             {
                 _spriteRenderer.enabled = true;
                 _box.enabled = true;
+                _navMod.enabled = false;
                 gameObject.tag = "Obstacle";
-                //interactableObject.interactionLayers = InteractionLayerMask.GetMask("Default");
-                //gameObject.LayerMask.NameToLayer
                 gameObject.layer = 8;
                 _closed = false;
-
             }
             else
             {
                 _spriteRenderer.enabled = false;
                 _box.enabled = false;
+                _navMod.enabled = true;
                 gameObject.tag = "Untagged";
                 gameObject.layer = 0;
                 _closed = true;
             }
+            EventManager.EventTrigger(EventType.REBUILD_NAVMESH, null);
         }
     }
 }

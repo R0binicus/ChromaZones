@@ -32,29 +32,32 @@ public class EnemyManager : MonoBehaviour
         EventManager.EventInitialise(EventType.LOSE);
         EventManager.EventInitialise(EventType.ASSIGNMENT_CODE_TRIGGER);
         EventManager.EventInitialise(EventType.AREA_CHASE_TRIGGER);
+        EventManager.EventInitialise(EventType.REBUILD_NAVMESH);
     }
 
     void Start()
     {
-        surfaceSingle.BuildNavMesh();
+        RebuildNavMesh(null);
     }
 
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.ADD_ENEMY, AddEnemy);
         EventManager.EventSubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
-        EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
+        EventManager.EventSubscribe(EventType.REBUILD_NAVMESH, RebuildNavMesh);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.ADD_ENEMY, AddEnemy);
         EventManager.EventUnsubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
+        EventManager.EventUnsubscribe(EventType.REBUILD_NAVMESH, RebuildNavMesh);
     }
 
-    private void AssignmentCodeHandler(object data)
+    private void RebuildNavMesh(object data)
     {
-        //surfaceSingle.BuildNavMesh();
+        Debug.Log("RebuildNavMesh");
+        surfaceSingle.BuildNavMesh();
     }
 
     // Receives Enemies that are instantiated within the level to keep track of for win condition
