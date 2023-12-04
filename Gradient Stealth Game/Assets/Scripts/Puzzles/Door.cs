@@ -6,36 +6,37 @@ public class Door : MonoBehaviour
 {
 
     [field: SerializeField] private int _assignmentCode = 0;
-    [field: SerializeField] private bool _disableOnStart = false;
+    [field: SerializeField] private bool _closed = false;
+
+    // Components
+    private SpriteRenderer _spriteRenderer;
+    private BoxCollider2D _box;
 
     // Start is called before the first frame update
     void Awake()
     {
-        
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _box = GetComponentInChildren<BoxCollider2D>();
+        if (_closed)
+        {
+            _spriteRenderer.enabled = false;
+            _box.enabled = false;
+            gameObject.tag = "Untagged";
+            gameObject.layer = 0;
+        }
     }
 
     private void OnEnable()
-    {
-        
-    }
-
-    private void OnDisable()
-    {
-        //EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
-    }
-
-    void Start()
     {
         if (_assignmentCode != 0)
         {
             EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
         }
+    }
 
-        if (_disableOnStart)
-        {
-            _disableOnStart = false;
-            gameObject.SetActive(false);
-        }
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
     }
 
     private void AssignmentCodeHandler(object data)
@@ -46,20 +47,25 @@ public class Door : MonoBehaviour
         }
         if (_assignmentCode == (int)data)
         {
-            if (gameObject.activeInHierarchy == false)
+            if (_closed == true)
             {
-                gameObject.SetActive(true);
+                _spriteRenderer.enabled = true;
+                _box.enabled = true;
+                gameObject.tag = "Obstacle";
+                //interactableObject.interactionLayers = InteractionLayerMask.GetMask("Default");
+                //gameObject.LayerMask.NameToLayer
+                gameObject.layer = 8;
+                _closed = false;
+
             }
             else
             {
-                EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
-                gameObject.SetActive(false);
+                _spriteRenderer.enabled = false;
+                _box.enabled = false;
+                gameObject.tag = "Untagged";
+                gameObject.layer = 0;
+                _closed = true;
             }
         }
-    }
-
-    private void OnDestroy()
-    {
-        EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
     }
 }
