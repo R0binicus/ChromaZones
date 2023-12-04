@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class ColourRegion : MonoBehaviour
 {
+    
     private SpriteRenderer _spriteRenderer;
     private ColourManager _colourManager;
-
+    
+    [field: Header("Colour Region Settings")]
     [SerializeField] private float _transitionMultiplier = 2f;
     [SerializeField] private float _localChangeMultiplier = 1f;
     [SerializeField] private int _assignmentCode = 0;
@@ -17,6 +19,7 @@ public class ColourRegion : MonoBehaviour
     private float _originalHue;              // Original colour value when the level started
 
     [SerializeField] private bool _disabledColourChange = false;
+    [SerializeField] private bool _reversedColourChange = false;
 
     public int State = 0;
 
@@ -60,7 +63,15 @@ public class ColourRegion : MonoBehaviour
     {
         if (!_disabledColourChange)
         {
-            _colourDiff = _colourManager.colour;
+            if (!_reversedColourChange)
+            {
+                _colourDiff = _colourManager.colour;
+            }
+            else 
+            {
+                _colourDiff = _colourManager.colour * -1f;
+            }
+
         }
         ProcessColour();
         SetColour();
@@ -76,6 +87,10 @@ public class ColourRegion : MonoBehaviour
         if (_localColour >= 360f)
         {
             _localColour = 0f;
+        }
+        else if (_localColour < 0f)
+        {
+            _localColour = 360f;
         }
 
         SetStates();
@@ -93,16 +108,16 @@ public class ColourRegion : MonoBehaviour
         int originalState = State;
         switch(_localColour) 
         {
-            case float x when x < 60f:
+            case float x when x < 45f:
                 State = 1;
             break;
-            case float x when x >= 60f && x < 180f :
+            case float x when x >= 45f && x < 165f :
                 State = 2;
             break;
-            case float x when x >= 180f && x < 300f :
+            case float x when x >= 165f && x < 285f :
                 State = 3;
             break;
-            case float x when x >= 300f && x < 360f :
+            case float x when x >= 285f && x <= 360f :
                 State = 1;
             break;
             default:
@@ -133,13 +148,13 @@ public class ColourRegion : MonoBehaviour
     {
         switch(_localColour) 
         {
-            case float x when x >= 50f && x < 70f :
+            case float x when x >= 35f && x < 55f :
                 _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
             break;
-            case float x when x >= 170f && x < 190f :
+            case float x when x >= 155f && x < 175f :
                 _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
             break;
-            case float x when x >= 290f && x < 310f :
+            case float x when x >= 275f && x < 295f :
                 _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
             break;
             default:
