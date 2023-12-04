@@ -43,8 +43,8 @@ public class Player : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _transform = GetComponent<Transform>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _obscuredSound = GameObject.Find(_obscuredName).GetComponent<AudioSource>();
-        _visibleSound = GameObject.Find(_visibleName).GetComponent<AudioSource>();
+        // _obscuredSound = GameObject.Find(_obscuredName).GetComponent<AudioSource>();
+        // _visibleSound = GameObject.Find(_visibleName).GetComponent<AudioSource>();
 
         _isDead = false;
         _spriteRenderer.sprite = _normalSprite;
@@ -102,13 +102,13 @@ public class Player : MonoBehaviour
     // Change between visible and 'hiding'
     public void HidingSprite()
     {
-        _obscuredSound.Play();
+        //_obscuredSound.Play();
         _spriteRenderer.sprite = _hidingSprite;
     }
 
     public void NormalSprite()
     {
-        _visibleSound.Play();
+        //_visibleSound.Play();
         _spriteRenderer.sprite = _normalSprite;
     }
 
