@@ -106,22 +106,41 @@ public class ColourRegion : MonoBehaviour
     private void SetStates()
     {
         int originalState = State;
+        //switch(_localColour) 
+        //{
+        //    case float x when x < 45f:
+        //        State = 1;
+        //    break;
+        //    case float x when x >= 45f && x < 165f :
+        //        State = 2;
+        //    break;
+        //    case float x when x >= 165f && x < 285f :
+        //        State = 3;
+        //    break;
+        //    case float x when x >= 285f && x <= 360f :
+        //        State = 1;
+        //    break;
+        //    default:
+        //        State = 0;
+        //    break;
+        //}
+
         switch(_localColour) 
         {
-            case float x when x < 45f:
+            case float x when x < 40f:
                 State = 1;
             break;
-            case float x when x >= 45f && x < 165f :
+            case float x when x >= 50f && x < 160f :
                 State = 2;
             break;
-            case float x when x >= 165f && x < 285f :
+            case float x when x >= 170f && x < 280f :
                 State = 3;
             break;
-            case float x when x >= 285f && x <= 360f :
+            case float x when x >= 290f && x <= 360f :
                 State = 1;
             break;
             default:
-                State = 0;
+                State = 2;
             break;
         }
 
