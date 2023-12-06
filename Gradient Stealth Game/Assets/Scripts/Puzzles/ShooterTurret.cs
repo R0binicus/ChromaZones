@@ -43,7 +43,7 @@ public class ShooterTurret : MonoBehaviour
         {
             BasicProjectile projectile = obj.GetComponent<BasicProjectile>();
             projectile.SetProjectileData(ProjectileData);
-            projectile.TurretParent = this;
+            projectile.SetTurrentParent(this);
         }
     }
 
@@ -69,7 +69,7 @@ public class ShooterTurret : MonoBehaviour
 
         if (obj == null)
         {
-            Debug.Log("HRRR NO OBJECTS IN POOL");
+            Debug.Log("NO OBJECTS IN POOL");
         }
 
         obj.GetComponent<BasicProjectile>().Go(transform);

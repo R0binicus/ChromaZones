@@ -9,7 +9,7 @@ public class BasicProjectile : MonoBehaviour
     private float _timer;
     private float _speed;
 
-    public ShooterTurret TurretParent;
+    private ShooterTurret _turretParent;
 
     private Rigidbody2D _rb;
 
@@ -44,7 +44,7 @@ public class BasicProjectile : MonoBehaviour
         {
             if (collision.gameObject.GetComponent<Player>().RegionState != 3)
             {
-                TurretParent.AlertOthers(transform.position);
+                _turretParent.AlertOthers(transform.position);
                 gameObject.SetActive(false);
             }
         }
@@ -65,5 +65,10 @@ public class BasicProjectile : MonoBehaviour
     {
         _lifeTime = projectileData.LifeTime;
         _speed = projectileData.Speed;
+    }
+
+    public void SetTurrentParent(ShooterTurret parent)
+    {
+        _turretParent = parent;
     }
 }

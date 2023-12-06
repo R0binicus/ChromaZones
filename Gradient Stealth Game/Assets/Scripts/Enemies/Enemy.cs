@@ -348,10 +348,10 @@ public class Enemy : MonoBehaviour
         EnemyManager.AlertNearbyEnemies(_alertData);
     }
 
-    public void CheckWalls(Vector3 callerPos)
+    public void CheckWalls()
     {
-        Vector2 playerDir = _player.transform.position - callerPos;
-        RaycastHit2D hit = Physics2D.Raycast(callerPos, playerDir, 50f, LayerMask.GetMask("Obstacle", "Player"));
+        Vector2 playerDir = _player.transform.position - transform.position;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDir, 50f, LayerMask.GetMask("Obstacle", "Player"));
 
         if (hit)
         {
