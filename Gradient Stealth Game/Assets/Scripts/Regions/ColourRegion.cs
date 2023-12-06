@@ -47,12 +47,6 @@ public class ColourRegion : MonoBehaviour
         Color.RGBToHSV(_outlineSprite.color, out var H2, out var S2, out var V2);
         _localColour = H * 360;
         _originalHue = _localColour;
-
-        Debug.Log("Outline");
-        Debug.Log(_outlineSprite.size);
-        Debug.Log("Background");
-        Debug.Log(_backgroundSprite.size);
-
         _outlineSprite.size = _backgroundSprite.size;
     }
 

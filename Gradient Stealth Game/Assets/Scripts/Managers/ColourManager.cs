@@ -5,8 +5,9 @@ using UnityEngine;
 public class ColourManager : MonoBehaviour
 {
     public float colour;                    // Final colour value for other things to access
+    [Header("Debug Stuff")]
     [SerializeField] private float _colourChangeSpeed = 0.1f;  
-    private bool _changing_bool = false;
+    [SerializeField] private bool _changing_bool = false;
 
     void Awake()
     {
@@ -46,6 +47,7 @@ public class ColourManager : MonoBehaviour
         {
             Debug.Log("ColourBoolHandler is null");
         }
+        
         _changing_bool = (bool)data;
     }
 }

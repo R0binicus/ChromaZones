@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class Player : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class Player : MonoBehaviour
     private bool _isDead;
     [SerializeField] private Sprite _hidingSprite;
     [SerializeField] private Sprite _normalSprite;
-    private bool _isCollidingObstacle = false;
+    public bool _isCollidingObstacle = false;
 
     // Sounds
     [Header("Sounds")]
@@ -123,6 +124,7 @@ public class Player : MonoBehaviour
         // Player colour gets converted to Enemy!!!
         Color convertedColour = new Color(1f, 0.2983692f, 0.2509804f);
         _spriteRenderer.color = convertedColour;
+        StopAllCoroutines();
     }
 
     private void ColourManagerHandler(object data)
@@ -174,9 +176,13 @@ public class Player : MonoBehaviour
 
     private IEnumerator EventCoroutine(bool moveBool)
     {
-        if (_isCollidingObstacle)
+        if (_isCollidingObstacle && !_isDead)
         {
             yield return new WaitForSeconds(0.2f);
+        }
+        else if (!_isDead)
+        {
+            yield return new WaitForSeconds(0.1f);
         }
 
         if (moveBool && _rb.velocity != Vector2.zero)
@@ -201,7 +207,7 @@ public class Player : MonoBehaviour
 
         if (data == null)
         {
-            Debug.Log("MoveBoolHandler is null");
+            Debug.Log("MoveVect2DHandler is null");
         }
 
         if (!_isDead)
