@@ -88,7 +88,7 @@ public class EnemyManager : MonoBehaviour
         {
             if ((centre - enemy.transform.position).magnitude < alertOthersRadius)
             {
-                enemy.CheckWalls();
+                enemy.CheckWalls(centre);
             }
         }
     }

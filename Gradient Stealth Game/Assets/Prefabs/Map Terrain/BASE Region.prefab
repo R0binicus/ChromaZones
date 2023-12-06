@@ -75,8 +75,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: bd1383848d7dac7458a77b408a56ae8e, type: 3}
+  m_SortingOrder: -2
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.047058824, g: 0.49803922, b: 0.9490196, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -121,7 +121,7 @@ BoxCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
-    border: {x: 0.044921875, y: 0.046875, z: 0.048828125, w: 0.046875}
+    border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
@@ -153,9 +153,6 @@ MonoBehaviour:
   _changeEnableDisable: 1
   _changeColourReset: 0
   _changeColourReverse: 0
-  _disabledSprite: {fileID: 21300000, guid: 79730117c52cb5b48b16c4f54b8bea2c, type: 3}
-  _normalSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  _background: {fileID: 6641022991188668044}
 --- !u!1 &6641022991188668044
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,13 +225,13 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -2
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.04705882, g: 0.9406084, b: 0.9490196, a: 1}
+  m_SortingOrder: -1
+  m_Sprite: {fileID: 21300000, guid: bd1383848d7dac7458a77b408a56ae8e, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 0.1, y: 0.1}
+  m_Size: {x: 0.2, y: 0.2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

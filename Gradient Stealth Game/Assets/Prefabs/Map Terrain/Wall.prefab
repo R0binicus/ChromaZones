@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5304361110647789336}
   - component: {fileID: 7977760419887716210}
   - component: {fileID: 7893953922252754312}
-  - component: {fileID: 5308229556094623712}
+  - component: {fileID: -259322810258046697}
   m_Layer: 8
   m_Name: Wall
   m_TagString: Obstacle
@@ -102,8 +102,8 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
---- !u!61 &5308229556094623712
-BoxCollider2D:
+--- !u!60 &-259322810258046697
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -144,6 +144,10 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.5, y: 0.5}
+      - {x: -0.5, y: -0.5}
+      - {x: 0.5, y: -0.5}
+      - {x: 0.5, y: 0.5}
+  m_UseDelaunayMesh: 0
