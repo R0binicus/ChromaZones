@@ -6,13 +6,13 @@ using UnityEngine;
 public class ColourRegion : MonoBehaviour
 {
     
-    private SpriteRenderer _spriteRenderer;
+    private SpriteRenderer _outlineSprite;
     private ColourManager _colourManager;
     
     [field: Header("Colour Region Settings")]
     [SerializeField] private float _transitionMultiplier = 2f;
     [SerializeField] private float _localChangeMultiplier = 1f;
-    [SerializeField] private int _assignmentCode = 0;
+    
 
     private float _colourDiff;               // Colour from game manager
     private float _localColour;              // Colour of this region specifically
@@ -26,22 +26,34 @@ public class ColourRegion : MonoBehaviour
     private Player _player;
     private List<Enemy> _enemies = new List<Enemy>();
 
+    [field: Header("Assignment Code Stuff")]
+    [SerializeField] private int _assignmentCode = 0;
+    [SerializeField] private bool _changeEnableDisable = true;
+    [SerializeField] private bool _changeColourReset = false;
+    [SerializeField] private bool _changeColourReverse = false;
+
     [field: Header("Sprites")]
-    [field: SerializeField] private Sprite _disabledSprite;
-    [field: SerializeField] private Sprite _normalSprite;
+    private GameObject _background;
+    private SpriteRenderer _backgroundSprite;
 
     void Awake()
     {
         // Set values and components
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        Color.RGBToHSV(_spriteRenderer.color, out var H, out var S, out var V);
+        _background = transform.GetChild(0).gameObject;
+        _outlineSprite = GetComponent<SpriteRenderer>();
+        _backgroundSprite = _background.GetComponent<SpriteRenderer>();
+        //_backgroundSprite = GetComponentInChildren<SpriteRenderer>();
+        Color.RGBToHSV(_outlineSprite.color, out var H, out var S, out var V);
+        Color.RGBToHSV(_backgroundSprite.color, out var H2, out var S2, out var V2);
         _localColour = H * 360;
         _originalHue = _localColour;
-        
-        if (_disabledColourChange)
-        {
-            DisabledSprite();
-        }
+
+        Debug.Log("Outline");
+        Debug.Log(_outlineSprite.size);
+        Debug.Log("Background");
+        Debug.Log(_backgroundSprite.size);
+
+        _backgroundSprite.size = _outlineSprite.size;
     }
 
     private void OnEnable()
@@ -100,49 +112,85 @@ public class ColourRegion : MonoBehaviour
     private void SetColour()
     {
         // used 0.95 because otherwise it hurts my eyes
-        _spriteRenderer.color = Color.HSVToRGB(_localColour/360f, 0.95f, 0.95f);
+        float darkness = 0.95f;
+        if (_disabledColourChange)
+        {
+            darkness = 0.6f;
+        }
+        
+        
+        _backgroundSprite.color = Color.HSVToRGB(_localColour/360f, 0.95f, darkness);
+    }
+
+    private void SetBorderColour(float borderColour)
+    {
+        // used 0.95 because otherwise it hurts my eyes
+        _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.95f, 0.95f);
     }
 
     private void SetStates()
     {
         int originalState = State;
-        //switch(_localColour) 
-        //{
-        //    case float x when x < 45f:
-        //        State = 1;
-        //    break;
-        //    case float x when x >= 45f && x < 165f :
-        //        State = 2;
-        //    break;
-        //    case float x when x >= 165f && x < 285f :
-        //        State = 3;
-        //    break;
-        //    case float x when x >= 285f && x <= 360f :
-        //        State = 1;
-        //    break;
-        //    default:
-        //        State = 0;
-        //    break;
-        //}
-
         switch(_localColour) 
         {
-            case float x when x < 40f:
+            case float x when x < 45f: 
                 State = 1;
+                SetBorderColour(330f);
             break;
-            case float x when x >= 50f && x < 160f :
+            case float x when x >= 45f && x < 165f :
                 State = 2;
+                SetBorderColour(90f);
             break;
-            case float x when x >= 170f && x < 280f :
+            case float x when x >= 165f && x < 285f :
                 State = 3;
+                SetBorderColour(210f);
             break;
-            case float x when x >= 290f && x <= 360f :
+            case float x when x >= 285f && x <= 360f :
                 State = 1;
+                SetBorderColour(330f);
             break;
             default:
                 State = 2;
+                SetBorderColour(90f);
             break;
         }
+
+        //switch(_localColour) 
+        //{
+        //    case float x when x < 40f:
+        //        State = 1;
+        //        _outlineSprite.enabled = true;
+        //        SetBorderColour(330f);
+        //    break;
+        //    case float x when x >= 50f && x < 160f :
+        //        State = 2;
+        //        if (_changeEnableDisable)
+        //        {
+        //            _outlineSprite.enabled = true;
+        //            SetBorderColour(90f);
+        //        }
+        //        _outlineSprite.enabled = false;
+        //    break;
+        //    case float x when x >= 170f && x < 280f :
+        //        State = 3;
+        //        _outlineSprite.enabled = true;
+        //        SetBorderColour(210f);
+        //    break;
+        //    case float x when x >= 290f && x <= 360f :
+        //        State = 1;
+        //        _outlineSprite.enabled = true;
+        //        SetBorderColour(330f);
+        //    break;
+        //    default:
+        //        State = 2;
+        //        if (_changeEnableDisable)
+        //        {
+        //            _outlineSprite.enabled = true;
+        //            SetBorderColour(90f);
+        //        }
+        //        _outlineSprite.enabled = false;
+        //    break;
+        //}
 
         if (originalState != State)
         {
@@ -264,26 +312,18 @@ public class ColourRegion : MonoBehaviour
 
         if (_assignmentCode == (int)data)
         {
-            _localColour = _originalHue;
-            _disabledColourChange = !_disabledColourChange;
-            if (_disabledColourChange)
+            if (_changeEnableDisable)
             {
-                DisabledSprite();
+                _disabledColourChange = !_disabledColourChange;
             }
-            else
+            if (_changeColourReset)
             {
-                NormalSprite();
+                _localColour = _originalHue;
+            }
+            if (_changeColourReverse)
+            {
+                _reversedColourChange = !_reversedColourChange;
             }
         }
-    }
-
-    public void DisabledSprite()
-    {
-        _spriteRenderer.sprite = _disabledSprite;
-    }
-
-    public void NormalSprite()
-    {
-        _spriteRenderer.sprite = _normalSprite;
     }
 }
