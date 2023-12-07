@@ -7,11 +7,12 @@ public enum EventType
     QUIT_LEVEL,             
     SCENE_LOAD,             
     ADD_ENEMY,              // Broadcasts an instantiated Enemy to the EnemyManager to add to its list
-    INIT_COLOUR_MANAGER,    // 
+    INIT_COLOUR_MANAGER,    // Sends ColourManager reference
+    INIT_PLAYER,            // Sends Player reference
     COLOUR_CHANGE_BOOL,     // 
     ASSIGNMENT_CODE_TRIGGER,     // 
     AREA_CHASE_TRIGGER,     // 
-    PAUSE_TOGGLE,
+    PAUSE_TOGGLE,           // Broadcasts when pause is toggled on or off
     PLAYER_MOVE_BOOL,
     PLAYER_MOVE_VECT2D,
     REBUILD_NAVMESH

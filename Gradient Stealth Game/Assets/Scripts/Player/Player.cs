@@ -10,7 +10,6 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rb;
     private ColourManager _colourManager;
     private SpriteRenderer _spriteRenderer;
-    private Transform _transform;
 
     // Regions
     public int RegionState = 0;
@@ -40,9 +39,10 @@ public class Player : MonoBehaviour
     void Awake()
     {
         EventManager.EventInitialise(EventType.COLOUR_CHANGE_BOOL);
+        EventManager.EventInitialise(EventType.INIT_PLAYER);
+
         // Set values and components
         _rb = GetComponent<Rigidbody2D>();
-        _transform = GetComponent<Transform>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _obscuredSound = GameObject.Find(_obscuredName).GetComponent<AudioSource>();
         _visibleSound = GameObject.Find(_visibleName).GetComponent<AudioSource>();
@@ -75,6 +75,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        EventManager.EventTrigger(EventType.INIT_PLAYER, this);
         EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
     }
 

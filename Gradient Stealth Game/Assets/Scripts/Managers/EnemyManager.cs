@@ -27,7 +27,6 @@ public class EnemyManager : MonoBehaviour
         deathSound = GameObject.Find(deathName).GetComponent<AudioSource>();
         winSound = GameObject.Find(winName).GetComponent<AudioSource>();
         loseSound = GameObject.Find(loseName).GetComponent<AudioSource>();
-        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         _enemies = new List<Enemy>();
         EventManager.EventInitialise(EventType.LOSE);
         EventManager.EventInitialise(EventType.ASSIGNMENT_CODE_TRIGGER);
@@ -45,6 +44,7 @@ public class EnemyManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.ADD_ENEMY, AddEnemy);
         EventManager.EventSubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
         EventManager.EventSubscribe(EventType.REBUILD_NAVMESH, RebuildNavMesh);
+        EventManager.EventSubscribe(EventType.INIT_PLAYER, PlayerInitHandler);
     }
 
     private void OnDisable()
@@ -52,9 +52,21 @@ public class EnemyManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.ADD_ENEMY, AddEnemy);
         EventManager.EventUnsubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
         EventManager.EventUnsubscribe(EventType.REBUILD_NAVMESH, RebuildNavMesh);
+        EventManager.EventUnsubscribe(EventType.INIT_PLAYER, PlayerInitHandler);
     }
 
-    private void RebuildNavMesh(object data)
+    public void PlayerInitHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.LogError("Player has not been assigned!");
+        }
+
+        _player = (Player)data;
+        AssignPlayerToEnemy();
+    }
+
+    public void RebuildNavMesh(object data)
     {
         Debug.Log("RebuildNavMesh");
         surfaceSingle.BuildNavMesh();
@@ -63,6 +75,7 @@ public class EnemyManager : MonoBehaviour
     // Receives Enemies that are instantiated within the level to keep track of for win condition
     private void AddEnemy(object data)
     {
+        Debug.Log("Enemy Added");
         // Make sure enemies are being passed in as data
         Enemy enemy = data as Enemy;
         if (enemy == null) return;
@@ -71,6 +84,16 @@ public class EnemyManager : MonoBehaviour
         enemy.EnemyManager = this;
         enemy.Player = _player;
         _enemies.Add(enemy);
+    }
+
+    // To assign player to enemies that have already been added to the enemy list before the player init
+    // event was received
+    private void AssignPlayerToEnemy()
+    {
+        foreach (Enemy enemy in _enemies)
+        {
+            enemy.Player = _player;
+        }
     }
 
     public void AlertNearbyEnemies(object data)

@@ -160,6 +160,7 @@ public class Enemy : MonoBehaviour
     {
         // Send Enemy to EnemyManager to be stored in a list and kept track of for win condition
         EventManager.EventTrigger(EventType.ADD_ENEMY, this);
+        
         SetWalkSpeed();
         _alertData = new AlertData(transform.position, AlertOthersRadius);
     }

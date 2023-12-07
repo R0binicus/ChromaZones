@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class ColourRegion : MonoBehaviour
 {
-    
     private SpriteRenderer _outlineSprite;
     private ColourManager _colourManager;
     
@@ -248,27 +247,26 @@ public class ColourRegion : MonoBehaviour
     }
 
     // Set state variable whenever it moves inside a region
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        // This should only be useful when the region changes state
-        // while the player or enemy is inside a region
-        if(collision.tag == "RegionDetector")
-        {
-            if (collision.transform.parent.tag == "Player") 
-            {
-                var player = collision.transform.parent.GetComponent<Player>();
-            }
-            else if (collision.transform.parent.tag == "Enemy")
-            {
-                var enemy = collision.transform.parent.GetComponent<Enemy>();
-            }
-        }
-    }
+    // private void OnTriggerStay2D(Collider2D collision)
+    // {
+    //     // This should only be useful when the region changes state
+    //     // while the player or enemy is inside a region
+    //     if(collision.tag == "RegionDetector")
+    //     {
+    //         if (collision.transform.parent.tag == "Player") 
+    //         {
+    //             var player = collision.transform.parent.GetComponent<Player>();
+    //         }
+    //         else if (collision.transform.parent.tag == "Enemy")
+    //         {
+    //             var enemy = collision.transform.parent.GetComponent<Enemy>();
+    //         }
+    //     }
+    // }
 
     // Reset state variable if no longer on a region
     private void OnTriggerExit2D(Collider2D collision)
-    {
-        
+    {  
         if(collision.tag == "RegionDetector")
         {
             GameObject mainObject = collision.transform.parent.gameObject;
