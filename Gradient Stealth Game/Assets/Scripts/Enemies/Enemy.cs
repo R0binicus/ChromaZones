@@ -162,7 +162,7 @@ public class Enemy : MonoBehaviour
         EventManager.EventTrigger(EventType.ADD_ENEMY, this);
         
         SetWalkSpeed();
-        _alertData = new AlertData(transform.position, AlertOthersRadius);
+        _alertData = new AlertData(transform.position, AlertOthersRadius, 0);
     }
 
     // Runs when changes are made in the editor for the FOV
@@ -346,18 +346,36 @@ public class Enemy : MonoBehaviour
     public void EnemyAlertNearbyEnemies()
     {
         _alertData.Centre = transform.position;
+        _alertData.Type = 0;
         EnemyManager.AlertNearbyEnemies(_alertData);
     }
 
-    public void CheckWalls()
+    public void CheckWalls(float magnitude)
     {
         Vector2 playerDir = _player.transform.position - transform.position;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDir, 50f, LayerMask.GetMask("Obstacle", "Player"));
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDir, magnitude, LayerMask.GetMask("Obstacle", "Player"));
 
         if (hit)
         {
             // If ray hits player first, chase. Otherwise, it has hit an obstacle - do not chase
             if (hit.collider.CompareTag("Player") && StateMachine.CurrentState != CaughtState && StateMachine.CurrentState != CaughtState)
+            {
+                chaseSound.Play(); 
+                StateMachine.ChangeState(ChaseState);
+            }
+        }
+    }
+
+    public void CheckWallsProjectile(float magnitude, Vector3 callerPosition)
+    {
+        Vector2 centrerDir = transform.position - callerPosition;
+        RaycastHit2D hit = Physics2D.Raycast(callerPosition, centrerDir, magnitude, LayerMask.GetMask("Obstacle", "Enemy"));
+        //Debug.DrawRay(callerPosition, centrerDir, Color.red, 2f, true);
+
+        if (hit)
+        {
+            // If ray hits enemy first, chase. Otherwise, it has hit an obstacle - do not chase
+            if (hit.collider.gameObject == gameObject && StateMachine.CurrentState != CaughtState && StateMachine.CurrentState != CaughtState)
             {
                 chaseSound.Play(); 
                 StateMachine.ChangeState(ChaseState);

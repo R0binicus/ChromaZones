@@ -6,9 +6,12 @@ public class AlertData
     [field:SerializeField] public float AlertOthersRadius { get; private set; }
     [field:SerializeField] public Vector3 Centre;
 
-    public AlertData(Vector3 Centre, float AlertOthersRadius)
+    [field:SerializeField] public int Type; // 0 = enemies, 1 = projectile
+
+    public AlertData(Vector3 Centre, float AlertOthersRadius, int Type)
     {
         this.Centre = Centre;
         this.AlertOthersRadius = AlertOthersRadius;
+        this.Type = Type;
     }
 }

@@ -68,14 +68,14 @@ public class EnemyManager : MonoBehaviour
 
     public void RebuildNavMesh(object data)
     {
-        Debug.Log("RebuildNavMesh");
+        //Debug.Log("RebuildNavMesh");
         surfaceSingle.BuildNavMesh();
     }
 
     // Receives Enemies that are instantiated within the level to keep track of for win condition
     private void AddEnemy(object data)
     {
-        Debug.Log("Enemy Added");
+        //Debug.Log("Enemy Added");
         // Make sure enemies are being passed in as data
         Enemy enemy = data as Enemy;
         if (enemy == null) return;
@@ -105,13 +105,22 @@ public class EnemyManager : MonoBehaviour
 
         var data2 = (AlertData)data;
         var centre = data2.Centre;
+        var type = data2.Type;
         var alertOthersRadius = data2.AlertOthersRadius;
 
         foreach (Enemy enemy in _enemies)
         {
-            if ((centre - enemy.transform.position).magnitude < alertOthersRadius)
+            float magnitude = (centre - enemy.transform.position).magnitude;
+            if (magnitude < alertOthersRadius)
             {
-                enemy.CheckWalls();
+                if (type == 0)
+                {
+                    enemy.CheckWalls(magnitude);
+                }
+                else
+                {
+                    enemy.CheckWallsProjectile(magnitude, centre);
+                }
             }
         }
     }

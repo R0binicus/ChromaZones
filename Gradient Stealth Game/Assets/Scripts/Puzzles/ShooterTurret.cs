@@ -36,7 +36,7 @@ public class ShooterTurret : MonoBehaviour
 
     private void Start()
     {
-        _alertData = new AlertData(transform.position, _alertOthersRadius);
+        _alertData = new AlertData(transform.position, _alertOthersRadius, 1);
         _projectiles = ObjectPooler.CreateObjectPool(_maxPoolNum, _proj, transform);
         
         foreach (GameObject obj in _projectiles)

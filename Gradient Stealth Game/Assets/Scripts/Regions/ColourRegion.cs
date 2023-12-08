@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ColourRegion : MonoBehaviour
 {
-    private SpriteRenderer _outlineSprite;
+    
     private ColourManager _colourManager;
     
     [field: Header("Colour Region Settings")]
@@ -32,16 +32,13 @@ public class ColourRegion : MonoBehaviour
     [SerializeField] private bool _changeColourReverse = false;
 
     [field: Header("Sprites")]
-    //private GameObject _background;
+    [SerializeField] private SpriteRenderer _outlineSprite;
     private SpriteRenderer _backgroundSprite;
 
     void Awake()
     {
-        // Set values and components
-        //_background = transform.GetChild(0).gameObject; _outlineSprite _backgroundSprite
         _backgroundSprite = GetComponent<SpriteRenderer>();
-        _outlineSprite = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
-        //_backgroundSprite = GetComponentInChildren<SpriteRenderer>();
+        //_outlineSprite = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
         Color.RGBToHSV(_backgroundSprite.color, out var H, out var S, out var V);
         Color.RGBToHSV(_outlineSprite.color, out var H2, out var S2, out var V2);
         _localColour = H * 360;
@@ -117,8 +114,13 @@ public class ColourRegion : MonoBehaviour
 
     private void SetBorderColour(float borderColour)
     {
+        float darkness = 0.85f;
+        if (_disabledColourChange)
+        {
+            darkness = 0.95f;
+        }
         // used 0.95 because otherwise it hurts my eyes
-        _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.95f, 0.95f);
+        _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.95f, darkness);
     }
 
     private void SetStates()
