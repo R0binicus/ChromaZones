@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
 	private AudioSource _obscuredSound;
     [SerializeField] private string _visibleName = "PlayerVisible";
 	private AudioSource _visibleSound;
+    private bool _startSoundDisabler = true;
 
     void Awake()
     {
@@ -109,13 +110,29 @@ public class Player : MonoBehaviour
     // Change between visible and 'hiding'
     public void HidingSprite()
     {
-        _obscuredSound.Play();
+        if (_startSoundDisabler)
+        {
+            _startSoundDisabler = false;
+        }
+        else
+        {
+            _obscuredSound.Play();
+        }
+        
         _spriteRenderer.sprite = _hidingSprite;
     }
 
     public void NormalSprite()
     {
-        _visibleSound.Play();
+        if (_startSoundDisabler)
+        {
+            _startSoundDisabler = false;
+        }
+        else
+        {
+            _visibleSound.Play();
+        }
+        
         _spriteRenderer.sprite = _normalSprite;
     }
 
