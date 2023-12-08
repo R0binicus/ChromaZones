@@ -115,7 +115,7 @@ public class EnemyManager : MonoBehaviour
             {
                 if (type == 0)
                 {
-                    enemy.CheckWalls(magnitude);
+                    enemy.CheckWalls(magnitude, centre);
                 }
                 else
                 {

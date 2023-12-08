@@ -350,20 +350,23 @@ public class Enemy : MonoBehaviour
         EnemyManager.AlertNearbyEnemies(_alertData);
     }
 
-    public void CheckWalls(float magnitude)
+    public void CheckWalls(float magnitude, Vector3 callerPosition)
     {
-        Vector2 playerDir = _player.transform.position - transform.position;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDir, magnitude, LayerMask.GetMask("Obstacle", "Player"));
+        gameObject.layer = 1;
+        Vector2 centrerDir =  callerPosition - transform.position;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, centrerDir, magnitude, LayerMask.GetMask("Obstacle", "Enemy"));
+        //Debug.DrawRay(transform.position, centrerDir, Color.red, 2f, true);
 
         if (hit)
         {
-            // If ray hits player first, chase. Otherwise, it has hit an obstacle - do not chase
-            if (hit.collider.CompareTag("Player") && StateMachine.CurrentState != CaughtState && StateMachine.CurrentState != CaughtState)
+            // If ray hits enemy first, chase. Otherwise, it has hit an obstacle - do not chase
+            if (hit.collider.CompareTag("Enemy") && StateMachine.CurrentState != ChaseState && StateMachine.CurrentState != CaughtState)
             {
                 chaseSound.Play(); 
                 StateMachine.ChangeState(ChaseState);
             }
         }
+        gameObject.layer = 9;
     }
 
     public void CheckWallsProjectile(float magnitude, Vector3 callerPosition)
@@ -375,7 +378,7 @@ public class Enemy : MonoBehaviour
         if (hit)
         {
             // If ray hits enemy first, chase. Otherwise, it has hit an obstacle - do not chase
-            if (hit.collider.gameObject == gameObject && StateMachine.CurrentState != CaughtState && StateMachine.CurrentState != CaughtState)
+            if (hit.collider.gameObject == gameObject && StateMachine.CurrentState != ChaseState && StateMachine.CurrentState != CaughtState)
             {
                 chaseSound.Play(); 
                 StateMachine.ChangeState(ChaseState);
