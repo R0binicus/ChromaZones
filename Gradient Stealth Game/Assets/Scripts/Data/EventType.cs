@@ -15,5 +15,6 @@ public enum EventType
     PAUSE_TOGGLE,           // Broadcasts when pause is toggled on or off
     PLAYER_MOVE_BOOL,
     PLAYER_MOVE_VECT2D,
-    REBUILD_NAVMESH
+    REBUILD_NAVMESH,
+    SFX,
 };

@@ -30,7 +30,7 @@ public class EnemyAlertState : EnemyState
             }
             else
             {
-                Enemy.deAlertSound.Play();
+                EventManager.EventTrigger(EventType.SFX, Enemy.SoundEnemyDeAlert);
                 Enemy.StateMachine.ChangeState(Enemy.PatrolState);
             }
         }

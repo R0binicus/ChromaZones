@@ -23,6 +23,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] AnimationCurve _fadeInSpeed;
     [SerializeField] AnimationCurve _fadeOutSpeed;
 
+    [Header("Sounds")]
+    [SerializeField] private Sound _soundButtonSFX;
+
     // Scene Tracker
     int _currentSceneIndex;
     int _numOfScenes;
@@ -70,6 +73,7 @@ public class UIManager : MonoBehaviour
 
     public void NextLevel()
     {
+        EventManager.EventTrigger(EventType.SFX, _soundButtonSFX);
         Time.timeScale = 1.0f;
         EventManager.EventTrigger(EventType.NEXT_LEVEL, _fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time);
     }
@@ -77,6 +81,7 @@ public class UIManager : MonoBehaviour
     // Button callback to restart level
     public void Restart()
     {
+        EventManager.EventTrigger(EventType.SFX, _soundButtonSFX);
         Time.timeScale = 1.0f;
         EventManager.EventTrigger(EventType.RESTART_LEVEL, _fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time);
     }
@@ -84,6 +89,7 @@ public class UIManager : MonoBehaviour
     //Button callback to go back to main menu
     public void Quit()
     {
+        EventManager.EventTrigger(EventType.SFX, _soundButtonSFX);
         Time.timeScale = 1.0f;
         EventManager.EventTrigger(EventType.QUIT_LEVEL, _fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time);
     }

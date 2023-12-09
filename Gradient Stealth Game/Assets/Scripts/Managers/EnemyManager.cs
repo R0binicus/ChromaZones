@@ -11,22 +11,15 @@ public class EnemyManager : MonoBehaviour
     List<Enemy> _enemies; // List of Enemies in the scene
 
     [Header("Sounds")]
-    [SerializeField] private string deathName = "EnemyDeath";
-	private AudioSource deathSound;
-
-    [SerializeField] private string winName = "PlayerWin";
-	private AudioSource winSound;
-
-    [SerializeField] private string loseName = "PlayerLose";
-	private AudioSource loseSound;
+    [SerializeField] private Sound _soundEnemyDeath;
+    [SerializeField] private Sound _soundPlayerWin;
+    [SerializeField] private Sound _soundPlayerLose;
 
     [SerializeField] private NavMeshPlus.Components.NavMeshSurface surfaceSingle;
+    
 
     private void Awake()
     {
-        deathSound = GameObject.Find(deathName).GetComponent<AudioSource>();
-        winSound = GameObject.Find(winName).GetComponent<AudioSource>();
-        loseSound = GameObject.Find(loseName).GetComponent<AudioSource>();
         _enemies = new List<Enemy>();
         EventManager.EventInitialise(EventType.LOSE);
         EventManager.EventInitialise(EventType.ASSIGNMENT_CODE_TRIGGER);
@@ -127,7 +120,7 @@ public class EnemyManager : MonoBehaviour
 
     public void PlayerCaught()
     {
-        loseSound.Play();
+        EventManager.EventTrigger(EventType.SFX, _soundPlayerLose);
 
         // Change all enemies to caught state
         foreach (Enemy enemy in _enemies)
@@ -144,7 +137,7 @@ public class EnemyManager : MonoBehaviour
     // Deactivate Enemy that was attacked then check to see how many enemies are left
     public void PlayerAttacked(Enemy enemy)
     {
-        deathSound.Play();
+        EventManager.EventTrigger(EventType.SFX, _soundEnemyDeath);
         enemy.gameObject.SetActive(false);
         CheckEnemiesLeft();
     }
@@ -162,7 +155,7 @@ public class EnemyManager : MonoBehaviour
         }
 
         // Signal game won
-        winSound.Play();
+        EventManager.EventTrigger(EventType.SFX, _soundPlayerWin);
         EventManager.EventTrigger(EventType.WIN, null);
     }
 }

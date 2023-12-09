@@ -31,10 +31,8 @@ public class Player : MonoBehaviour
 
     // Sounds
     [Header("Sounds")]
-    [SerializeField] private string _obscuredName = "PlayerObscured";
-	private AudioSource _obscuredSound;
-    [SerializeField] private string _visibleName = "PlayerVisible";
-	private AudioSource _visibleSound;
+    [SerializeField] private Sound _soundPlayerObscured;
+    [SerializeField] private Sound _soundPlayerVisible;
     private bool _startSoundDisabler = true;
 
     void Awake()
@@ -45,8 +43,6 @@ public class Player : MonoBehaviour
         // Set values and components
         _rb = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _obscuredSound = GameObject.Find(_obscuredName).GetComponent<AudioSource>();
-        _visibleSound = GameObject.Find(_visibleName).GetComponent<AudioSource>();
 
         _isDead = false;
         _spriteRenderer.sprite = _normalSprite;
@@ -116,7 +112,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            _obscuredSound.Play();
+            EventManager.EventTrigger(EventType.SFX, _soundPlayerObscured);
         }
         
         _spriteRenderer.sprite = _hidingSprite;
@@ -130,7 +126,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            _visibleSound.Play();
+            EventManager.EventTrigger(EventType.SFX, _soundPlayerVisible);
         }
         
         _spriteRenderer.sprite = _normalSprite;

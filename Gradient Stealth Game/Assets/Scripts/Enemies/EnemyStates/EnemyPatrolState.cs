@@ -17,7 +17,8 @@ public class EnemyPatrolState : EnemyState
         // If player is spotted, transition to AlertState
         if (Enemy.PlayerSpotted() && Enemy.Player.RegionState != 3)
         {
-            Enemy.chaseSound.Play();
+            //Enemy.chaseSound.Play();
+            EventManager.EventTrigger(EventType.SFX, Enemy.SoundEnemyChase);
             Enemy.StateMachine.ChangeState(Enemy.ChaseState);
             Enemy.EnemyAlertNearbyEnemies();
         }

@@ -60,14 +60,10 @@ public class Enemy : MonoBehaviour
 
     #region Sounds
     [Header("Sounds")]
-    [SerializeField] private string alertName = "EnemyAlert";
-	public AudioSource alertSound { get; private set; }
-
-    [SerializeField] private string deAlertName = "EnemyDeAlert";
-	public AudioSource deAlertSound { get; private set; }
-
-    [SerializeField] private string chaseName = "EnemyChase";
-	public AudioSource chaseSound { get; private set; }
+    [SerializeField] public Sound SoundEnemyChase;
+    //[SerializeField] public Sound SoundEnemyAlert;
+    [SerializeField] public Sound SoundEnemyDeAlert;
+    
     #endregion
 
     #region GameObject Refs
@@ -136,11 +132,6 @@ public class Enemy : MonoBehaviour
         // Set up nav mesh
         Agent.updateRotation = false;
         Agent.updateUpAxis = false;
-
-        // Sounds
-        alertSound = GameObject.Find(alertName).GetComponent<AudioSource>();
-        deAlertSound = GameObject.Find(deAlertName).GetComponent<AudioSource>();
-        chaseSound = GameObject.Find(chaseName).GetComponent<AudioSource>();
     }
 
     private void OnEnable()
@@ -362,7 +353,7 @@ public class Enemy : MonoBehaviour
             // If ray hits enemy first, chase. Otherwise, it has hit an obstacle - do not chase
             if (hit.collider.CompareTag("Enemy") && StateMachine.CurrentState != ChaseState && StateMachine.CurrentState != CaughtState)
             {
-                chaseSound.Play(); 
+                EventManager.EventTrigger(EventType.SFX, SoundEnemyChase);
                 StateMachine.ChangeState(ChaseState);
             }
         }
@@ -380,7 +371,7 @@ public class Enemy : MonoBehaviour
             // If ray hits enemy first, chase. Otherwise, it has hit an obstacle - do not chase
             if (hit.collider.gameObject == gameObject && StateMachine.CurrentState != ChaseState && StateMachine.CurrentState != CaughtState)
             {
-                chaseSound.Play(); 
+                EventManager.EventTrigger(EventType.SFX, SoundEnemyChase);
                 StateMachine.ChangeState(ChaseState);
             }
         }
