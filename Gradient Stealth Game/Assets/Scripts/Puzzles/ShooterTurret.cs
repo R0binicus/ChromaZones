@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ShooterTurret : MonoBehaviour
@@ -11,7 +12,7 @@ public class ShooterTurret : MonoBehaviour
     [SerializeField] private float _fireRate;
     [SerializeField] private float _fireCD = 0f;
     [SerializeField] private bool _shootDisable = false;
-    private List<GameObject> _projectiles;
+    private List<BasicProjectile> _projectiles;
     
     
     private AlertData _alertData;
@@ -37,11 +38,10 @@ public class ShooterTurret : MonoBehaviour
     private void Start()
     {
         _alertData = new AlertData(transform.position, _alertOthersRadius);
-        _projectiles = ObjectPooler.CreateObjectPool(_maxPoolNum, _proj, transform);
+        _projectiles = ObjectPooler.CreateObjectPool<BasicProjectile>(_maxPoolNum, _proj, transform);
         
-        foreach (GameObject obj in _projectiles)
+        foreach (BasicProjectile projectile in _projectiles)
         {
-            BasicProjectile projectile = obj.GetComponent<BasicProjectile>();
             projectile.SetProjectileData(ProjectileData);
             projectile.TurretParent = this;
         }
@@ -65,14 +65,15 @@ public class ShooterTurret : MonoBehaviour
 
     void Shoot()
     {
-        var obj = ObjectPooler.GetPooledObject(_projectiles);
+        var list = _projectiles.Cast<MonoBehaviour>().ToList();
+        BasicProjectile projectile = ObjectPooler.GetPooledObject(list) as BasicProjectile;
 
-        if (obj == null)
+        if (projectile == null)
         {
             Debug.Log("HRRR NO OBJECTS IN POOL");
         }
 
-        obj.GetComponent<BasicProjectile>().Go(transform);
+        projectile.Go(transform);
     }
 
     public void AlertOthers(Vector3 centre)
