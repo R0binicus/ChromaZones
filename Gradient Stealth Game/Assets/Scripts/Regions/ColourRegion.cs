@@ -108,19 +108,19 @@ public class ColourRegion : MonoBehaviour
             darkness = 0.7f;
         }
         
-        
         _backgroundSprite.color = Color.HSVToRGB(_localColour/360f, 0.95f, darkness);
     }
 
     private void SetBorderColour(float borderColour)
     {
-        float darkness = 0.7f;
         if (_disabledColourChange)
         {
-            darkness = 0.95f;
+            _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0f, 1f);
         }
-        // used 0.95 because otherwise it hurts my eyes
-        _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.95f, darkness);
+        else
+        {
+            _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.95f, 0.7f);
+        }
     }
 
     private void SetStates()
@@ -247,24 +247,6 @@ public class ColourRegion : MonoBehaviour
             }
         }
     }
-
-    // Set state variable whenever it moves inside a region
-    // private void OnTriggerStay2D(Collider2D collision)
-    // {
-    //     // This should only be useful when the region changes state
-    //     // while the player or enemy is inside a region
-    //     if(collision.tag == "RegionDetector")
-    //     {
-    //         if (collision.transform.parent.tag == "Player") 
-    //         {
-    //             var player = collision.transform.parent.GetComponent<Player>();
-    //         }
-    //         else if (collision.transform.parent.tag == "Enemy")
-    //         {
-    //             var enemy = collision.transform.parent.GetComponent<Enemy>();
-    //         }
-    //     }
-    // }
 
     // Reset state variable if no longer on a region
     private void OnTriggerExit2D(Collider2D collision)

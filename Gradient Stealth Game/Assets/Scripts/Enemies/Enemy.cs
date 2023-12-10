@@ -30,6 +30,9 @@ public class Enemy : MonoBehaviour
     [field: SerializeField] private Sprite _hidingSprite;
     [field: SerializeField] private Sprite _normalSprite;
     [field: SerializeField] private Sprite _invulnerableSprite;
+    [field: SerializeField] private SpriteRenderer _fillSprite;
+
+
     #endregion
    
     #region Region Data
@@ -267,11 +270,13 @@ public class Enemy : MonoBehaviour
     public void NormalSprite()
     {
         SpriteRenderer.sprite = _normalSprite;
+        _fillSprite.enabled = false;
     }
 
     public void InvulnerableSprite()
     {
         SpriteRenderer.sprite = _invulnerableSprite;
+        _fillSprite.enabled = true;
     }
 
     public void SetWalkSpeed()

@@ -6,6 +6,10 @@ public class PressurePlate : MonoBehaviour
 {
     [field: SerializeField] private int _assignmentCode = 0;
 
+    [field: SerializeField] private bool _playerMode = false;
+
+    [field: SerializeField] private SpriteRenderer _fillSprite;
+
     private bool _activated = false;
 
     // Start is called before the first frame update
@@ -28,7 +32,11 @@ public class PressurePlate : MonoBehaviour
             {
                 GameObject mainObject = collision.transform.parent.gameObject;
 
-                if (mainObject.tag == "Enemy") 
+                if (mainObject.tag == "Enemy" && !_playerMode) 
+                {
+                    ActivatePlate();
+                }
+                else if (mainObject.tag == "Player" && _playerMode)
                 {
                     ActivatePlate();
                 }
@@ -41,5 +49,6 @@ public class PressurePlate : MonoBehaviour
         _activated = true;
         EventManager.EventTrigger(EventType.ASSIGNMENT_CODE_TRIGGER, _assignmentCode);
         GetComponent<SpriteRenderer>().color = Color.HSVToRGB(0f, 0f, 0.5f);
+        _fillSprite.color = Color.HSVToRGB(0f, 0f, 0.5f);
     }
 }
