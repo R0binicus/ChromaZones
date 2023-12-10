@@ -114,7 +114,7 @@ public class ColourRegion : MonoBehaviour
 
     private void SetBorderColour(float borderColour)
     {
-        float darkness = 0.85f;
+        float darkness = 0.7f;
         if (_disabledColourChange)
         {
             darkness = 0.95f;

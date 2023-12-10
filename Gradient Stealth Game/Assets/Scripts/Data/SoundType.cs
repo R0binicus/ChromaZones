@@ -1,6 +1,7 @@
 public enum Sound 
 {
-    LevelMusic,
+    // SFX
+    Empty,
     EnemyDeath,
     PlayerLose,
     PlayerWin,
@@ -11,4 +12,10 @@ public enum Sound
     PlayerVisible,
     PlayerMove,
     ButtonSFX,
+
+    // Level Music
+    TitleMusic,
+    LevelMusic01,
+    LevelMusic02,
+    LevelMusic03,
 }
