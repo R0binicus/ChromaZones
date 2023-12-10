@@ -48,7 +48,6 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
         {
             destination = waypoints[waypointIndex - 1];
         }
-        GetLocation(destination);
     }
 
     public override void ResetBehaviour()
@@ -73,6 +72,7 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
             UpdateWaypoint();
         }
 
+        GetLocation(destination);
         Quaternion fullRotatation = Quaternion.LookRotation(transform.forward, destinationDirection);
         Quaternion lookRot = Quaternion.identity;
         lookRot.eulerAngles = new Vector3(0,0,fullRotatation.eulerAngles.z);

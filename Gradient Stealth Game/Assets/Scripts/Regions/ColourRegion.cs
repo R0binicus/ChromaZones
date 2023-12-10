@@ -119,7 +119,7 @@ public class ColourRegion : MonoBehaviour
         }
         else
         {
-            _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.95f, 0.7f);
+            _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 0.7f);
         }
     }
 
