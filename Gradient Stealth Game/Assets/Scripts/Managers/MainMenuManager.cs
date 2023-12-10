@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -12,61 +14,142 @@ public class MainMenuManager : MonoBehaviour
 {
     // Menu Panels
     [Header("Menu Panels")]
-    [SerializeField] GameObject _mainMenu;
-    [SerializeField] GameObject _playMenu;
-    [SerializeField] GameObject _instructions;
-
-    [Header("Fading Data")]
-    [SerializeField] Image _fadePanel;
-    [SerializeField] AnimationCurve _fadeInSpeed;
-    [SerializeField] AnimationCurve _fadeOutSpeed;
-
-    AudioSource _buttonSFXSource;
+    [SerializeField] private GameObject _mainMenu;
+    [SerializeField] private GameObject _playMenu;
+    [SerializeField] private GameObject _levelSelectMenu;
+    [SerializeField] private GameObject _creditsMenu;
+    private List<GameObject> _panels;
+    [Header("Confirm Box")]
+    [SerializeField] private GameObject _confirmBox;
+    [SerializeField] private GameObject _cbContinueButton;
+    [SerializeField] private GameObject _cbBackButton;
+    [SerializeField] private TextMeshProUGUI _cbText;
+    [SerializeField, TextArea] private string _newGameText;
+    [SerializeField, TextArea] private string _loadGameFailedText;
+    [SerializeField, TextArea] private string _loadGameSuccessText;
 
     private void Awake()
     {
         // If using the Unity editor or development build, enable debug logs
         Debug.unityLogger.logEnabled = Debug.isDebugBuild;
-        _buttonSFXSource = GetComponent<AudioSource>();
-        FadeIn();
+        //FadeIn();
     }
 
+    private void Start()
+    {
+        _panels = new List<GameObject>() { _mainMenu, _playMenu, _levelSelectMenu, _creditsMenu };
+        ConfirmBoxToggle(false);
+        ShowPanel(_mainMenu);
+    }
+
+    #region Panel Functionality
+    // Have list of panels to easily deactivate all of them
+    private void DeactivateAllPanels()
+    {
+        foreach (GameObject panel in _panels)
+        {
+            panel.SetActive(false);
+        }
+    }
+
+    // Show specified Menu Panel
+    private void ShowPanel(GameObject panel)
+    {
+        DeactivateAllPanels();
+        panel.SetActive(true);
+    }
+    #endregion
+
+    #region Main Menu
+    // Shows the play menu
     public void PlayButton()
     {
-        _mainMenu.SetActive(false);
-        _playMenu.SetActive(true);
+        ShowPanel(_playMenu);
     }
 
-    public void SelectLevelButton(int level)
+    // Shows credits
+    public void CreditsButton()
     {
-        StartCoroutine(Fade(_fadeOutSpeed, Time.time));
-        StartCoroutine(LoadScene(level, _fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time));
+        ShowPanel(_creditsMenu);
     }
-
-    public void InstructionsButton()
+    
+    // All back buttons will return to main menu
+    public void BackButton()
     {
-        _instructions.SetActive(true);
-        _mainMenu.SetActive(false);
+        ShowPanel(_mainMenu);
     }
 
+    // Quits the game
     public void QuitButton()
     {
-        StartCoroutine(Fade(_fadeOutSpeed, Time.time));
-        StartCoroutine(QuitGame(_fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time));
+        //StartCoroutine(Fade(_fadeOutSpeed, Time.time));
+        //StartCoroutine(QuitGame(_fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time));
+        StartCoroutine(QuitGame(0));
+    }
+    #endregion
+
+    #region Play Menu
+    public void NewGameButton()
+    {
+        CBNewGame();
+        ConfirmBoxToggle(true);
     }
 
-    public void BackToMenuButton()
+    // TODO: Wire up to PersistentDataManager event
+    public void LoadGameButton()
     {
-        _instructions.SetActive(false);
-        _playMenu.SetActive(false);
-        _mainMenu.SetActive(true);
+        //CBLoadSuccess();
+        CBLoadFailed();
+        ConfirmBoxToggle(true);
+    }
+    #endregion
+
+    #region Level Select Menu
+    public void LevelSelectButton(int index)
+    {
+
+    }
+    #endregion
+
+    #region Confirm Box
+    private void ConfirmBoxToggle(bool toggle)
+    {
+        _confirmBox.SetActive(toggle);
     }
 
-    IEnumerator LoadScene(int index, float delayTime)
+    private void ConfirmBoxPopulate(bool showBack, bool showContinue, string text)
     {
-        yield return new WaitForSeconds(delayTime - 0.1f);
-        SceneManager.LoadScene(index);
+        _cbText.text = text;
+        _cbBackButton.SetActive(showBack);
+        _cbContinueButton.SetActive(showContinue);
     }
+
+    public void CBLoadSuccess()
+    {
+        ConfirmBoxPopulate(false, true, _loadGameSuccessText);
+    }
+
+    public void CBLoadFailed()
+    {
+        ConfirmBoxPopulate(true, false, _loadGameFailedText);
+    }
+
+    public void CBNewGame()
+    {
+        ConfirmBoxPopulate(true, true, _newGameText);
+    }
+
+    public void ConfirmBoxContinueButton()
+    {
+        ConfirmBoxToggle(false);
+        ShowPanel(_levelSelectMenu);
+    }
+
+    public void ConfirmBoxBackButton()
+    {
+        ConfirmBoxToggle(false);
+    }
+    #endregion
 
     IEnumerator QuitGame(float delayTime)
     {
@@ -76,33 +159,5 @@ public class MainMenuManager : MonoBehaviour
 #else
 		Application.Quit();
 #endif
-    }
-
-     public void FadeOut()
-    {
-        StartCoroutine(Fade(_fadeOutSpeed, Time.time));
-    }
-
-    public void FadeIn()
-    {
-        StartCoroutine(Fade(_fadeInSpeed, Time.time));
-    }
-
-    IEnumerator Fade(AnimationCurve fadeCurve, float startTime)
-    {
-        _fadePanel.gameObject.SetActive(true);
-
-        while (Time.time - startTime < fadeCurve.keys[fadeCurve.length - 1].time)
-        {
-            _fadePanel.color = new Color(0, 0, 0, Mathf.Lerp
-            (
-                fadeCurve.keys[0].time,
-                fadeCurve.keys[fadeCurve.length - 1].time,
-                fadeCurve.Evaluate(Time.time - startTime)
-            ));
-            yield return null;
-        }
-
-        _fadePanel.gameObject.SetActive(false);
     }
 }
