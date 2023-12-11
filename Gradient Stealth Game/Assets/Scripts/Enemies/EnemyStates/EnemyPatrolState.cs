@@ -6,7 +6,6 @@ public class EnemyPatrolState : EnemyState
 
     public override void Enter()
     {
-        //Debug.Log("Entering Patrol State");
         Enemy.FOVsIsActive(true, false);
         Enemy.SetFOVsData(Enemy.PatrolFOVData);
         Enemy.CreateFOVs();
@@ -17,7 +16,6 @@ public class EnemyPatrolState : EnemyState
         // If player is spotted, transition to AlertState
         if (Enemy.PlayerSpotted() && Enemy.Player.RegionState != 3)
         {
-            //Enemy.chaseSound.Play();
             EventManager.EventTrigger(EventType.SFX, Enemy.SoundEnemyChase);
             Enemy.StateMachine.ChangeState(Enemy.ChaseState);
             Enemy.EnemyAlertNearbyEnemies();
@@ -35,9 +33,7 @@ public class EnemyPatrolState : EnemyState
 
     public override void Exit()
     {
-        //Debug.Log("Leaving Patrol State");
-        Enemy.RB.velocity = Vector2.zero;
-        Enemy.Agent.ResetPath();
+
     }
 
     public override void OnCollisionEnter2D(Collision2D collision)

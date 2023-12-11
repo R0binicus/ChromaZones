@@ -9,6 +9,9 @@ public class EnemyAlertState : EnemyState
 
     public override void Enter()
     {
+        Enemy.Agent.ResetPath();
+        Enemy.SetWalkSpeed();
+        Enemy.RB.velocity = Vector2.zero;
         _timer = 0;
     }
 

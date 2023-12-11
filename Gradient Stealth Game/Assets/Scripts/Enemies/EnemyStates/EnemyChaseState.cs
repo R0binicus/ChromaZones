@@ -9,8 +9,6 @@ public class EnemyChaseState : EnemyState
 
     public override void Enter()
     {
-        //Debug.Log("Entering Enemy Chase State");
-        //Enemy.chaseSound.Play();
         Enemy.SetChaseSpeed();
         Enemy.FOVsIsActive(false, false);
     }
@@ -27,11 +25,8 @@ public class EnemyChaseState : EnemyState
         // If player is in their own region
         if (Enemy.Player.RegionState == 3)
         {
-            // If player has been hidden in their region for a certain amount of time
+            // If player has been hidden in their region
             // Change to AlertState
-            Enemy.Agent.ResetPath();
-            Enemy.SetWalkSpeed();
-            Enemy.RB.velocity = Vector2.zero;
             Enemy.StateMachine.ChangeState(Enemy.AlertState);
         }
     }
