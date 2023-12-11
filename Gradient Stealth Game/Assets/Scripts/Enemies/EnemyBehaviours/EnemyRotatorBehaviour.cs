@@ -127,11 +127,12 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
 
         Quaternion _endRot = _currentRot * Quaternion.Euler(0f, 0f, 90f * signChange);
 
-        while (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) > 0.1f)
+        while (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) > 0.05f)
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _rotateSpeed * Time.deltaTime);
             yield return null;
         }
+        transform.rotation = _endRot;
     }
 
     private void GetLocation(Vector2 point)
