@@ -4,8 +4,6 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 public class EnemyChaseState : EnemyState
 {
     Vector2 _moveDir;
-    float _timer;
-    float _accelTimer;
 
     public EnemyChaseState(Enemy enemy) : base(enemy) {}
 
@@ -13,8 +11,6 @@ public class EnemyChaseState : EnemyState
     {
         //Debug.Log("Entering Enemy Chase State");
         //Enemy.chaseSound.Play();
-        _timer = 0;
-        _accelTimer = 0;
         Enemy.SetChaseSpeed();
         Enemy.FOVsIsActive(false, false);
     }
@@ -33,21 +29,11 @@ public class EnemyChaseState : EnemyState
         {
             // If player has been hidden in their region for a certain amount of time
             // Change to AlertState
-            if (_timer > Enemy.HiddenTime)
-            {
-                _timer = 0;
-                Enemy.Agent.ResetPath();
-                Enemy.SetWalkSpeed();
-                Enemy.RB.velocity = Vector2.zero;
-                Enemy.StateMachine.ChangeState(Enemy.AlertState);
-            }
-            else
-            {
-                _timer += Time.deltaTime;
-            }
+            Enemy.Agent.ResetPath();
+            Enemy.SetWalkSpeed();
+            Enemy.RB.velocity = Vector2.zero;
+            Enemy.StateMachine.ChangeState(Enemy.AlertState);
         }
-
-        _accelTimer += Time.deltaTime;
     }
 
     public override void PhysicsUpdate()

@@ -192,8 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7245d556e31fd14439dff711d6f76cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DetectionTime>k__BackingField: 0
-  <HiddenTime>k__BackingField: 0
+  <DetectionTime>k__BackingField: 1
   <Velocity>k__BackingField:
     serializedVersion: 2
     m_Curve:
@@ -226,10 +225,6 @@ MonoBehaviour:
     <FOVAngle>k__BackingField: 80
     <FOVDist>k__BackingField: 3
     <TriangleSlices>k__BackingField: 10
-  <AlertFOVData>k__BackingField:
-    <FOVAngle>k__BackingField: 360
-    <FOVDist>k__BackingField: 5
-    <TriangleSlices>k__BackingField: 30
   _hidingSprite: {fileID: 7482667652216324306, guid: fc321b8f076fe07439c92eac0d9f2de8, type: 3}
   _normalSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   _invulnerableSprite: {fileID: 21300000, guid: babe0956a558e604990260247a5369ec, type: 3}

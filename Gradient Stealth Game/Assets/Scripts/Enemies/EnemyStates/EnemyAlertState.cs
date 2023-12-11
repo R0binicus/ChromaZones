@@ -9,11 +9,6 @@ public class EnemyAlertState : EnemyState
 
     public override void Enter()
     {
-        //Debug.Log("Entering Enemy Alert State");
-
-        Enemy.FOVsIsActive(true, true);
-        Enemy.SetFOVsData(Enemy.AlertFOVData);
-        Enemy.CreateFOVs();
         _timer = 0;
     }
 
@@ -44,8 +39,17 @@ public class EnemyAlertState : EnemyState
     // If player touches Enemy whilst in hiding
     public override void OnCollisionEnter2D(Collision2D collision)
     {
-        // Check if Player
-        if (collision.transform.CompareTag("Player"))
+        // If player has attacked Enemy and Enemy is not in their region, notify the EnemyManager
+        if (collision.transform.CompareTag("Player") && Enemy.RegionState != 1 && !Enemy.InvulnerableState)
+        {
+            Enemy.EnemyManager.PlayerAttacked(Enemy);
+        }
+        if (collision.transform.CompareTag("Player") && Enemy.RegionState != 1 && Enemy.InvulnerableState)
+        {
+            Enemy.Caught();
+        }
+        // Else if player has attacked Enemy and Enemy is in their region, call game over
+        else if (collision.transform.CompareTag("Player") && Enemy.RegionState == 1)
         {
             Enemy.Caught();
         }

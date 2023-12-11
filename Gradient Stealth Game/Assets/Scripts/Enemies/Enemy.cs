@@ -10,7 +10,6 @@ public class Enemy : MonoBehaviour
     #region Exposed Data
     [field: Header("Timers")]
     [field: SerializeField] public float DetectionTime { get; private set; }
-    [field: SerializeField] public float HiddenTime { get; private set; }
 
     [field: Header("Movement")]
     [field: SerializeField] public AnimationCurve Velocity { get; private set; }
@@ -24,7 +23,6 @@ public class Enemy : MonoBehaviour
     private AlertData _alertData;
     [field: SerializeField] public float AlertOthersRadius { get; private set; } = 3f;
     [field: SerializeField] public FOVData PatrolFOVData { get; private set; }
-    [field: SerializeField] public FOVData AlertFOVData { get; private set; }
     
     [field: Header("Sprites")]
     [field: SerializeField] private Sprite _hidingSprite;
