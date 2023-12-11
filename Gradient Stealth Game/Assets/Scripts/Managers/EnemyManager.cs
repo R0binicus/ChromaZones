@@ -4,39 +4,20 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    // GameObject References
-    private Player _player;
-
     // Internal Data
-    List<Enemy> _enemies; // List of Enemies in the scene
+    List<Enemy> _enemies; // List of Enemies in the level
 
-    [Header("Sounds")]
-    [SerializeField] private string deathName = "EnemyDeath";
-	private AudioSource deathSound;
-
-    [SerializeField] private string winName = "PlayerWin";
-	private AudioSource winSound;
-
-    [SerializeField] private string loseName = "PlayerLose";
-	private AudioSource loseSound;
-
+    // GameObject References
+    [SerializeField] private Player _player;
     [SerializeField] private NavMeshPlus.Components.NavMeshSurface surfaceSingle;
 
     private void Awake()
     {
-        deathSound = GameObject.Find(deathName).GetComponent<AudioSource>();
-        winSound = GameObject.Find(winName).GetComponent<AudioSource>();
-        loseSound = GameObject.Find(loseName).GetComponent<AudioSource>();
-        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         _enemies = new List<Enemy>();
+
         EventManager.EventInitialise(EventType.LOSE);
         EventManager.EventInitialise(EventType.ASSIGNMENT_CODE_TRIGGER);
         EventManager.EventInitialise(EventType.AREA_CHASE_TRIGGER);
-    }
-
-    void Start()
-    {
-        surfaceSingle.BuildNavMesh();
     }
 
     private void OnEnable()
@@ -50,6 +31,23 @@ public class EnemyManager : MonoBehaviour
     {
         EventManager.EventUnsubscribe(EventType.ADD_ENEMY, AddEnemy);
         EventManager.EventUnsubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
+    }
+
+    private void Start()
+    {
+        surfaceSingle.BuildNavMesh();
+    }
+
+    // Called once a level is loaded
+    public void LevelStart(object data)
+    {
+        surfaceSingle.BuildNavMesh();
+    }
+
+    // Called when the level is about to be unloaded
+    public void LevelEnd(object data)
+    {
+        _enemies.Clear();
     }
 
     private void AssignmentCodeHandler(object data)
@@ -92,8 +90,6 @@ public class EnemyManager : MonoBehaviour
 
     public void PlayerCaught()
     {
-        loseSound.Play();
-
         // Change all enemies to caught state
         foreach (Enemy enemy in _enemies)
         {
@@ -109,7 +105,6 @@ public class EnemyManager : MonoBehaviour
     // Deactivate Enemy that was attacked then check to see how many enemies are left
     public void PlayerAttacked(Enemy enemy)
     {
-        deathSound.Play();
         enemy.gameObject.SetActive(false);
         CheckEnemiesLeft();
     }
@@ -127,7 +122,6 @@ public class EnemyManager : MonoBehaviour
         }
 
         // Signal game won
-        winSound.Play();
         EventManager.EventTrigger(EventType.WIN, null);
     }
 }

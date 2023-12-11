@@ -30,8 +30,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void Awake()
     {
-        // If using the Unity editor or development build, enable debug logs
-        Debug.unityLogger.logEnabled = Debug.isDebugBuild;
+        EventManager.EventInitialise(EventType.LEVEL_SELECTED);
         //FadeIn();
     }
 
@@ -105,9 +104,9 @@ public class MainMenuManager : MonoBehaviour
     #endregion
 
     #region Level Select Menu
-    public void LevelSelectButton(int index)
+    public void LevelSelectButton(int levelNum)
     {
-
+        EventManager.EventTrigger(EventType.LEVEL_SELECTED, levelNum);
     }
     #endregion
 

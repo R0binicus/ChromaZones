@@ -18,10 +18,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject _buttonsPanel;
     [Header("Buttons")]
     [SerializeField] GameObject _nextLevelButton;
-    [Header("Fading Data")]
-    [SerializeField] Image _fadePanel;
-    [SerializeField] AnimationCurve _fadeInSpeed;
-    [SerializeField] AnimationCurve _fadeOutSpeed;
 
     // Scene Tracker
     int _currentSceneIndex;
@@ -47,7 +43,6 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        FadeIn();
         Time.timeScale = 1.0f;
         _paused = false;
     }
@@ -56,7 +51,6 @@ public class UIManager : MonoBehaviour
     {
         EventManager.EventSubscribe(EventType.LOSE, ShowLosePanel);
         EventManager.EventSubscribe(EventType.WIN, ShowWinPanel);
-        EventManager.EventSubscribe(EventType.SCENE_LOAD, FadeOut);
         EventManager.EventSubscribe(EventType.PAUSE_TOGGLE, TogglePause);
     }
 
@@ -64,34 +58,33 @@ public class UIManager : MonoBehaviour
     {
         EventManager.EventUnsubscribe(EventType.LOSE, ShowLosePanel);
         EventManager.EventUnsubscribe(EventType.WIN, ShowWinPanel);
-        EventManager.EventUnsubscribe(EventType.SCENE_LOAD, FadeOut);
         EventManager.EventUnsubscribe(EventType.PAUSE_TOGGLE, TogglePause);
     }
 
     public void NextLevel()
     {
         Time.timeScale = 1.0f;
-        EventManager.EventTrigger(EventType.NEXT_LEVEL, _fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time);
+        EventManager.EventTrigger(EventType.NEXT_LEVEL, null);
     }
 
     // Button callback to restart level
     public void Restart()
     {
         Time.timeScale = 1.0f;
-        EventManager.EventTrigger(EventType.RESTART_LEVEL, _fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time);
+        EventManager.EventTrigger(EventType.RESTART_LEVEL, null);
     }
 
     //Button callback to go back to main menu
     public void Quit()
     {
         Time.timeScale = 1.0f;
-        EventManager.EventTrigger(EventType.QUIT_LEVEL, _fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time);
+        Debug.Log("Quit pressed");
+        EventManager.EventTrigger(EventType.QUIT_LEVEL, null);
     }
 
     public void TogglePause(object data)
     {
         _paused = !_paused;
-        Debug.Log("Dobug");
 
         if (!_paused)
         {
@@ -138,34 +131,5 @@ public class UIManager : MonoBehaviour
         _buttonsPanel.SetActive(true);
         _nextLevelButton.SetActive(true);
         _winPanel.SetActive(true);
-    }
-
-    // Listens for when a scene is about to change
-    public void FadeOut(object data)
-    {
-        StartCoroutine(Fade(_fadeOutSpeed, Time.time));
-    }
-
-    public void FadeIn()
-    {
-        StartCoroutine(Fade(_fadeInSpeed, Time.time));
-    }
-
-    IEnumerator Fade(AnimationCurve fadeCurve, float startTime)
-    {
-        _fadePanel.gameObject.SetActive(true);
-
-        while (Time.time - startTime < fadeCurve.keys[fadeCurve.length - 1].time)
-        {
-            _fadePanel.color = new Color(0, 0, 0, Mathf.Lerp
-            (
-                fadeCurve.keys[0].time,
-                fadeCurve.keys[fadeCurve.length - 1].time,
-                fadeCurve.Evaluate(Time.time - startTime)
-            ));
-            yield return null;
-        }
-
-        _fadePanel.gameObject.SetActive(false);
     }
 }

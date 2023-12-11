@@ -136,11 +136,6 @@ public class Enemy : MonoBehaviour
         // Set up nav mesh
         Agent.updateRotation = false;
         Agent.updateUpAxis = false;
-
-        // Sounds
-        alertSound = GameObject.Find(alertName).GetComponent<AudioSource>();
-        deAlertSound = GameObject.Find(deAlertName).GetComponent<AudioSource>();
-        chaseSound = GameObject.Find(chaseName).GetComponent<AudioSource>();
     }
 
     private void OnEnable()
@@ -358,7 +353,6 @@ public class Enemy : MonoBehaviour
             // If ray hits player first, chase. Otherwise, it has hit an obstacle - do not chase
             if (hit.collider.CompareTag("Player") && StateMachine.CurrentState != CaughtState && StateMachine.CurrentState != CaughtState)
             {
-                chaseSound.Play(); 
                 StateMachine.ChangeState(ChaseState);
             }
         }

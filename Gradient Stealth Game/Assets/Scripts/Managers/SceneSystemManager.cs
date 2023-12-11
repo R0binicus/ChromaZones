@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LevelManager : MonoBehaviour
+public class SceneSystemManager : MonoBehaviour
 {
     [Header("Scene Fading Data")]
     [SerializeField] CanvasGroup _fadePanel;
@@ -17,6 +17,9 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        // If using the Unity editor or development build, enable debug logs
+        Debug.unityLogger.logEnabled = Debug.isDebugBuild;
+
         // Get total number of scenes in game
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
 
@@ -26,6 +29,7 @@ public class LevelManager : MonoBehaviour
 
     private void OnEnable()
     {
+        EventManager.EventSubscribe(EventType.LEVEL_SELECTED, LevelSelected);
         EventManager.EventSubscribe(EventType.NEXT_LEVEL, NextLevelHandler);
         EventManager.EventSubscribe(EventType.RESTART_LEVEL, RestartLevelHandler);
         EventManager.EventSubscribe(EventType.QUIT_LEVEL, QuitLevelHandler);
@@ -33,6 +37,7 @@ public class LevelManager : MonoBehaviour
 
     private void OnDisable()
     {
+        EventManager.EventUnsubscribe(EventType.LEVEL_SELECTED, LevelSelected);
         EventManager.EventUnsubscribe(EventType.NEXT_LEVEL, NextLevelHandler);
         EventManager.EventUnsubscribe(EventType.RESTART_LEVEL, RestartLevelHandler);
         EventManager.EventUnsubscribe(EventType.QUIT_LEVEL, QuitLevelHandler);
@@ -41,54 +46,58 @@ public class LevelManager : MonoBehaviour
     // After Services Scene is loaded in, additively load in the MainMenu scene
     private void Start()
     {
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+        //SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
     }
 
+    #region Game UI Response
     // Listens for when NextLevelButton is pressed
     public void NextLevelHandler(object data)
     {
-        if (data == null)
-        {
-            Debug.LogError("NextLevelHandler did not receive a float as data");
-        }
-
-        float delayTime = (float)data;
-
+        // Check if last level
         if (_currentLoadableScene < _numOfScenes - 1)
         {
-            StartCoroutine(LoadScene(_currentLoadableScene + 1, delayTime));
+            StartCoroutine(LoadLevel(_currentLoadableScene + 1));
         }
     }
 
     // Listens for when ReplayLevelButton is pressed
     public void RestartLevelHandler(object data)
     {
-        if (data == null)
-        {
-            Debug.LogError("RestartLevelHandler did not receive a float as data");
-        }
-
-        float delayTime = (float)data;
-        StartCoroutine(LoadScene(_currentLoadableScene, delayTime));
+        StartCoroutine(LoadLevel(_currentLoadableScene));
     }
 
     // Listens for when UIManager QuitButton is pressed
     public void QuitLevelHandler(object data)
     {
+        Debug.Log("Quitting in level manager");
+        SceneManager.UnloadSceneAsync("Level02");
+        SceneManager.UnloadSceneAsync("Gameplay");
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+    }
+    #endregion
+
+    #region Main Menu UI Response
+    public void LevelSelected(object data)
+    {
         if (data == null)
         {
-            Debug.LogError("QuitLevelHandler did not receive a float as data");
+            Debug.LogError("Level has not been chosen!");
         }
 
-        float delayTime = (float)data;
-        StartCoroutine(LoadScene(0, delayTime));
+        SceneManager.UnloadSceneAsync("MainMenu");
+        SceneManager.LoadScene("Gameplay", LoadSceneMode.Additive);
+        int sceneIndex = (int)data + 2;
+        StartCoroutine(LoadLevel(sceneIndex));
     }
+    #endregion
 
-    IEnumerator LoadScene(int index, float delayTime)
+    IEnumerator LoadLevel(int index)
     {
         EventManager.EventTrigger(EventType.SCENE_LOAD, null);
-        yield return new WaitForSeconds(delayTime - 0.1f);
-        SceneManager.LoadScene(index);
+        yield return new WaitForSeconds(0.1f);
+        SceneManager.LoadScene(index, LoadSceneMode.Additive);
+        Scene scene = SceneManager.GetSceneAt(index);
+        SceneManager.SetActiveScene(scene);
     }
 
     #region Scene Fading
