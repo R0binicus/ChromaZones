@@ -16,10 +16,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private Sound _soundPlayerLose;
 
     [SerializeField] private NavMeshPlus.Components.NavMeshSurface surfaceSingle;
-
-    private bool _playerLost = false;
     
-
     private void Awake()
     {
         _enemies = new List<Enemy>();
@@ -122,24 +119,17 @@ public class EnemyManager : MonoBehaviour
 
     public void PlayerCaught()
     {
-        // Needs _playerLost because otherwise it makes each enemy call the PlayerCaught, which makes each enemy call 
-        // PlayerCaught and so on until all enemies are in CaughtState. This is both laggy AND makes the _soundPlayerLose 
-        // sound play a BUNCH which overloads the audio manager
-        if (!_playerLost)
+        // Change all enemies to caught state
+        foreach (Enemy enemy in _enemies)
         {
-            _playerLost = true;
-            // Change all enemies to caught state
-            foreach (Enemy enemy in _enemies)
+            if (enemy.gameObject.activeInHierarchy == true && enemy.StateMachine.CurrentState != enemy.CaughtState)
             {
-                if (enemy.gameObject.activeInHierarchy == true && enemy.StateMachine.CurrentState != enemy.CaughtState)
-                {
-                    enemy.StateMachine.ChangeState(enemy.CaughtState);
-                }
+                enemy.StateMachine.ChangeState(enemy.CaughtState);
             }
-
-            EventManager.EventTrigger(EventType.SFX, _soundPlayerLose);
-            EventManager.EventTrigger(EventType.LOSE, null);
         }
+
+        EventManager.EventTrigger(EventType.SFX, _soundPlayerLose);
+        EventManager.EventTrigger(EventType.LOSE, null);
     }
 
     // Deactivate Enemy that was attacked then check to see how many enemies are left

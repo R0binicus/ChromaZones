@@ -60,7 +60,7 @@ public class EnemyChaseState : EnemyState
         // Check if Player
         if (collision.transform.CompareTag("Player"))
         {
-            Enemy.StateMachine.ChangeState(Enemy.CaughtState);
+            Enemy.Caught();
         }
     }
 }

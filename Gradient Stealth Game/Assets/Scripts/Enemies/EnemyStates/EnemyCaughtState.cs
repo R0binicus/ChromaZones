@@ -11,6 +11,5 @@ public class EnemyCaughtState : EnemyState
     public override void Enter()
     {
         Enemy.Agent.isStopped = true;
-        Enemy.EnemyManager.PlayerCaught();
     }
 }

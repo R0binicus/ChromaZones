@@ -49,12 +49,12 @@ public class EnemyPatrolState : EnemyState
         }
         if (collision.transform.CompareTag("Player") && Enemy.RegionState != 1 && Enemy.InvulnerableState)
         {
-            Enemy.StateMachine.ChangeState(Enemy.CaughtState);
+            Enemy.Caught();
         }
         // Else if player has attacked Enemy and Enemy is in their region, call game over
         else if (collision.transform.CompareTag("Player") && Enemy.RegionState == 1)
         {
-            Enemy.StateMachine.ChangeState(Enemy.CaughtState);
+            Enemy.Caught();
         }
     }
 }

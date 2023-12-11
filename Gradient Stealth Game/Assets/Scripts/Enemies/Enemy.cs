@@ -381,4 +381,10 @@ public class Enemy : MonoBehaviour
             }
         }
     }
+
+    public void Caught()
+    {
+        StateMachine.ChangeState(CaughtState);
+        EnemyManager.PlayerCaught();
+    }
 }
