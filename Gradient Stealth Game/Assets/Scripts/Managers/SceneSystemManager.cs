@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SceneSystemManager : MonoBehaviour
 {
+    [Header("Debugging")]
+    [SerializeField] bool _editingLevel = false;
+
     [Header("Scene Fading Data")]
     [SerializeField] CanvasGroup _fadePanel;
     [SerializeField] AnimationCurve _fadeInSpeed;
@@ -24,7 +28,7 @@ public class SceneSystemManager : MonoBehaviour
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
 
         // Create level events
-        EventManager.EventInitialise(EventType.SCENE_LOAD);
+        EventManager.EventInitialise(EventType.LEVEL_STARTED);
     }
 
     private void OnEnable()
@@ -46,7 +50,10 @@ public class SceneSystemManager : MonoBehaviour
     // After Services Scene is loaded in, additively load in the MainMenu scene
     private void Start()
     {
-        //SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+        if (!_editingLevel)
+        {
+            SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+        }
     }
 
     #region Game UI Response
@@ -93,11 +100,16 @@ public class SceneSystemManager : MonoBehaviour
 
     IEnumerator LoadLevel(int index)
     {
-        EventManager.EventTrigger(EventType.SCENE_LOAD, null);
-        yield return new WaitForSeconds(0.1f);
-        SceneManager.LoadScene(index, LoadSceneMode.Additive);
-        Scene scene = SceneManager.GetSceneAt(index);
-        SceneManager.SetActiveScene(scene);
+        var levelAsync = SceneManager.LoadSceneAsync(index, LoadSceneMode.Additive);
+
+        // Wait until the level fully loads to trigger the level started event
+        while (!levelAsync.isDone)
+        {
+            Debug.Log("Level Loading...");
+            yield return null;
+        }
+
+        EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
     }
 
     #region Scene Fading
