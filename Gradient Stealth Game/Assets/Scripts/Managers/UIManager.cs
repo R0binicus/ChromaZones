@@ -52,6 +52,7 @@ public class UIManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.LOSE, ShowLosePanel);
         EventManager.EventSubscribe(EventType.WIN, ShowWinPanel);
         EventManager.EventSubscribe(EventType.PAUSE_TOGGLE, TogglePause);
+        EventManager.EventSubscribe(EventType.LEVEL_ENDED, LevelEnded);
     }
 
     private void OnDisable()
@@ -59,8 +60,10 @@ public class UIManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LOSE, ShowLosePanel);
         EventManager.EventUnsubscribe(EventType.WIN, ShowWinPanel);
         EventManager.EventUnsubscribe(EventType.PAUSE_TOGGLE, TogglePause);
+        EventManager.EventUnsubscribe(EventType.LEVEL_ENDED, LevelEnded);
     }
 
+    // Button callback to go to the next level
     public void NextLevel()
     {
         Time.timeScale = 1.0f;
@@ -98,6 +101,11 @@ public class UIManager : MonoBehaviour
             _buttonsPanel.SetActive(true);
             _pausePanel.SetActive(true);
         }
+    }
+
+    public void LevelEnded(object data)
+    {
+        DeactivateUI();
     }
 
     private void DeactivateUI()

@@ -16,7 +16,7 @@ public class SceneSystemManager : MonoBehaviour
     [SerializeField] AnimationCurve _fadeOutSpeed;
 
     // Scene Tracking
-    int _currentLoadableScene;
+    Scene _currentLevel;
     int _numOfScenes;
 
     private void Awake()
@@ -29,6 +29,7 @@ public class SceneSystemManager : MonoBehaviour
 
         // Create level events
         EventManager.EventInitialise(EventType.LEVEL_STARTED);
+        EventManager.EventInitialise(EventType.LEVEL_ENDED);
     }
 
     private void OnEnable()
@@ -54,6 +55,21 @@ public class SceneSystemManager : MonoBehaviour
         {
             SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
         }
+        // Make sure current level loaded in editor is assigned as the current level
+        else
+        {
+            int count = SceneManager.loadedSceneCount;
+
+            for (int i = 0; i < count; i++)
+            {
+                Scene scene = SceneManager.GetSceneAt(i);
+
+                if (scene.name != "Gameplay" && scene.name != "Services")
+                {
+                    _currentLevel = scene;
+                }
+            }
+        }
     }
 
     #region Game UI Response
@@ -61,23 +77,24 @@ public class SceneSystemManager : MonoBehaviour
     public void NextLevelHandler(object data)
     {
         // Check if last level
-        if (_currentLoadableScene < _numOfScenes - 1)
+        if (_currentLevel.buildIndex < _numOfScenes - 1)
         {
-            StartCoroutine(LoadLevel(_currentLoadableScene + 1));
+            StartCoroutine(LoadLevel(_currentLevel.buildIndex + 1));
         }
     }
 
     // Listens for when ReplayLevelButton is pressed
     public void RestartLevelHandler(object data)
     {
-        StartCoroutine(LoadLevel(_currentLoadableScene));
+        UnloadLevel();
+        StartCoroutine(LoadLevel(_currentLevel.buildIndex));
     }
 
     // Listens for when UIManager QuitButton is pressed
     public void QuitLevelHandler(object data)
     {
         Debug.Log("Quitting in level manager");
-        SceneManager.UnloadSceneAsync("Level02");
+        UnloadLevel();
         SceneManager.UnloadSceneAsync("Gameplay");
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
     }
@@ -98,6 +115,7 @@ public class SceneSystemManager : MonoBehaviour
     }
     #endregion
 
+    // Only loads levels, does not load MainMenu scene or core scenes
     IEnumerator LoadLevel(int index)
     {
         var levelAsync = SceneManager.LoadSceneAsync(index, LoadSceneMode.Additive);
@@ -109,7 +127,15 @@ public class SceneSystemManager : MonoBehaviour
             yield return null;
         }
 
+        _currentLevel = SceneManager.GetSceneByBuildIndex(index);
+        SceneManager.SetActiveScene(_currentLevel);
         EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
+    }
+
+    private void UnloadLevel()
+    {
+        EventManager.EventTrigger(EventType.LEVEL_ENDED, null);
+        SceneManager.UnloadSceneAsync(_currentLevel);
     }
 
     #region Scene Fading
