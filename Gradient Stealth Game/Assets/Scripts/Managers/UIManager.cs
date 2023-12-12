@@ -81,7 +81,6 @@ public class UIManager : MonoBehaviour
     public void Quit()
     {
         Time.timeScale = 1.0f;
-        Debug.Log("Quit pressed");
         EventManager.EventTrigger(EventType.QUIT_LEVEL, null);
     }
 
@@ -106,6 +105,7 @@ public class UIManager : MonoBehaviour
     public void LevelEnded(object data)
     {
         DeactivateUI();
+        _paused = false;
     }
 
     private void DeactivateUI()

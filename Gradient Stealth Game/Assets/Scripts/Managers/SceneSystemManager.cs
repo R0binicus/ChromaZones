@@ -18,6 +18,7 @@ public class SceneSystemManager : MonoBehaviour
     // Scene Tracking
     Scene _currentLevel;
     int _numOfScenes;
+    int _mainMenuIndex;
 
     private void Awake()
     {
@@ -26,6 +27,7 @@ public class SceneSystemManager : MonoBehaviour
 
         // Get total number of scenes in game
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
+        _mainMenuIndex = GetBuildIndex("MainMenu");
 
         // Create level events
         EventManager.EventInitialise(EventType.LEVEL_STARTED);
@@ -53,7 +55,8 @@ public class SceneSystemManager : MonoBehaviour
     {
         if (!_editingLevel)
         {
-            SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+            _fadePanel.alpha = 1f;
+            StartCoroutine(LoadScene(_mainMenuIndex));
         }
         // Make sure current level loaded in editor is assigned as the current level
         else
@@ -81,25 +84,20 @@ public class SceneSystemManager : MonoBehaviour
         // Check if last level
         if (_currentLevel.buildIndex < _numOfScenes - 1)
         {
-            UnloadLevel();
-            StartCoroutine(LoadLevel(_currentLevel.buildIndex + 1));
+            StartCoroutine(LevelChanger(_currentLevel.buildIndex, _currentLevel.buildIndex + 1));
         }
     }
 
     // Listens for when ReplayLevelButton is pressed
     public void RestartLevelHandler(object data)
     {
-        UnloadLevel();
-        StartCoroutine(LoadLevel(_currentLevel.buildIndex));
+        StartCoroutine(LevelChanger(_currentLevel.buildIndex, _currentLevel.buildIndex));
     }
 
     // Listens for when UIManager QuitButton is pressed
     public void QuitLevelHandler(object data)
     {
-        Debug.Log("Quitting in level manager");
-        UnloadLevel();
-        SceneManager.UnloadSceneAsync("Gameplay");
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+        StartCoroutine(LevelToMenu());
     }
     #endregion
 
@@ -111,51 +109,119 @@ public class SceneSystemManager : MonoBehaviour
             Debug.LogError("Level has not been chosen!");
         }
 
-        SceneManager.UnloadSceneAsync("MainMenu");
-        SceneManager.LoadScene("Gameplay", LoadSceneMode.Additive);
         int sceneIndex = (int)data + 2;
-        StartCoroutine(LoadLevel(sceneIndex));
+        StartCoroutine(MenuToLevel(sceneIndex));
     }
     #endregion
 
+    IEnumerator LevelChanger(int prevLevel, int newLevel)
+    {
+        yield return StartCoroutine(UnloadLevel(prevLevel));
+        yield return StartCoroutine(LoadLevel(newLevel));
+    }
+
+    IEnumerator LevelToMenu()
+    {
+        yield return StartCoroutine(UnloadLevel(_currentLevel.buildIndex));
+        yield return StartCoroutine(UnloadGameplay());
+        yield return StartCoroutine(LoadScene(_mainMenuIndex));
+    }
+
+    IEnumerator MenuToLevel(int levelSelected)
+    {
+        yield return StartCoroutine(UnloadScene(_mainMenuIndex));
+        yield return StartCoroutine(LoadGameplay());
+        yield return StartCoroutine(LoadLevel(levelSelected));
+    }
+
+    #region Services Loading/Unloading
+    IEnumerator LoadGameplay()
+    {
+        var levelAsync = SceneManager.LoadSceneAsync("Gameplay", LoadSceneMode.Additive);
+
+        // Wait until the scene fully loads to fade in
+        while (!levelAsync.isDone)
+        {
+            yield return null;
+        }
+    }
+
+    IEnumerator UnloadGameplay()
+    {
+        var levelAsync = SceneManager.UnloadSceneAsync("Gameplay");
+        
+        while (!levelAsync.isDone)
+        {
+            yield return null;
+        }
+    }
+    #endregion
+
+    #region Level Loading/Unloading
     // Only loads levels, does not load MainMenu scene or core scenes
     IEnumerator LoadLevel(int index)
     {
-        var levelAsync = SceneManager.LoadSceneAsync(index, LoadSceneMode.Additive);
-
-        // Wait until the level fully loads to trigger the level started event
-        while (!levelAsync.isDone)
-        {
-            Debug.Log("Level Loading...");
-            yield return null;
-        }
-
+        yield return StartCoroutine(LoadScene(index));
         _currentLevel = SceneManager.GetSceneByBuildIndex(index);
         SceneManager.SetActiveScene(_currentLevel);
         EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
     }
 
-    private void UnloadLevel()
+    IEnumerator UnloadLevel(int index)
     {
         EventManager.EventTrigger(EventType.LEVEL_ENDED, null);
-        SceneManager.UnloadSceneAsync(_currentLevel);
+        yield return StartCoroutine(UnloadScene(index));
     }
+    #endregion
+
+    #region Scene Functions
+    IEnumerator LoadScene(int index)
+    {
+        var levelAsync = SceneManager.LoadSceneAsync(index, LoadSceneMode.Additive);
+
+        // Wait until the scene fully loads to fade in
+        while (!levelAsync.isDone)
+        {
+            yield return null;
+        }
+        
+        yield return Fade(_fadeInSpeed, Time.time);
+    }
+
+    IEnumerator UnloadScene(int index)
+    {
+        // Wait until fadeout is complete to unload the level
+        yield return Fade(_fadeOutSpeed, Time.time);
+
+        var levelAsync = SceneManager.UnloadSceneAsync(index);
+
+        // Wait until the scene fully unloads
+        while (!levelAsync.isDone)
+        {
+            yield return null;
+        }
+    }
+
+    public int GetBuildIndex(string name)
+    {
+        for (int index = 0; index < _numOfScenes; index++)
+        {
+            string sceneName = System.IO.Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(index));
+
+            if (sceneName == name)
+            {
+                return index;
+            }
+        }
+
+        Debug.LogError("Scene name not found");
+        return -1;
+    }
+    #endregion
 
     #region Scene Fading
-    public void FadeOut()
-    {
-        StartCoroutine(Fade(_fadeOutSpeed, Time.time));
-    }
-
-    public void FadeIn()
-    {
-        StartCoroutine(Fade(_fadeInSpeed, Time.time));
-    }
-
     IEnumerator Fade(AnimationCurve fadeCurve, float startTime)
     {
-        _fadePanel.gameObject.SetActive(true);
-
         while (Time.time - startTime < fadeCurve.keys[fadeCurve.length - 1].time)
         {
             _fadePanel.alpha = Mathf.Lerp
@@ -166,8 +232,7 @@ public class SceneSystemManager : MonoBehaviour
             );
             yield return null;
         }
-
-        _fadePanel.gameObject.SetActive(false);
+        _fadePanel.alpha = fadeCurve.keys[fadeCurve.length - 1].value;
     }
     #endregion
 }
