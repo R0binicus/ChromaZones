@@ -7,7 +7,11 @@ public class ColourManager : MonoBehaviour
     public float colour;                    // Final colour value for other things to access
     [Header("Debug Stuff")]
     [SerializeField] private float _colourChangeSpeed = 0.1f;  
-    [SerializeField] private bool _changing_bool = false;
+    private bool _changing_bool = false;
+
+    private float time = 0f;
+
+    private float period = 0.1f;
 
     void Awake()
     {
@@ -39,6 +43,8 @@ public class ColourManager : MonoBehaviour
         {
             colour = 0f;
         }
+        
+        //Debug.Log(colour);
     }
 
     private void ColourBoolHandler(object data)

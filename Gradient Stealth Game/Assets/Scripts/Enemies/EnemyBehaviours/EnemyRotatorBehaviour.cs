@@ -129,6 +129,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
 
         while (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) > 0.05f)
         {
+            
             transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _rotateSpeed * Time.deltaTime);
             yield return null;
         }
