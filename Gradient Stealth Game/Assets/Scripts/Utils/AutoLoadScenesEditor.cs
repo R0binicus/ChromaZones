@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
@@ -42,8 +40,8 @@ public class AutoLoadScenesEditor
     // Automatically load the Gameplay scene if Levels has been loaded as a single
     static void LoadGameplayScene(Scene scene, OpenSceneMode mode)
     {
-        // Make sure additive scene loading hasn't happened or Gameplay/Main Menu hasn't just been loaded in
-        if (mode == OpenSceneMode.Single && scene.name != GameplaySceneName && scene.name != "MainMenu")
+        // Make sure additive scene loading hasn't happened or Services/Gameplay/Main Menu hasn't just been loaded in
+        if (mode == OpenSceneMode.Single && scene.name != GameplaySceneName && scene.name != "MainMenu" && scene.name != ServicesSceneName)
         {
             Scene gameplay = EditorSceneManager.GetSceneByPath(GameplayPath);
 
@@ -58,3 +56,4 @@ public class AutoLoadScenesEditor
         }
     }
 }
+#endif

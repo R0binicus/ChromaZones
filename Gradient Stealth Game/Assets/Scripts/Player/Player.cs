@@ -56,6 +56,7 @@ public class Player : MonoBehaviour
         EventManager.EventSubscribe(EventType.LOSE, Death);
         EventManager.EventSubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
         EventManager.EventSubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
+        EventManager.EventSubscribe(EventType.PLAYER_SPAWNPOINT, SpawnPointHandler);
     }
 
     private void OnDisable()
@@ -64,6 +65,7 @@ public class Player : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LOSE, Death);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
+        EventManager.EventUnsubscribe(EventType.PLAYER_SPAWNPOINT, SpawnPointHandler);
         StopAllCoroutines();
     }
 
@@ -128,6 +130,18 @@ public class Player : MonoBehaviour
         }
 
         _colourManager = (ColourManager)data;
+    }
+
+    // Assign player new starting location when changing/restarting levels
+    public void SpawnPointHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.LogError("Player needs starting location!");
+        }
+
+        Vector3 startLoc = (Vector3)data;
+        transform.position = startLoc;
     }
 
     public void NewState(int input)

@@ -69,6 +69,8 @@ public class SceneSystemManager : MonoBehaviour
                     _currentLevel = scene;
                 }
             }
+
+            EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
         }
     }
 
