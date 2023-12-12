@@ -26,7 +26,7 @@ public class EnemyManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
         EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
         EventManager.EventSubscribe(EventType.LEVEL_STARTED, LevelStart);
-        EventManager.EventSubscribe(EventType.LEVEL_ENDED, LevelStart);
+        EventManager.EventSubscribe(EventType.LEVEL_ENDED, LevelEnd);
     }
 
     private void OnDisable()
@@ -34,7 +34,7 @@ public class EnemyManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.ADD_ENEMY, AddEnemy);
         EventManager.EventUnsubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
         EventManager.EventUnsubscribe(EventType.LEVEL_STARTED, LevelStart);
-        EventManager.EventUnsubscribe(EventType.LEVEL_ENDED, LevelStart);
+        EventManager.EventUnsubscribe(EventType.LEVEL_ENDED, LevelEnd);
     }
 
     private void Start()

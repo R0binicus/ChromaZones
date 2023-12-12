@@ -81,6 +81,7 @@ public class SceneSystemManager : MonoBehaviour
         // Check if last level
         if (_currentLevel.buildIndex < _numOfScenes - 1)
         {
+            UnloadLevel();
             StartCoroutine(LoadLevel(_currentLevel.buildIndex + 1));
         }
     }
