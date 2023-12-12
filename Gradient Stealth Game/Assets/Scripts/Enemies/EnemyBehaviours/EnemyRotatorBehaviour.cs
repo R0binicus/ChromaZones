@@ -16,6 +16,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     private Quaternion _originAngle;
     private Vector2 _destinationDirection;
     private bool _rotatingToOrigin = false;
+    private bool _reachedDestination = true;
 
     //Components
     private Rigidbody2D rb;
@@ -52,8 +53,12 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         if ((_originWaypoint - (Vector2)transform.position).magnitude < 0.05f)
         {
             // Stay still
-            //rb.velocity = Vector2.zero;
-            Agent.ResetPath();
+            if (!_reachedDestination)
+            {
+                _reachedDestination = true;
+                Agent.ResetPath();
+                rb.velocity = Vector2.zero;
+            }
             
             // If Enemy needs to rotate back to original angle
             if (_rotatingToOrigin)
@@ -84,6 +89,10 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         // If Enemy is not at origin waypoint, move back to it
         else 
         {
+            if (_reachedDestination)
+            {
+                _reachedDestination = false;
+            }
             _rotatingToOrigin = true;
             GetLocation(_originWaypoint);
             Quaternion fullRotatation = Quaternion.LookRotation(transform.forward, _destinationDirection);

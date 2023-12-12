@@ -11,6 +11,7 @@ public class EnemyChaseState : EnemyState
     {
         Enemy.SetChaseSpeed();
         Enemy.FOVsIsActive(false, false);
+        EventManager.EventTrigger(EventType.SFX, Enemy.SoundEnemyChase);
     }
 
     public override void LogicUpdate()

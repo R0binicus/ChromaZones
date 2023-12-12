@@ -182,7 +182,7 @@ public class Player : MonoBehaviour
         var moveBool = (bool)data;
         _moveBool = moveBool;
 
-        if (!_isDead)
+        if (!_isDead && gameObject.activeSelf)
         {
             StartCoroutine(EventCoroutine(moveBool));
         }

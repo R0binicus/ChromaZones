@@ -263,6 +263,7 @@ public class Enemy : MonoBehaviour
     public void HidingSprite()
     {
         SpriteRenderer.sprite = _hidingSprite;
+        _fillSprite.enabled = false;
     }
 
     public void NormalSprite()
