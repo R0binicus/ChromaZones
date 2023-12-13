@@ -18,7 +18,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     private bool _rotatingToOrigin = false;
     private bool _reachedDestination = true;
 
-    public Vector3 _endRotEuler; //SHOULD BE DELETED only public for debugging 
+    public Vector3 _endRotEuler; //SHOULD BE DELETED AND MADE LOCAL only public for debugging 
 
     //Components
     private Rigidbody2D rb;
@@ -138,6 +138,9 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
 
         Quaternion _endRot = _currentRot * Quaternion.Euler(0f, 0f, 90f * signChange);
         _endRotEuler = _endRot.eulerAngles;
+        _endRotEuler.z = Mathf.Round(_endRotEuler.z / 90) * 90;
+
+        _endRot = Quaternion.Euler(_endRotEuler.x, _endRotEuler.y, _endRotEuler.z);
 
         while (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) > 0.05f)
         {
