@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-public class MainMenuManager : MonoBehaviour
+public class MainMenuUIManager : MonoBehaviour
 {
     // Menu Panels
     [Header("Menu Panels")]
@@ -19,6 +20,8 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject _levelSelectMenu;
     [SerializeField] private GameObject _creditsMenu;
     private List<GameObject> _panels;
+
+    // Confirm Box
     [Header("Confirm Box")]
     [SerializeField] private GameObject _confirmBox;
     [SerializeField] private GameObject _cbContinueButton;
@@ -27,19 +30,43 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField, TextArea] private string _newGameText;
     [SerializeField, TextArea] private string _loadGameFailedText;
     [SerializeField, TextArea] private string _loadGameSuccessText;
+    
+    // Level Buttons
+    [Header("Level Buttons Panel")]
+    [SerializeField] private GameObject _levelButtonPanel;
 
+    // Internal Data
+    private bool _startNewGame;
+    private Button[] _levelButtonsArr;
+    private List<Button> _levelButtons;
+
+    #region Init
     private void Awake()
     {
         EventManager.EventInitialise(EventType.LEVEL_SELECTED);
-        //FadeIn();
+    }
+
+    private void OnEnable()
+    {
+        EventManager.EventSubscribe(EventType.LOAD_GAME_SUCCESS, LoadSuccessHandler);
+        EventManager.EventSubscribe(EventType.LOAD_GAME_FAILED, LoadFailedHandler);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.EventUnsubscribe(EventType.LOAD_GAME_SUCCESS, LoadSuccessHandler);
+        EventManager.EventUnsubscribe(EventType.LOAD_GAME_FAILED, LoadFailedHandler);
     }
 
     private void Start()
     {
-        _panels = new List<GameObject>() { _mainMenu, _playMenu, _levelSelectMenu, _creditsMenu };
+        CreateLists();
+        DeactivateAllLevelButtons();
         ConfirmBoxToggle(false);
         ShowPanel(_mainMenu);
+        _startNewGame = false;
     }
+    #endregion
 
     #region Panel Functionality
     // Have list of panels to easily deactivate all of them
@@ -81,25 +108,31 @@ public class MainMenuManager : MonoBehaviour
     // Quits the game
     public void QuitButton()
     {
-        //StartCoroutine(Fade(_fadeOutSpeed, Time.time));
-        //StartCoroutine(QuitGame(_fadeOutSpeed.keys[_fadeOutSpeed.length - 1].time));
         StartCoroutine(QuitGame(0));
+    }
+
+    IEnumerator QuitGame(float delayTime)
+    {
+        yield return new WaitForSeconds(delayTime - 0.1f);
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
+		Application.Quit();
+#endif
     }
     #endregion
 
     #region Play Menu
     public void NewGameButton()
     {
-        CBNewGame();
-        ConfirmBoxToggle(true);
+        ConfirmBoxNewGame();
+        _startNewGame = true;
     }
 
-    // TODO: Wire up to PersistentDataManager event
     public void LoadGameButton()
     {
-        //CBLoadSuccess();
-        CBLoadFailed();
-        ConfirmBoxToggle(true);
+        _startNewGame = false;
+        EventManager.EventTrigger(EventType.LOAD_GAME_REQUEST, null);
     }
     #endregion
 
@@ -107,6 +140,17 @@ public class MainMenuManager : MonoBehaviour
     public void LevelSelectButton(int levelNum)
     {
         EventManager.EventTrigger(EventType.LEVEL_SELECTED, levelNum);
+    }
+
+    public void DeactivateAllLevelButtons()
+    {
+        foreach (Button button in _levelButtons)
+        {
+            button.interactable = false;
+            button.GetComponent<Image>().color = Color.grey;
+            button.GetComponent<ColourRegionUI>().DisableColourChange();
+        }
+
     }
     #endregion
 
@@ -121,42 +165,48 @@ public class MainMenuManager : MonoBehaviour
         _cbText.text = text;
         _cbBackButton.SetActive(showBack);
         _cbContinueButton.SetActive(showContinue);
+        ConfirmBoxToggle(true);
     }
 
-    public void CBLoadSuccess()
+    public void LoadSuccessHandler(object data)
     {
         ConfirmBoxPopulate(false, true, _loadGameSuccessText);
     }
 
-    public void CBLoadFailed()
+    public void LoadFailedHandler(object data)
     {
         ConfirmBoxPopulate(true, false, _loadGameFailedText);
     }
 
-    public void CBNewGame()
+    // Confirm box pop up for clicking on New Game button
+    public void ConfirmBoxNewGame()
     {
         ConfirmBoxPopulate(true, true, _newGameText);
     }
 
+    // If continue is pressed when confirm box pops up, send to level select menu
     public void ConfirmBoxContinueButton()
     {
+        if (_startNewGame)
+        {
+            EventManager.EventTrigger(EventType.NEW_GAME_REQUEST, null);
+        }
         ConfirmBoxToggle(false);
         ShowPanel(_levelSelectMenu);
     }
 
+    // If back button is pressed on confirm box pop up
     public void ConfirmBoxBackButton()
     {
         ConfirmBoxToggle(false);
     }
     #endregion
 
-    IEnumerator QuitGame(float delayTime)
+    private void CreateLists()
     {
-        yield return new WaitForSeconds(delayTime - 0.1f);
-#if UNITY_EDITOR
-        EditorApplication.isPlaying = false;
-#else
-		Application.Quit();
-#endif
+        _panels = new List<GameObject>() { _mainMenu, _playMenu, _levelSelectMenu, _creditsMenu };
+        _levelButtonsArr = _levelButtonPanel.GetComponentsInChildren<Button>();
+        _levelButtons = _levelButtonsArr.ToList<Button>();
+        _levelButtons.Remove(_levelButtons.Last<Button>());
     }
 }

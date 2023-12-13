@@ -13,8 +13,9 @@ public class ColourRegionUI : MonoBehaviour
 
     private float _colourDiff;          // Colour from game manager
     private float _localColour;         // Colour of this region specifically
+    private bool _enabled;
 
-    void Start()
+    private void Awake()
     {
         // Set values and components
         Color.RGBToHSV(GetComponent<UnityEngine.UI.Image>().color, out var H, out var S, out var V);
@@ -23,11 +24,19 @@ public class ColourRegionUI : MonoBehaviour
         _spriteRenderer = GetComponent<UnityEngine.UI.Image>();
     }
 
+    void Start()
+    {
+        _enabled = true;
+    }
+
     void Update()
     {
-        _colourDiff = _UIColourChanger.Colour;
-        ProcessColour();
-        SetColour();
+        if (_enabled)
+        {
+            _colourDiff = _UIColourChanger.Colour;
+            ProcessColour();
+            SetColour();
+        }
     }
 
     // Processes the _UIColourChanger colour
@@ -49,6 +58,13 @@ public class ColourRegionUI : MonoBehaviour
     {
         // used 0.95 because otherwise it hurts my eyes
         _spriteRenderer.color = Color.HSVToRGB(_localColour/360f, 0.95f, 0.95f);
+    }
+
+    public void DisableColourChange()
+    {
+        _enabled = false;
+        _spriteRenderer.color = Color.black;
+        _localChangeMultiplier = 0;
     }
 
     // If local colour value is in a 'transition zone' change the colour witha multiplier,
