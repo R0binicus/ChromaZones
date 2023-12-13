@@ -28,6 +28,7 @@ public class AudioManager : MonoBehaviour
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.SFX, SFXEventHandler);
+        StopAllCoroutines();
     }
 
     // Handles SFXEvent with incoming SFX data to play at specified cue source
@@ -74,7 +75,7 @@ public class AudioManager : MonoBehaviour
     private IEnumerator DoNotPlayMultipleOfSame(Sound sound)
     {
         CurrentSoundsArray.Add(sound);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         CurrentSoundsArray.Remove(sound);
     }
 }

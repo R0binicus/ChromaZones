@@ -7,7 +7,7 @@ public class Door : MonoBehaviour
 {
 
     [field: SerializeField] private int _assignmentCode = 0;
-    [field: SerializeField] private bool _closed = false;
+    [field: SerializeField] private bool _opened = false;
 
     // Components
     private SpriteRenderer _spriteRenderer;
@@ -20,7 +20,7 @@ public class Door : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _box = GetComponentInChildren<BoxCollider2D>();
         _navMod = GetComponentInChildren<NavMeshModifier>();
-        if (_closed)
+        if (_opened)
         {
             _spriteRenderer.enabled = false;
             _box.enabled = false;
@@ -51,14 +51,14 @@ public class Door : MonoBehaviour
         }
         if (_assignmentCode == (int)data)
         {
-            if (_closed == true)
+            if (_opened == true)
             {
                 _spriteRenderer.enabled = true;
                 _box.enabled = true;
                 _navMod.enabled = false;
                 gameObject.tag = "Obstacle";
                 gameObject.layer = 8;
-                _closed = false;
+                _opened = false;
             }
             else
             {
@@ -67,7 +67,7 @@ public class Door : MonoBehaviour
                 _navMod.enabled = true;
                 gameObject.tag = "Untagged";
                 gameObject.layer = 0;
-                _closed = true;
+                _opened = true;
             }
             EventManager.EventTrigger(EventType.REBUILD_NAVMESH, null);
         }

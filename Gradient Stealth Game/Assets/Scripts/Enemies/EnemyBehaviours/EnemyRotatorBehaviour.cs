@@ -12,11 +12,13 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     [SerializeField] RotateType _rotateType;
 
     [Header("Return to Start Data")]
-    private Vector2 _originWaypoint;
+    public Vector2 _originWaypoint; //SHOULD BE PRIVATE only public for debugging
     private Quaternion _originAngle;
     private Vector2 _destinationDirection;
     private bool _rotatingToOrigin = false;
     private bool _reachedDestination = true;
+
+    public Vector3 _endRotEuler; //SHOULD BE DELETED only public for debugging 
 
     //Components
     private Rigidbody2D rb;
@@ -135,6 +137,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         }
 
         Quaternion _endRot = _currentRot * Quaternion.Euler(0f, 0f, 90f * signChange);
+        _endRotEuler = _endRot.eulerAngles;
 
         while (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) > 0.05f)
         {
@@ -143,6 +146,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
             yield return null;
         }
         transform.rotation = _endRot;
+        transform.position = _originWaypoint;
     }
 
     private void GetLocation(Vector2 point)
