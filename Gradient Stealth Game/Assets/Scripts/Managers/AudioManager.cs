@@ -13,7 +13,7 @@ public class AudioManager : MonoBehaviour
 
     public SoundAudioClip[] MusicAudioClipArray;
 
-    private List<Sound> CurrentSoundsArray = new List<Sound>();
+    private List<Sound> CurrentSoundsList = new List<Sound>();
 
     private void Awake()
     {
@@ -55,7 +55,7 @@ public class AudioManager : MonoBehaviour
             }
             else
             {
-                if (!CurrentSoundsArray.Contains(sound))
+                if (!CurrentSoundsList.Contains(sound))
                 {
                     source.PlayOneShot(clipSound.audioClip, clipSound.volume);
                     StartCoroutine(DoNotPlayMultipleOfSame(sound));
@@ -74,8 +74,8 @@ public class AudioManager : MonoBehaviour
 
     private IEnumerator DoNotPlayMultipleOfSame(Sound sound)
     {
-        CurrentSoundsArray.Add(sound);
+        CurrentSoundsList.Add(sound);
         yield return new WaitForSeconds(0.1f);
-        CurrentSoundsArray.Remove(sound);
+        CurrentSoundsList.Remove(sound);
     }
 }

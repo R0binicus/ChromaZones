@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
+    [field: Header("Assignment Code Stuff")]
     [field: SerializeField] private int _sentAssignmentCode = 0;
     [field: SerializeField] private int _recievedAssignmentCode = 0;
-    [field: SerializeField] private bool _playerMode = false;
-    [field: SerializeField] private SpriteRenderer _fillSprite;
     [field: SerializeField] private bool _disabled = false;
-    [field: SerializeField] private bool _resetOnAssignmentCodeTrigger = false;
+    [field: SerializeField] private bool _playerMode = false;
+
+    private bool _resetOnRecieved = false;
+
+
+    [field: Header("Sprites")]
+    [field: SerializeField] private SpriteRenderer _fillSprite;
+    
     private SpriteRenderer _borderSprite;
-    public float _originalHue;
+    private float _originalHue;
 
     // Start is called before the first frame update
     void Awake()
@@ -27,7 +33,7 @@ public class PressurePlate : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_recievedAssignmentCode != 0 && _resetOnAssignmentCodeTrigger)
+        if (_recievedAssignmentCode != 0)
         {
             EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
         }
@@ -97,15 +103,15 @@ public class PressurePlate : MonoBehaviour
 
     private IEnumerator DisableForASec()
     {
-        _resetOnAssignmentCodeTrigger = false;
+        _resetOnRecieved = false;
         yield return new WaitForSeconds(0.2f);
-        _resetOnAssignmentCodeTrigger = true;
+        _resetOnRecieved = true;
     }
 
     private IEnumerator DelayAssignmentCheck()
     {
         yield return new WaitForSeconds(0.1f);
-        if (_resetOnAssignmentCodeTrigger)
+        if (_resetOnRecieved)
             {
                 if (_disabled)
                 {

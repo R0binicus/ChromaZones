@@ -60,6 +60,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
                 _reachedDestination = true;
                 Agent.ResetPath();
                 rb.velocity = Vector2.zero;
+                transform.position = _originWaypoint;
             }
             
             // If Enemy needs to rotate back to original angle
@@ -139,7 +140,6 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         Quaternion _endRot = _currentRot * Quaternion.Euler(0f, 0f, 90f * signChange);
         _endRotEuler = _endRot.eulerAngles;
         _endRotEuler.z = Mathf.Round(_endRotEuler.z / 90) * 90;
-
         _endRot = Quaternion.Euler(_endRotEuler.x, _endRotEuler.y, _endRotEuler.z);
 
         while (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) > 0.05f)
@@ -148,8 +148,12 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _rotateSpeed * Time.deltaTime);
             yield return null;
         }
-        transform.rotation = _endRot;
-        transform.position = _originWaypoint;
+
+        if ((_originWaypoint - (Vector2)transform.position).magnitude < 0.06f)
+        {
+            transform.rotation = _endRot;
+            transform.position = _originWaypoint;
+        }
     }
 
     private void GetLocation(Vector2 point)
