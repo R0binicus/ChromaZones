@@ -19,6 +19,7 @@ public class SceneSystemManager : MonoBehaviour
     Scene _currentLevel;
     int _numOfScenes;
     int _mainMenuIndex;
+    int _gameplayIndex;
 
     private void Awake()
     {
@@ -28,6 +29,7 @@ public class SceneSystemManager : MonoBehaviour
         // Get total number of scenes in game
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
         _mainMenuIndex = GetBuildIndex("MainMenu");
+        _gameplayIndex = GetBuildIndex("Gameplay");
 
         // Create level events
         EventManager.EventInitialise(EventType.LEVEL_STARTED);
@@ -117,47 +119,29 @@ public class SceneSystemManager : MonoBehaviour
 
     IEnumerator LevelChanger(int prevLevel, int newLevel)
     {
+        yield return Fade(_fadeOutSpeed, Time.time);
         yield return StartCoroutine(UnloadLevel(prevLevel));
         yield return StartCoroutine(LoadLevel(newLevel));
+        yield return StartCoroutine(Fade(_fadeInSpeed, Time.time));
     }
 
     IEnumerator LevelToMenu()
     {
+        yield return Fade(_fadeOutSpeed, Time.time);
         yield return StartCoroutine(UnloadLevel(_currentLevel.buildIndex));
-        yield return StartCoroutine(UnloadGameplay());
+        yield return StartCoroutine(UnloadScene(_gameplayIndex));
         yield return StartCoroutine(LoadScene(_mainMenuIndex));
         yield return StartCoroutine(Fade(_fadeInSpeed, Time.time));
     }
 
     IEnumerator MenuToLevel(int levelSelected)
     {
+        yield return Fade(_fadeOutSpeed, Time.time);
         yield return StartCoroutine(UnloadScene(_mainMenuIndex));
-        yield return StartCoroutine(LoadGameplay());
+        yield return StartCoroutine(LoadScene(_gameplayIndex));
         yield return StartCoroutine(LoadLevel(levelSelected));
+        yield return Fade(_fadeInSpeed, Time.time);
     }
-
-    #region Services Loading/Unloading
-    IEnumerator LoadGameplay()
-    {
-        var levelAsync = SceneManager.LoadSceneAsync("Gameplay", LoadSceneMode.Additive);
-
-        // Wait until the scene fully loads to fade in
-        while (!levelAsync.isDone)
-        {
-            yield return null;
-        }
-    }
-
-    IEnumerator UnloadGameplay()
-    {
-        var levelAsync = SceneManager.UnloadSceneAsync("Gameplay");
-        
-        while (!levelAsync.isDone)
-        {
-            yield return null;
-        }
-    }
-    #endregion
 
     #region Level Loading/Unloading
     // Only loads levels, does not load MainMenu scene or core scenes
@@ -167,7 +151,6 @@ public class SceneSystemManager : MonoBehaviour
         EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
         _currentLevel = SceneManager.GetSceneByBuildIndex(index);
         SceneManager.SetActiveScene(_currentLevel);
-        yield return Fade(_fadeInSpeed, Time.time);
     }
 
     IEnumerator UnloadLevel(int index)
@@ -191,9 +174,6 @@ public class SceneSystemManager : MonoBehaviour
 
     IEnumerator UnloadScene(int index)
     {
-        // Wait until fadeout is complete to unload the level
-        yield return Fade(_fadeOutSpeed, Time.time);
-
         var levelAsync = SceneManager.UnloadSceneAsync(index);
 
         // Wait until the scene fully unloads
