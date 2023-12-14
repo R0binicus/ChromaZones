@@ -38,7 +38,7 @@ public class DataPersistenceManager : MonoBehaviour
         }
         else
         {
-            EventManager.EventTrigger(EventType.LOAD_GAME_SUCCESS, null);
+            EventManager.EventTrigger(EventType.LOAD_GAME_SUCCESS, _gameSaveData);
         }
     }
 

@@ -57,6 +57,7 @@ public class SceneSystemManager : MonoBehaviour
         {
             _fadePanel.alpha = 1f;
             StartCoroutine(LoadScene(_mainMenuIndex));
+            StartCoroutine(Fade(_fadeInSpeed, Time.time));
         }
         // Make sure current level loaded in editor is assigned as the current level
         else
@@ -125,6 +126,7 @@ public class SceneSystemManager : MonoBehaviour
         yield return StartCoroutine(UnloadLevel(_currentLevel.buildIndex));
         yield return StartCoroutine(UnloadGameplay());
         yield return StartCoroutine(LoadScene(_mainMenuIndex));
+        yield return StartCoroutine(Fade(_fadeInSpeed, Time.time));
     }
 
     IEnumerator MenuToLevel(int levelSelected)
@@ -162,9 +164,10 @@ public class SceneSystemManager : MonoBehaviour
     IEnumerator LoadLevel(int index)
     {
         yield return StartCoroutine(LoadScene(index));
+        EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
         _currentLevel = SceneManager.GetSceneByBuildIndex(index);
         SceneManager.SetActiveScene(_currentLevel);
-        EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
+        yield return Fade(_fadeInSpeed, Time.time);
     }
 
     IEnumerator UnloadLevel(int index)
@@ -183,9 +186,7 @@ public class SceneSystemManager : MonoBehaviour
         while (!levelAsync.isDone)
         {
             yield return null;
-        }
-        
-        yield return Fade(_fadeInSpeed, Time.time);
+        }        
     }
 
     IEnumerator UnloadScene(int index)

@@ -31,12 +31,9 @@ public class ColourRegionUI : MonoBehaviour
 
     void Update()
     {
-        if (_enabled)
-        {
-            _colourDiff = _UIColourChanger.Colour;
-            ProcessColour();
-            SetColour();
-        }
+        _colourDiff = _UIColourChanger.Colour;
+        ProcessColour();
+        SetColour();
     }
 
     // Processes the _UIColourChanger colour
@@ -58,13 +55,6 @@ public class ColourRegionUI : MonoBehaviour
     {
         // used 0.95 because otherwise it hurts my eyes
         _spriteRenderer.color = Color.HSVToRGB(_localColour/360f, 0.95f, 0.95f);
-    }
-
-    public void DisableColourChange()
-    {
-        _enabled = false;
-        _spriteRenderer.color = Color.black;
-        _localChangeMultiplier = 0;
     }
 
     // If local colour value is in a 'transition zone' change the colour witha multiplier,

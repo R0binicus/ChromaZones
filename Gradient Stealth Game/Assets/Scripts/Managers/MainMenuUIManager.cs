@@ -36,6 +36,7 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] private GameObject _levelButtonPanel;
 
     // Internal Data
+    private SaveData _loadData;
     private bool _startNewGame;
     private Button[] _levelButtonsArr;
     private List<Button> _levelButtons;
@@ -148,9 +149,18 @@ public class MainMenuUIManager : MonoBehaviour
         {
             button.interactable = false;
             button.GetComponent<Image>().color = Color.grey;
-            button.GetComponent<ColourRegionUI>().DisableColourChange();
+            button.GetComponent<ColourRegionUI>().enabled = false;
         }
+    }
 
+    public void ActivateLevelButtons(int levelUnlocked)
+    {
+        for (int i = 0; i < levelUnlocked; i++)
+        {
+            _levelButtons[i].interactable = true;
+            //_levelButtons[i].GetComponent<Image>().color = Color.grey;
+            _levelButtons[i].GetComponent<ColourRegionUI>().enabled = true;
+        }
     }
     #endregion
 
@@ -170,6 +180,12 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void LoadSuccessHandler(object data)
     {
+        if (data == null)
+        {
+            Debug.LogError("Loading has failed.");
+        }
+
+        _loadData = (SaveData)data;
         ConfirmBoxPopulate(false, true, _loadGameSuccessText);
     }
 
@@ -190,7 +206,20 @@ public class MainMenuUIManager : MonoBehaviour
         if (_startNewGame)
         {
             EventManager.EventTrigger(EventType.NEW_GAME_REQUEST, null);
+            ActivateLevelButtons(1);
         }
+        else
+        {
+            if (_loadData != null)
+            {
+                ActivateLevelButtons(_loadData.LevelUnlocked);
+            }
+            else
+            {
+                Debug.LogError("Load has failed when confirming.");
+            }
+        }
+
         ConfirmBoxToggle(false);
         ShowPanel(_levelSelectMenu);
     }
@@ -205,8 +234,12 @@ public class MainMenuUIManager : MonoBehaviour
     private void CreateLists()
     {
         _panels = new List<GameObject>() { _mainMenu, _playMenu, _levelSelectMenu, _creditsMenu };
+
+        // Create a List of Level Buttons from the array given by GetComponent
         _levelButtonsArr = _levelButtonPanel.GetComponentsInChildren<Button>();
         _levelButtons = _levelButtonsArr.ToList<Button>();
+        
+        // Remove the Back Button from the list
         _levelButtons.Remove(_levelButtons.Last<Button>());
     }
 }
