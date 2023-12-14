@@ -167,7 +167,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
 
     private IEnumerator ResetPosition()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         transform.position = _originWaypoint;
     }
 }
