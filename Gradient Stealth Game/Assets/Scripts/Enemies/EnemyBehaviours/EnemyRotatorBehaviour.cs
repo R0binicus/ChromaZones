@@ -42,7 +42,10 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         _originWaypoint = transform.position;
         _originAngle = transform.rotation;
         GetLocation(_originWaypoint);
-        transform.position = _originWaypoint;
+
+        //Do this because otherwise the rotators aren't in their starting
+        //position for some reason???
+        StartCoroutine(ResetPosition());
     }
 
     public override void ResetBehaviour()
@@ -160,5 +163,11 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     private void GetLocation(Vector2 point)
     {
         _destinationDirection = (point - (Vector2)transform.position).normalized;
+    }
+
+    private IEnumerator ResetPosition()
+    {
+        yield return new WaitForSeconds(0.2f);
+        transform.position = _originWaypoint;
     }
 }
