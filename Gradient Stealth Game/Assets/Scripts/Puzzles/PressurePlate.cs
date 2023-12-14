@@ -5,8 +5,8 @@ using UnityEngine;
 public class PressurePlate : MonoBehaviour
 {
     [field: Header("Assignment Code Stuff")]
-    [field: SerializeField] private int _sentAssignmentCode = 0;
-    [field: SerializeField] private int _recievedAssignmentCode = 0;
+    [field: SerializeField] private int _sentCode = 0;
+    [field: SerializeField] private int _recievedCode = 0;
     [field: SerializeField] private bool _disabled = false;
     [field: SerializeField] private bool _playerMode = false;
 
@@ -33,7 +33,7 @@ public class PressurePlate : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_recievedAssignmentCode != 0)
+        if (_recievedCode != 0)
         {
             EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
         }
@@ -47,7 +47,7 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (_sentAssignmentCode != 0)
+        if (_sentCode != 0)
         {
             if(collision.tag == "RegionDetector")
             {
@@ -70,7 +70,7 @@ public class PressurePlate : MonoBehaviour
         if (!_disabled)
         {
             DisablePlate();
-            EventManager.EventTrigger(EventType.ASSIGNMENT_CODE_TRIGGER, _sentAssignmentCode);
+            EventManager.EventTrigger(EventType.ASSIGNMENT_CODE_TRIGGER, _sentCode);
             StartCoroutine(DisableForASec());
         }
     }
@@ -95,7 +95,7 @@ public class PressurePlate : MonoBehaviour
         {
             Debug.Log("PressurePlate AssignmentCodeHandler is null");
         }
-        if (_recievedAssignmentCode == (int)data)
+        if (_recievedCode == (int)data)
         {
             StartCoroutine(DelayAssignmentCheck());
         }
