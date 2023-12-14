@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.6, g: 0.039215688, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.09803922, b: 0.6, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 8596997936987593879}
   - component: {fileID: 9154094379050843789}
   m_Layer: 0
-  m_Name: EnemyPressurePlate
+  m_Name: PlayerButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -221,5 +221,5 @@ MonoBehaviour:
   _sentAssignmentCode: 0
   _recievedAssignmentCode: 0
   _disabled: 0
-  _playerMode: 0
+  _playerMode: 1
   _fillSprite: {fileID: 905289246605478013}

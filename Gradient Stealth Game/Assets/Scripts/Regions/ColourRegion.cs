@@ -75,6 +75,10 @@ public class ColourRegion : MonoBehaviour
             }
 
         }
+        else
+        {
+            _colourDiff = 0f;
+        }
         ProcessColour();
         SetColour();
     }
