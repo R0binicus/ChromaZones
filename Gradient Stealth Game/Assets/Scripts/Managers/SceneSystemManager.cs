@@ -34,6 +34,7 @@ public class SceneSystemManager : MonoBehaviour
         // Create level events
         EventManager.EventInitialise(EventType.LEVEL_STARTED);
         EventManager.EventInitialise(EventType.LEVEL_ENDED);
+        EventManager.EventInitialise(EventType.SAVE_GAME);
     }
 
     private void OnEnable()
@@ -87,6 +88,7 @@ public class SceneSystemManager : MonoBehaviour
         // Check if last level
         if (_currentLevel.buildIndex < _numOfScenes - 1)
         {
+            EventManager.EventTrigger(EventType.SAVE_GAME, _currentLevel.buildIndex + 1);
             StartCoroutine(LevelChanger(_currentLevel.buildIndex, _currentLevel.buildIndex + 1));
         }
     }
@@ -100,6 +102,7 @@ public class SceneSystemManager : MonoBehaviour
     // Listens for when UIManager QuitButton is pressed
     public void QuitLevelHandler(object data)
     {
+        EventManager.EventTrigger(EventType.SAVE_GAME, _currentLevel.buildIndex);
         StartCoroutine(LevelToMenu());
     }
     #endregion
@@ -117,9 +120,10 @@ public class SceneSystemManager : MonoBehaviour
     }
     #endregion
 
+    #region Scene Loading/Unloading/Ordering
     IEnumerator LevelChanger(int prevLevel, int newLevel)
     {
-        yield return Fade(_fadeOutSpeed, Time.time);
+        yield return StartCoroutine(Fade(_fadeOutSpeed, Time.time));
         yield return StartCoroutine(UnloadLevel(prevLevel));
         yield return StartCoroutine(LoadLevel(newLevel));
         yield return StartCoroutine(Fade(_fadeInSpeed, Time.time));
@@ -127,7 +131,7 @@ public class SceneSystemManager : MonoBehaviour
 
     IEnumerator LevelToMenu()
     {
-        yield return Fade(_fadeOutSpeed, Time.time);
+        yield return StartCoroutine(Fade(_fadeOutSpeed, Time.time));
         yield return StartCoroutine(UnloadLevel(_currentLevel.buildIndex));
         yield return StartCoroutine(UnloadScene(_gameplayIndex));
         yield return StartCoroutine(LoadScene(_mainMenuIndex));
@@ -136,12 +140,13 @@ public class SceneSystemManager : MonoBehaviour
 
     IEnumerator MenuToLevel(int levelSelected)
     {
-        yield return Fade(_fadeOutSpeed, Time.time);
+        yield return StartCoroutine(Fade(_fadeOutSpeed, Time.time));
         yield return StartCoroutine(UnloadScene(_mainMenuIndex));
         yield return StartCoroutine(LoadScene(_gameplayIndex));
         yield return StartCoroutine(LoadLevel(levelSelected));
-        yield return Fade(_fadeInSpeed, Time.time);
+        yield return StartCoroutine(Fade(_fadeInSpeed, Time.time));
     }
+    #endregion
 
     #region Level Loading/Unloading
     // Only loads levels, does not load MainMenu scene or core scenes

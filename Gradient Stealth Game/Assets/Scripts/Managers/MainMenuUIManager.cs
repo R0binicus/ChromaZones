@@ -158,7 +158,6 @@ public class MainMenuUIManager : MonoBehaviour
         for (int i = 0; i < levelUnlocked; i++)
         {
             _levelButtons[i].interactable = true;
-            //_levelButtons[i].GetComponent<Image>().color = Color.grey;
             _levelButtons[i].GetComponent<ColourRegionUI>().enabled = true;
         }
     }
@@ -191,6 +190,7 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void LoadFailedHandler(object data)
     {
+        _loadData = null;
         ConfirmBoxPopulate(true, false, _loadGameFailedText);
     }
 
@@ -205,6 +205,7 @@ public class MainMenuUIManager : MonoBehaviour
     {
         if (_startNewGame)
         {
+            _loadData = null;
             EventManager.EventTrigger(EventType.NEW_GAME_REQUEST, null);
             ActivateLevelButtons(1);
         }

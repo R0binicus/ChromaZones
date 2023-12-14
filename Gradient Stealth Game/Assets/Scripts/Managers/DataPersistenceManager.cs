@@ -17,12 +17,14 @@ public class DataPersistenceManager : MonoBehaviour
     {
         EventManager.EventSubscribe(EventType.NEW_GAME_REQUEST, NewGameHandler);
         EventManager.EventSubscribe(EventType.LOAD_GAME_REQUEST, LoadGameHandler);
+        EventManager.EventSubscribe(EventType.SAVE_GAME, SaveGameHandler);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.NEW_GAME_REQUEST, NewGameHandler);
         EventManager.EventUnsubscribe(EventType.LOAD_GAME_REQUEST, LoadGameHandler);
+        EventManager.EventUnsubscribe(EventType.SAVE_GAME, SaveGameHandler);
     }
 
     public void NewGameHandler(object data)
@@ -42,8 +44,14 @@ public class DataPersistenceManager : MonoBehaviour
         }
     }
 
-    public void SaveGame()
+    public void SaveGameHandler(object data)
     {
+        if (data == null)
+        {
+            Debug.LogError("Save data has not been passed.");
+        }
 
+        // Need to minus 2 since data is the buildIndex NOT the level number
+        _gameSaveData.LevelUnlocked = (int)data - 2;
     }
 }

@@ -1974,6 +1974,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 225800905}
     m_Modifications:
+    - target: {fileID: 631624968364960866, guid: f48af885953eb9146865f1211a07a87e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 631624968364960866, guid: f48af885953eb9146865f1211a07a87e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 612183805}
+    - target: {fileID: 631624968364960866, guid: f48af885953eb9146865f1211a07a87e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LevelSelectButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 631624968364960866, guid: f48af885953eb9146865f1211a07a87e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MainMenuUIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 631624968364960866, guid: f48af885953eb9146865f1211a07a87e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2705335433187644467, guid: f48af885953eb9146865f1211a07a87e, type: 3}
       propertyPath: m_Name
       value: Level3Button
@@ -16316,6 +16336,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 225800905}
     m_Modifications:
+    - target: {fileID: 631624968364960866, guid: f48af885953eb9146865f1211a07a87e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 612183805}
+    - target: {fileID: 631624968364960866, guid: f48af885953eb9146865f1211a07a87e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LevelSelectButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 631624968364960866, guid: f48af885953eb9146865f1211a07a87e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MainMenuUIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 631624968364960866, guid: f48af885953eb9146865f1211a07a87e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2705335433187644467, guid: f48af885953eb9146865f1211a07a87e, type: 3}
       propertyPath: m_Name
       value: Level2Button
