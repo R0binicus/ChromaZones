@@ -35,6 +35,9 @@ public class MainMenuUIManager : MonoBehaviour
     [Header("Level Buttons Panel")]
     [SerializeField] private GameObject _levelButtonPanel;
 
+    [Header("Debugging")]
+    [SerializeField] private bool _unlockAllLevels;
+
     // Internal Data
     private SaveData _loadData;
     private bool _startNewGame;
@@ -203,21 +206,30 @@ public class MainMenuUIManager : MonoBehaviour
     // If continue is pressed when confirm box pops up, send to level select menu
     public void ConfirmBoxContinueButton()
     {
-        if (_startNewGame)
+        DeactivateAllLevelButtons();
+        
+        if (_unlockAllLevels)
         {
-            _loadData = null;
-            EventManager.EventTrigger(EventType.NEW_GAME_REQUEST, null);
-            ActivateLevelButtons(1);
+            ActivateLevelButtons(_levelButtons.Count);
         }
         else
         {
-            if (_loadData != null)
+            if (_startNewGame)
             {
-                ActivateLevelButtons(_loadData.LevelUnlocked);
+                _loadData = null;
+                EventManager.EventTrigger(EventType.NEW_GAME_REQUEST, null);
+                ActivateLevelButtons(1);
             }
             else
             {
-                Debug.LogError("Load has failed when confirming.");
+                if (_loadData != null)
+                {
+                    ActivateLevelButtons(_loadData.LevelUnlocked);
+                }
+                else
+                {
+                    Debug.LogError("Load has failed when confirming.");
+                }
             }
         }
 
