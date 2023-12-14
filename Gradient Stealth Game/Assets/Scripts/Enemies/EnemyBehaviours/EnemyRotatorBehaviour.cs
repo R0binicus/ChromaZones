@@ -42,6 +42,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         _originWaypoint = transform.position;
         _originAngle = transform.rotation;
         GetLocation(_originWaypoint);
+        transform.position = _originWaypoint;
     }
 
     public override void ResetBehaviour()
@@ -149,7 +150,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
             yield return null;
         }
 
-        if ((_originWaypoint - (Vector2)transform.position).magnitude < 0.06f)
+        if ((_originWaypoint - (Vector2)transform.position).magnitude < 0.1f)
         {
             transform.rotation = _endRot;
             transform.position = _originWaypoint;
