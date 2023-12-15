@@ -5,9 +5,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
-using UnityEngine.EventSystems;
-
-
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -15,6 +12,10 @@ using UnityEditor;
 
 public class MainMenuUIManager : MonoBehaviour
 {
+    // Title Card
+    [Header("Title")]
+    [SerializeField] private GameObject _title;
+
     // Menu Panels
     [Header("Menu Panels")]
     [SerializeField] private GameObject _mainMenu;
@@ -94,6 +95,16 @@ public class MainMenuUIManager : MonoBehaviour
     {
         DeactivateAllPanels();
         panel.SetActive(true);
+
+        if (panel == _mainMenu || _playMenu)
+        {
+            _title.SetActive(true);
+        }
+        else
+        {
+            _title.SetActive(false);
+        }
+
     }
     #endregion
 
