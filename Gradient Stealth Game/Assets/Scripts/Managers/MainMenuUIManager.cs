@@ -38,7 +38,7 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] private GameObject _levelButtonPanel;
 
     [Header("Music")]
-    [SerializeField] Sound _titleMusic; 
+    //[SerializeField] Sound _titleMusic; 
 
     [Header("Debugging")]
     [SerializeField] private bool _unlockAllLevels;

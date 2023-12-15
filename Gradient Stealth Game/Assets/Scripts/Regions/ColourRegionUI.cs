@@ -13,7 +13,7 @@ public class ColourRegionUI : MonoBehaviour
 
     private float _colourDiff;          // Colour from game manager
     private float _localColour;         // Colour of this region specifically
-    public bool Enabled = true;
+    public bool Enabled = false;
 
     private void Awake()
     {
@@ -33,7 +33,6 @@ public class ColourRegionUI : MonoBehaviour
     {
         _colourDiff = _UIColourChanger.Colour;
         ProcessColour();
-        SetColour(_localColour);
     }
 
     // Processes the _UIColourChanger colour
@@ -48,11 +47,13 @@ public class ColourRegionUI : MonoBehaviour
             if (_localColour >= 360f)
             {
                 _localColour = 0f;
+                SetColour(_localColour);
             }
         }
         else
         {
-            _spriteRenderer.color = Color.grey;
+            //_spriteRenderer.color = Color.grey;
+            _spriteRenderer.color = Color.HSVToRGB(300/360f, 0.95f, 0.95f);
         }
     }
 
