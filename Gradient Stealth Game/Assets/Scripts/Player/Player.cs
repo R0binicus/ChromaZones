@@ -209,7 +209,7 @@ public class Player : MonoBehaviour
         var moveBool = (bool)data;
         _moveBool = moveBool;
 
-        if (!_isDead && gameObject.activeSelf)
+        if (_canMove && gameObject.activeSelf)
         {
             StartCoroutine(EventCoroutine(moveBool));
         }
@@ -217,11 +217,11 @@ public class Player : MonoBehaviour
 
     private IEnumerator EventCoroutine(bool moveBool)
     {
-        if (_isCollidingObstacle && !_isDead)
+        if (_isCollidingObstacle && _canMove)
         {
             yield return new WaitForSeconds(0.2f);
         }
-        else if (!_isDead)
+        else if (_canMove)
         {
             yield return new WaitForSeconds(0.1f);
         }

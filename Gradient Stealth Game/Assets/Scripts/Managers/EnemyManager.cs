@@ -49,13 +49,13 @@ public class EnemyManager : MonoBehaviour
 
     private void Start()
     {
-        RebuildNavMesh();
+        RebuildNavMesh(null);
     }
 
     // Called once a level is loaded
     public void LevelStart(object data)
     {
-        RebuildNavMesh();
+        RebuildNavMesh(null);
     }
 
     // Called when the level is about to be unloaded
