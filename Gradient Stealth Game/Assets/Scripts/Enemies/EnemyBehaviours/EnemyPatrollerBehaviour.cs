@@ -13,12 +13,12 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
     [SerializeField] private int roationSpeed = 100;
 
     private Rigidbody2D rb;
-    private UnityEngine.AI.NavMeshAgent Agent;
+    private UnityEngine.AI.NavMeshAgent _agent;
 
     public void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        Agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        _agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         originWaypoint = transform.position;
         UpdateWaypoint();
 
@@ -59,9 +59,9 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
     {
         if ((destination - (Vector2)transform.position).magnitude < 0.1f)
         {
-            Agent.ResetPath();
+            _agent.ResetPath();
         }
-        Agent.SetDestination(destination);
+        _agent.SetDestination(destination);
     }
 
     public override void UpdateLogicBehaviour()

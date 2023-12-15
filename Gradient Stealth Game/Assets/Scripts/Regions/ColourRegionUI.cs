@@ -13,14 +13,20 @@ public class ColourRegionUI : MonoBehaviour
 
     private float _colourDiff;          // Colour from game manager
     private float _localColour;         // Colour of this region specifically
+    private bool _enabled;
 
-    void Start()
+    private void Awake()
     {
         // Set values and components
         Color.RGBToHSV(GetComponent<UnityEngine.UI.Image>().color, out var H, out var S, out var V);
         _localColour = H * 360;
         _UIColourChanger = GameObject.FindGameObjectWithTag("Manager").GetComponent<UIColourScript>();
         _spriteRenderer = GetComponent<UnityEngine.UI.Image>();
+    }
+
+    void Start()
+    {
+        _enabled = true;
     }
 
     void Update()

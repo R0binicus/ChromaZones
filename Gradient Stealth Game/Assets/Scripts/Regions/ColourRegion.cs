@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-//using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class ColourRegion : MonoBehaviour
@@ -49,6 +48,7 @@ public class ColourRegion : MonoBehaviour
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
+
         if (_assignmentCode != 0)
         {
             EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
@@ -63,7 +63,7 @@ public class ColourRegion : MonoBehaviour
 
     void Update()
     {
-        if (!_disabledColourChange)
+        if (!_disabledColourChange && _colourManager != null)
         {
             if (!_reversedColourChange)
             {

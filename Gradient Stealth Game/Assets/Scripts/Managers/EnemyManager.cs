@@ -4,31 +4,26 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    // GameObject References
-    private Player _player;
-
     // Internal Data
-    List<Enemy> _enemies; // List of Enemies in the scene
+    List<Enemy> _enemies; // List of Enemies in the level
 
     [Header("Sounds")]
     [SerializeField] private Sound _soundEnemyDeath;
     [SerializeField] private Sound _soundPlayerWin;
     [SerializeField] private Sound _soundPlayerLose;
 
+    // GameObject References
+    [SerializeField] private Player _player;
     [SerializeField] private NavMeshPlus.Components.NavMeshSurface surfaceSingle;
     
     private void Awake()
     {
         _enemies = new List<Enemy>();
+
         EventManager.EventInitialise(EventType.LOSE);
         EventManager.EventInitialise(EventType.ASSIGNMENT_CODE_TRIGGER);
         EventManager.EventInitialise(EventType.AREA_CHASE_TRIGGER);
         EventManager.EventInitialise(EventType.REBUILD_NAVMESH);
-    }
-
-    void Start()
-    {
-        RebuildNavMesh(null);
     }
 
     private void OnEnable()
@@ -37,6 +32,9 @@ public class EnemyManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
         EventManager.EventSubscribe(EventType.REBUILD_NAVMESH, RebuildNavMesh);
         EventManager.EventSubscribe(EventType.INIT_PLAYER, PlayerInitHandler);
+        //EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
+        EventManager.EventSubscribe(EventType.LEVEL_STARTED, LevelStart);
+        EventManager.EventSubscribe(EventType.LEVEL_ENDED, LevelEnd);
     }
 
     private void OnDisable()
@@ -45,6 +43,25 @@ public class EnemyManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
         EventManager.EventUnsubscribe(EventType.REBUILD_NAVMESH, RebuildNavMesh);
         EventManager.EventUnsubscribe(EventType.INIT_PLAYER, PlayerInitHandler);
+        EventManager.EventUnsubscribe(EventType.LEVEL_STARTED, LevelStart);
+        EventManager.EventUnsubscribe(EventType.LEVEL_ENDED, LevelEnd);
+    }
+
+    private void Start()
+    {
+        RebuildNavMesh();
+    }
+
+    // Called once a level is loaded
+    public void LevelStart(object data)
+    {
+        RebuildNavMesh();
+    }
+
+    // Called when the level is about to be unloaded
+    public void LevelEnd(object data)
+    {
+        _enemies.Clear();
     }
 
     public void PlayerInitHandler(object data)

@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.InputSystem;
 using UnityEngine;
 using Unity.VisualScripting;
 
@@ -24,7 +22,7 @@ public class Player : MonoBehaviour
     private bool _moveBool = false;
 
     // Data
-    private bool _isDead;
+    private bool _canMove;
     [SerializeField] private Sprite _hidingSprite;
     [SerializeField] private Sprite _normalSprite;
     public bool _isCollidingObstacle = false;
@@ -44,7 +42,7 @@ public class Player : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
-        _isDead = false;
+        _canMove = true;
         _spriteRenderer.sprite = _normalSprite;
     }
 
@@ -52,16 +50,22 @@ public class Player : MonoBehaviour
     {
         EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventSubscribe(EventType.LOSE, Death);
+        EventManager.EventSubscribe(EventType.WIN, WinHandler);
         EventManager.EventSubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
         EventManager.EventSubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
+        EventManager.EventSubscribe(EventType.PLAYER_SPAWNPOINT, SpawnPointHandler);
+        EventManager.EventSubscribe(EventType.LEVEL_STARTED, StartLevelHandler);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventUnsubscribe(EventType.LOSE, Death);
+        EventManager.EventUnsubscribe(EventType.WIN, WinHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
+        EventManager.EventUnsubscribe(EventType.PLAYER_SPAWNPOINT, SpawnPointHandler);
+        EventManager.EventUnsubscribe(EventType.LEVEL_STARTED, StartLevelHandler);
         StopAllCoroutines();
     }
 
@@ -76,14 +80,9 @@ public class Player : MonoBehaviour
         EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
     }
 
-    void Update()
-    {
-        //
-    }
-
     private void FixedUpdate()
     {
-        if (!_isDead)
+        if (_canMove)
         {
             // Calculate desired velocity
             float targetVelocity = _moveDirection.magnitude * _moveSpeed;
@@ -134,11 +133,16 @@ public class Player : MonoBehaviour
 
     public void Death(object data)
     {
-        _isDead = true;
+        _canMove = false;
         // Player colour gets converted to Enemy!!!
         Color convertedColour = new Color(1f, 0.2983692f, 0.2509804f);
         _spriteRenderer.color = convertedColour;
         StopAllCoroutines();
+    }
+
+    public void WinHandler(object data)
+    {
+        _canMove = false;
     }
 
     private void ColourManagerHandler(object data)
@@ -149,6 +153,29 @@ public class Player : MonoBehaviour
         }
 
         _colourManager = (ColourManager)data;
+    }
+
+    // Reset Player's data
+    public void StartLevelHandler(object data)
+    {
+        NormalSprite();
+        Color colourReset = new Color(0f, 0.0972971f, 0.6f);
+        _spriteRenderer.color = colourReset;
+        _rb.velocity = Vector3.zero;
+        _moveDirection = Vector2.zero;
+        _canMove = true;
+    }
+
+    // Assign player new starting location when changing/restarting levels
+    public void SpawnPointHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.LogError("Player needs starting location!");
+        }
+
+        Vector3 startLoc = (Vector3)data;
+        transform.position = startLoc;
     }
 
     public void NewState(int input)
@@ -218,13 +245,12 @@ public class Player : MonoBehaviour
 
     private void MoveVect2DHandler(object data)
     {
-
         if (data == null)
         {
             Debug.Log("MoveVect2DHandler is null");
         }
 
-        if (!_isDead)
+        if (_canMove)
         {
             _moveDirection = (Vector2)data;
             if (_moveDirection == Vector2.zero)

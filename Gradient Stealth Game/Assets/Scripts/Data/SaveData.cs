@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class SaveData
 {
-    public uint LevelUnlocked { get; set; }
+    public int LevelUnlocked;
 
     public SaveData()
     {

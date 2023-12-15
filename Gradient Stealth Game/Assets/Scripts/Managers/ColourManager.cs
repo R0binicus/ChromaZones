@@ -20,15 +20,17 @@ public class ColourManager : MonoBehaviour
 
     private void OnEnable()
     {
+        EventManager.EventSubscribe(EventType.LEVEL_STARTED, LevelStart);
         EventManager.EventSubscribe(EventType.COLOUR_CHANGE_BOOL, ColourBoolHandler);
     }
 
     private void OnDisable()
     {
+        EventManager.EventUnsubscribe(EventType.LEVEL_STARTED, LevelStart);
         EventManager.EventUnsubscribe(EventType.COLOUR_CHANGE_BOOL, ColourBoolHandler);
     }
 
-    void Start()
+    public void LevelStart(object data)
     {
         EventManager.EventTrigger(EventType.INIT_COLOUR_MANAGER, this);
     }
