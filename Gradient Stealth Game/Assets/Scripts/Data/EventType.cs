@@ -18,6 +18,8 @@ public enum EventType
     REBUILD_NAVMESH,
     SFX,
     MUSIC,
+    STOP_MUSIC,
+    PAUSE_MUSIC,
     PLAYER_SPAWNPOINT,
     LEVEL_SELECTED,
     LEVEL_STARTED,

@@ -24,14 +24,16 @@ public class AudioManager : MonoBehaviour
     {
         EventManager.EventSubscribe(EventType.SFX, SFXEventHandler);
         EventManager.EventSubscribe(EventType.MUSIC, MusicEventHandler);
-        EventManager.EventSubscribe(EventType.LEVEL_ENDED, StopMusic);
+        EventManager.EventSubscribe(EventType.STOP_MUSIC, StopMusic);
+        EventManager.EventSubscribe(EventType.PAUSE_MUSIC, PauseMusic);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.SFX, SFXEventHandler);
         EventManager.EventUnsubscribe(EventType.MUSIC, MusicEventHandler);
-        EventManager.EventUnsubscribe(EventType.LEVEL_ENDED, StopMusic);
+        EventManager.EventUnsubscribe(EventType.STOP_MUSIC, StopMusic);
+        EventManager.EventUnsubscribe(EventType.PAUSE_MUSIC, PauseMusic);
         StopAllCoroutines();
     }
 
@@ -86,6 +88,25 @@ public class AudioManager : MonoBehaviour
         {
             MusicSource.clip = musicClip.audioClip;
             MusicSource.volume = musicClip.volume;
+            MusicSource.Play();
+        }
+    }
+
+    public void PauseMusic(object data)
+    {
+        if (data == null)
+        {
+            Debug.LogError("Pause music has not received a bool");
+        }
+
+        bool paused = (bool)data;
+        
+        if (paused)
+        {
+            MusicSource.Pause();
+        }
+        else
+        {
             MusicSource.Play();
         }
     }

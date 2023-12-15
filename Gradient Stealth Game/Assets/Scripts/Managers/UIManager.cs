@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements.Experimental;
 using Unity.Collections;
+using UnityEngine.EventSystems;
 
 public class UIManager : MonoBehaviour
 {
@@ -42,6 +43,7 @@ public class UIManager : MonoBehaviour
         EventManager.EventInitialise(EventType.NEXT_LEVEL);
         EventManager.EventInitialise(EventType.RESTART_LEVEL);
         EventManager.EventInitialise(EventType.QUIT_LEVEL);
+        EventManager.EventInitialise(EventType.PAUSE_MUSIC);
     }
 
     private void Start()
@@ -90,6 +92,7 @@ public class UIManager : MonoBehaviour
     public void TogglePause(object data)
     {
         _paused = !_paused;
+        EventManager.EventTrigger(EventType.PAUSE_MUSIC, _paused);
 
         if (!_paused)
         {
@@ -122,6 +125,7 @@ public class UIManager : MonoBehaviour
 
     private void ShowLosePanel(object data)
     {
+        StopMusicRaiseEvent();
         _nextLevelButton.SetActive(false);
         _buttonsPanel.SetActive(true);
         _losePanel.SetActive(true);
@@ -129,6 +133,7 @@ public class UIManager : MonoBehaviour
 
     private void ShowWinPanel(object data)
     {
+        StopMusicRaiseEvent();
         // If last level, do not show next level button
         if (_currentSceneIndex == _numOfScenes - 1)
         {
@@ -147,5 +152,10 @@ public class UIManager : MonoBehaviour
     public void ButtonSFX()
     {
         EventManager.EventTrigger(EventType.SFX, _buttonSFX);
+    }
+
+    private void StopMusicRaiseEvent()
+    {
+        EventManager.EventTrigger(EventType.STOP_MUSIC, null);
     }
 }
