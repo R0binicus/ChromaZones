@@ -56,8 +56,6 @@ public class DataPersistenceManager : MonoBehaviour
         {
             EventManager.EventTrigger(EventType.LOAD_GAME_SUCCESS, _gameSaveData);
         }
-
-        Debug.Log(_gameSaveData.LevelUnlocked);
     }
 
     public void SaveGameHandler(object data)
@@ -77,7 +75,5 @@ public class DataPersistenceManager : MonoBehaviour
         {
             Debug.Log("No save game data, possibly in leveleditormode");
         }
-
-        Debug.Log(_gameSaveData.LevelUnlocked);
     }
 }

@@ -31,7 +31,6 @@ public class FileDataHandler
                     using (StreamReader reader = new StreamReader(stream))
                     {
                         dataToLoad = reader.ReadToEnd();
-                        Debug.Log(dataToLoad);
                     }
                 }
 
@@ -49,7 +48,6 @@ public class FileDataHandler
     public void Save(SaveData saveData)
     {
         string fullPath = Path.Combine(_dataDirPath, _dataFileName);
-        Debug.Log(fullPath);
         try 
         {
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
