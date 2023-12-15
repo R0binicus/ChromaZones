@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject _nextLevelButton;
 
     [Header("Sounds")]
-    [SerializeField] private Sound _soundButtonSFX;
+    [SerializeField] private Sound _buttonSFX;
 
     // Scene Tracker
     int _currentSceneIndex;
@@ -69,7 +69,6 @@ public class UIManager : MonoBehaviour
     // Button callback to go to the next level
     public void NextLevel()
     {
-        EventManager.EventTrigger(EventType.SFX, _soundButtonSFX);
         Time.timeScale = 1.0f;
         EventManager.EventTrigger(EventType.NEXT_LEVEL, null);
     }
@@ -77,7 +76,6 @@ public class UIManager : MonoBehaviour
     // Button callback to restart level
     public void Restart()
     {
-        EventManager.EventTrigger(EventType.SFX, _soundButtonSFX);
         Time.timeScale = 1.0f;
         EventManager.EventTrigger(EventType.RESTART_LEVEL, null);
     }
@@ -85,7 +83,6 @@ public class UIManager : MonoBehaviour
     //Button callback to go back to main menu
     public void Quit()
     {
-        EventManager.EventTrigger(EventType.SFX, _soundButtonSFX);
         Time.timeScale = 1.0f;
         EventManager.EventTrigger(EventType.QUIT_LEVEL, null);
     }
@@ -145,5 +142,10 @@ public class UIManager : MonoBehaviour
         _buttonsPanel.SetActive(true);
         _nextLevelButton.SetActive(true);
         _winPanel.SetActive(true);
+    }
+
+    public void ButtonSFX()
+    {
+        EventManager.EventTrigger(EventType.SFX, _buttonSFX);
     }
 }

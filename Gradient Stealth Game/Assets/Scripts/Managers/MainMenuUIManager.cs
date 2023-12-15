@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using UnityEngine.EventSystems;
+
 
 
 #if UNITY_EDITOR
@@ -35,8 +37,9 @@ public class MainMenuUIManager : MonoBehaviour
     [Header("Level Buttons Panel")]
     [SerializeField] private GameObject _levelButtonPanel;
 
-    [Header("Music")]
-    //[SerializeField] Sound _titleMusic; 
+    [Header("Sound")]
+    [SerializeField] Sound _titleMusic; 
+    [SerializeField] Sound _buttonSFX;
 
     [Header("Debugging")]
     [SerializeField] private bool _unlockAllLevels;
@@ -72,6 +75,7 @@ public class MainMenuUIManager : MonoBehaviour
         ConfirmBoxToggle(false);
         ShowPanel(_mainMenu);
         _startNewGame = false;
+        EventManager.EventTrigger(EventType.MUSIC, _titleMusic);
     }
     #endregion
 
@@ -256,5 +260,10 @@ public class MainMenuUIManager : MonoBehaviour
         
         // Remove the Back Button from the list
         _levelButtons.Remove(_levelButtons.Last<Button>());
+    }
+
+    public void ButtonSFX()
+    {
+        EventManager.EventTrigger(EventType.SFX, _buttonSFX);
     }
 }
