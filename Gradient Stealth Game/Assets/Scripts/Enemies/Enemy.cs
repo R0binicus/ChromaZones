@@ -62,7 +62,6 @@ public class Enemy : MonoBehaviour
     #region Sounds
     [Header("Sounds")]
     [SerializeField] public Sound SoundEnemyChase;
-    //[SerializeField] public Sound SoundEnemyAlert;
     [SerializeField] public Sound SoundEnemyDeAlert;
     
     #endregion

@@ -9,10 +9,6 @@ public class ColourManager : MonoBehaviour
     [SerializeField] private float _colourChangeSpeed = 0.1f;  
     private bool _changing_bool = false;
 
-    private float time = 0f;
-
-    private float period = 0.1f;
-
     void Awake()
     {
         EventManager.EventInitialise(EventType.INIT_COLOUR_MANAGER);

@@ -154,43 +154,6 @@ public class ColourRegion : MonoBehaviour
             break;
         }
 
-        //switch(_localColour) 
-        //{
-        //    case float x when x < 40f:
-        //        State = 1;
-        //        _outlineSprite.enabled = true;
-        //        SetBorderColour(330f);
-        //    break;
-        //    case float x when x >= 50f && x < 160f :
-        //        State = 2;
-        //        if (_changeEnableDisable)
-        //        {
-        //            _outlineSprite.enabled = true;
-        //            SetBorderColour(90f);
-        //        }
-        //        _outlineSprite.enabled = false;
-        //    break;
-        //    case float x when x >= 170f && x < 280f :
-        //        State = 3;
-        //        _outlineSprite.enabled = true;
-        //        SetBorderColour(210f);
-        //    break;
-        //    case float x when x >= 290f && x <= 360f :
-        //        State = 1;
-        //        _outlineSprite.enabled = true;
-        //        SetBorderColour(330f);
-        //    break;
-        //    default:
-        //        State = 2;
-        //        if (_changeEnableDisable)
-        //        {
-        //            _outlineSprite.enabled = true;
-        //            SetBorderColour(90f);
-        //        }
-        //        _outlineSprite.enabled = false;
-        //    break;
-        //}
-
         if (originalState != State)
         {
             if (_player != null)

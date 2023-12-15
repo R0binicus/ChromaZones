@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class EnemyFieldOfView : MonoBehaviour
@@ -14,6 +14,8 @@ public class EnemyFieldOfView : MonoBehaviour
 
     public bool PlayerSpotted { get; private set; }
 
+    private bool _dontStartYet = true;
+
     private void Awake()
     {
         _layerToRaycast = LayerMask.GetMask("Player");
@@ -21,26 +23,36 @@ public class EnemyFieldOfView : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _currentAngle = GetAngleFromVectorFloat(transform.up) + (_FOVAngle / 2f); // Get starting angle first
-        float angleIncrease = _FOVAngle / _triangleSlices; // Calculate how much to increase angle by
-
-        for (int i = 0; i <= _triangleSlices; i++)
+        if (_dontStartYet)
         {
-            RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(_currentAngle), _FOVDist * transform.lossyScale.x, _layerToRaycast);
-
-            // Hit player
-            if (ray.collider != null)
-            {
-                PlayerSpotted = true;
-                break;
-            }
-            else
-            {
-                PlayerSpotted = false;
-            }
-
-            _currentAngle -= angleIncrease; // Increase angle to check next ray
+            StartCoroutine(DelayStart());
         }
+        else
+        {
+            _currentAngle = GetAngleFromVectorFloat(transform.up) + (_FOVAngle / 2f); // Get starting angle first
+            float angleIncrease = _FOVAngle / _triangleSlices; // Calculate how much to increase angle by
+    
+            for (int i = 0; i <= _triangleSlices; i++)
+            {
+                RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(_currentAngle), _FOVDist * transform.lossyScale.x, _layerToRaycast);
+    
+                // Hit player
+                if (ray.collider != null)
+                {
+                    PlayerSpotted = true;
+                    //Debug.Log(ray.point);
+                    Debug.DrawLine(ray.point, new Vector3(0,0,0), Color.red, 5f, false);
+                    break;
+                }
+                else
+                {
+                    PlayerSpotted = false;
+                }
+    
+                _currentAngle -= angleIncrease; // Increase angle to check next ray
+            }
+        }
+        
     }
 
     // Creating a custom mesh for the field of view
@@ -114,5 +126,11 @@ public class EnemyFieldOfView : MonoBehaviour
         }
 
         return n;
+    }
+
+    private IEnumerator DelayStart()
+    {
+        yield return new WaitForSeconds(0.1f);
+        _dontStartYet = false;
     }
 }

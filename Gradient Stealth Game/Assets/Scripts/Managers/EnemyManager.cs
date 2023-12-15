@@ -32,7 +32,6 @@ public class EnemyManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.AREA_CHASE_TRIGGER, AlertNearbyEnemies);
         EventManager.EventSubscribe(EventType.REBUILD_NAVMESH, RebuildNavMesh);
         EventManager.EventSubscribe(EventType.INIT_PLAYER, PlayerInitHandler);
-        //EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
         EventManager.EventSubscribe(EventType.LEVEL_STARTED, LevelStart);
         EventManager.EventSubscribe(EventType.LEVEL_ENDED, LevelEnd);
     }
@@ -77,14 +76,12 @@ public class EnemyManager : MonoBehaviour
 
     public void RebuildNavMesh(object data)
     {
-        //Debug.Log("RebuildNavMesh");
         surfaceSingle.BuildNavMesh();
     }
 
     // Receives Enemies that are instantiated within the level to keep track of for win condition
     private void AddEnemy(object data)
     {
-        //Debug.Log("Enemy Added");
         // Make sure enemies are being passed in as data
         Enemy enemy = data as Enemy;
         if (enemy == null) return;

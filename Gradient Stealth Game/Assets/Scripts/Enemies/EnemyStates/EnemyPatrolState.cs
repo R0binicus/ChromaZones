@@ -42,7 +42,7 @@ public class EnemyPatrolState : EnemyState
         {
             Enemy.EnemyManager.PlayerAttacked(Enemy);
         }
-        if (collision.transform.CompareTag("Player") && Enemy.RegionState != 1 && Enemy.InvulnerableState)
+        else if (collision.transform.CompareTag("Player") && Enemy.RegionState != 1 && Enemy.InvulnerableState)
         {
             Enemy.Caught();
         }

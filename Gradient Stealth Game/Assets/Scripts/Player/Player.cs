@@ -134,6 +134,7 @@ public class Player : MonoBehaviour
     public void Death(object data)
     {
         _canMove = false;
+        _rb.velocity = Vector2.zero;
         // Player colour gets converted to Enemy!!!
         Color convertedColour = new Color(1f, 0.2983692f, 0.2509804f);
         _spriteRenderer.color = convertedColour;
