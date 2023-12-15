@@ -11,6 +11,7 @@ public enum Sound
     PlayerObscured,
     PlayerVisible,
     PlayerMove,
+    UIButtonSFX,
     ButtonSFX,
 
     // Level Music

@@ -19,6 +19,9 @@ public class PressurePlate : MonoBehaviour
     private SpriteRenderer _borderSprite;
     private float _originalHue;
 
+    [Header("SFX")]
+    [SerializeField] private Sound _buttonSFX;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -71,6 +74,7 @@ public class PressurePlate : MonoBehaviour
         {
             DisablePlate();
             EventManager.EventTrigger(EventType.ASSIGNMENT_CODE_TRIGGER, _sentCode);
+            EventManager.EventTrigger(EventType.SFX, _buttonSFX);
             StartCoroutine(DisableForASec());
         }
     }
