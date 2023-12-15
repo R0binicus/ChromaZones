@@ -13,7 +13,7 @@ public class ColourRegionUI : MonoBehaviour
 
     private float _colourDiff;          // Colour from game manager
     private float _localColour;         // Colour of this region specifically
-    private bool _enabled;
+    public bool Enabled = true;
 
     private void Awake()
     {
@@ -26,35 +26,41 @@ public class ColourRegionUI : MonoBehaviour
 
     void Start()
     {
-        _enabled = true;
+        
     }
 
     void Update()
     {
         _colourDiff = _UIColourChanger.Colour;
         ProcessColour();
-        SetColour();
+        SetColour(_localColour);
     }
 
     // Processes the _UIColourChanger colour
     private void ProcessColour()
     {
-        // set new local colour value
-        TransitionZones();
-
-        //if local colour value is over 360, change the local colour values back to being under 360 with math
-        if (_localColour >= 360f)
+        if (_enabled)
         {
-            //_localColour = _localColour - ((Mathf.Floor(_localColour / 360f)) * 360);
-            _localColour = 0f;
+            // set new local colour value
+            TransitionZones();
+
+            //if local colour value is over 360, change the local colour values back to being under 360 with math
+            if (_localColour >= 360f)
+            {
+                _localColour = 0f;
+            }
+        }
+        else
+        {
+            _spriteRenderer.color = Color.grey;
         }
     }
 
     // Sets the colour of the sprite renderer
-    private void SetColour()
+    private void SetColour(float localColour)
     {
         // used 0.95 because otherwise it hurts my eyes
-        _spriteRenderer.color = Color.HSVToRGB(_localColour/360f, 0.95f, 0.95f);
+        _spriteRenderer.color = Color.HSVToRGB(localColour/360f, 0.95f, 0.95f);
     }
 
     // If local colour value is in a 'transition zone' change the colour witha multiplier,

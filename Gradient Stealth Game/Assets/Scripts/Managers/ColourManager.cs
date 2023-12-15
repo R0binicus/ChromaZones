@@ -39,14 +39,12 @@ public class ColourManager : MonoBehaviour
     {
         if (_changing_bool == true)
         {
-            colour = 0.5f * _colourChangeSpeed;
+            colour = 14.25f * _colourChangeSpeed * Time.deltaTime;
         }
         else
         {
             colour = 0f;
         }
-        
-        //Debug.Log(colour);
     }
 
     private void ColourBoolHandler(object data)

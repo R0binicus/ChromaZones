@@ -573,7 +573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colour: 0
-  _colourChangeSpeed: 0.075
+  _colourChangeSpeed: 1
 --- !u!114 &5973364815963447618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -592,6 +592,7 @@ MonoBehaviour:
   _pausePanel: {fileID: 3723532742170650121}
   _buttonsPanel: {fileID: 8991808281342674886}
   _nextLevelButton: {fileID: 3600559124588866068}
+  _soundButtonSFX: 0
 --- !u!114 &967849988218909932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -616,6 +617,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a00b13efe3362b448aa01f51430c9f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _soundEnemyDeath: 0
+  _soundPlayerWin: 0
+  _soundPlayerLose: 0
   _player: {fileID: 0}
   surfaceSingle: {fileID: 0}
 --- !u!1 &4806120295657309396
