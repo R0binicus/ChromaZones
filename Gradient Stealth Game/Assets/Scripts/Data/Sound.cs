@@ -13,6 +13,7 @@ public enum Sound
     PlayerMove,
     UIButtonSFX,
     ButtonSFX,
+    FOVProjectileSFX,
 
     // Level Music
     TitleMusic,
