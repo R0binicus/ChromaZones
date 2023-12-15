@@ -35,6 +35,9 @@ public class MainMenuUIManager : MonoBehaviour
     [Header("Level Buttons Panel")]
     [SerializeField] private GameObject _levelButtonPanel;
 
+    [Header("Music")]
+    [SerializeField] Sound _titleMusic; 
+
     [Header("Debugging")]
     [SerializeField] private bool _unlockAllLevels;
 
@@ -151,8 +154,7 @@ public class MainMenuUIManager : MonoBehaviour
         foreach (Button button in _levelButtons)
         {
             button.interactable = false;
-            button.GetComponent<Image>().color = Color.grey;
-            button.GetComponent<ColourRegionUI>().enabled = false;
+            button.GetComponent<ColourRegionUI>().Enabled = false;
         }
     }
 
@@ -161,7 +163,7 @@ public class MainMenuUIManager : MonoBehaviour
         for (int i = 0; i < levelUnlocked; i++)
         {
             _levelButtons[i].interactable = true;
-            _levelButtons[i].GetComponent<ColourRegionUI>().enabled = true;
+            _levelButtons[i].GetComponent<ColourRegionUI>().Enabled = true;
         }
     }
     #endregion

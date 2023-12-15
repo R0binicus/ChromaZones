@@ -39,7 +39,7 @@ public class ColourRegionUI : MonoBehaviour
     // Processes the _UIColourChanger colour
     private void ProcessColour()
     {
-        if (_enabled)
+        if (Enabled)
         {
             // set new local colour value
             TransitionZones();

@@ -17,6 +17,7 @@ public enum EventType
     PLAYER_MOVE_VECT2D,
     REBUILD_NAVMESH,
     SFX,
+    MUSIC,
     PLAYER_SPAWNPOINT,
     LEVEL_SELECTED,
     LEVEL_STARTED,

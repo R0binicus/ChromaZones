@@ -23,11 +23,15 @@ public class AudioManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.SFX, SFXEventHandler);
+        EventManager.EventSubscribe(EventType.MUSIC, MusicEventHandler);
+        EventManager.EventSubscribe(EventType.LEVEL_ENDED, StopMusic);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.SFX, SFXEventHandler);
+        EventManager.EventUnsubscribe(EventType.MUSIC, MusicEventHandler);
+        EventManager.EventUnsubscribe(EventType.LEVEL_ENDED, StopMusic);
         StopAllCoroutines();
     }
 
@@ -43,7 +47,7 @@ public class AudioManager : MonoBehaviour
 
         if (clipSound == null)
         {
-            Debug.LogError("SoundAudioClip's sound not found;" + sound);
+            Debug.LogError("SoundAudioClip's sound not found " + sound);
         }
         else
         {
@@ -64,12 +68,29 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    [Serializable]
-    public class SoundAudioClip
+    public void MusicEventHandler(object data)
+    {        
+        if (data == null) return;
+
+        StopMusic(null);
+
+        Sound music = (Sound)data;
+
+        SoundAudioClip musicClip = Array.Find(MusicAudioClipArray, x => x.sound == music);
+        
+        if (musicClip == null)
+        {
+            Debug.LogError("SoundAudioClip's music track not found " + music);
+        }
+        else
+        {
+            MusicSource.PlayOneShot(musicClip.audioClip, musicClip.volume);
+        }
+    }
+
+    public void StopMusic(object data)
     {
-        public Sound sound;
-        public AudioClip audioClip;
-        [Range(0, 1)] public float volume = 1f;
+        MusicSource.Stop();
     }
 
     private IEnumerator DoNotPlayMultipleOfSame(Sound sound)
@@ -78,4 +99,12 @@ public class AudioManager : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         CurrentSoundsList.Remove(sound);
     }
+}
+
+[Serializable]
+public class SoundAudioClip
+{
+    public Sound sound;
+    public AudioClip audioClip;
+    [Range(0, 1)] public float volume = 1f;
 }
