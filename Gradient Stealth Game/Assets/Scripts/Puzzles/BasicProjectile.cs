@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class BasicProjectile : MonoBehaviour
 {
-    [Header("Projectile Variables")]
+    [Header("SFX")]
+    [SerializeField] private Sound _FOVProjectileSFX;
+
+    // Internal Data
     private float _lifeTime;
     private float _timer;
     private float _speed;
@@ -47,6 +50,8 @@ public class BasicProjectile : MonoBehaviour
                 _turretParent.AlertOthers(transform.position);
                 gameObject.SetActive(false);
             }
+
+            EventManager.EventTrigger(EventType.SFX, _FOVProjectileSFX);
         }
         else if (collision.tag == "Obstacle")
         {
