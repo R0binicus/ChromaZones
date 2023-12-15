@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using UnityEngine.EventSystems;
+
 
 
 #if UNITY_EDITOR
@@ -72,6 +74,7 @@ public class MainMenuUIManager : MonoBehaviour
         ConfirmBoxToggle(false);
         ShowPanel(_mainMenu);
         _startNewGame = false;
+        EventManager.EventTrigger(EventType.MUSIC, _titleMusic);
     }
     #endregion
 
