@@ -84,7 +84,9 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            MusicSource.PlayOneShot(musicClip.audioClip, musicClip.volume);
+            MusicSource.clip = musicClip.audioClip;
+            MusicSource.volume = musicClip.volume;
+            MusicSource.Play();
         }
     }
 
