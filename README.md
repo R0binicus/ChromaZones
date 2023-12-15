@@ -1,1 +1,1 @@
-# Gradient-Colour-Game
+# ChromaZones
