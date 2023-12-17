@@ -24,6 +24,10 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] private GameObject _creditsMenu;
     private List<GameObject> _panels;
 
+    [Header("Credits")]
+    [SerializeField] private List<GameObject> _credits;
+    private int _activeCreditIndex;
+
     // Confirm Box
     [Header("Confirm Box")]
     [SerializeField] private GameObject _confirmBox;
@@ -76,6 +80,7 @@ public class MainMenuUIManager : MonoBehaviour
         ConfirmBoxToggle(false);
         ShowPanel(_mainMenu);
         _startNewGame = false;
+        _activeCreditIndex = 0;
         EventManager.EventTrigger(EventType.MUSIC, _titleMusic);
     }
     #endregion
@@ -180,6 +185,28 @@ public class MainMenuUIManager : MonoBehaviour
             _levelButtons[i].interactable = true;
             _levelButtons[i].GetComponent<ColourRegionUI>().Enabled = true;
         }
+    }
+    #endregion
+
+    #region Credits
+    public void CreditsScrollButton(int dir)
+    {
+        _credits[_activeCreditIndex].SetActive(false);
+
+        _activeCreditIndex += dir;
+
+        // Loop to back
+        if (_activeCreditIndex == -1)
+        {
+            _activeCreditIndex = _credits.Count() - 1;
+        }
+        // Loop to front
+        else if (_activeCreditIndex == _credits.Count())
+        {
+            _activeCreditIndex = 0;
+        }
+
+        _credits[_activeCreditIndex].SetActive(true);
     }
     #endregion
 
