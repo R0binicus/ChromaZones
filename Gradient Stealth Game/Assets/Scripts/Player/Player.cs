@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
-        EventManager.EventSubscribe(EventType.LOSE, Death);
+        EventManager.EventSubscribe(EventType.LOSE, LoseHandler);
         EventManager.EventSubscribe(EventType.WIN, WinHandler);
         EventManager.EventSubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
         EventManager.EventSubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
-        EventManager.EventUnsubscribe(EventType.LOSE, Death);
+        EventManager.EventUnsubscribe(EventType.LOSE, LoseHandler);
         EventManager.EventUnsubscribe(EventType.WIN, WinHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
@@ -131,7 +131,7 @@ public class Player : MonoBehaviour
         _spriteRenderer.sprite = _normalSprite;
     }
 
-    public void Death(object data)
+    public void LoseHandler(object data)
     {
         _canMove = false;
         _rb.velocity = Vector2.zero;
@@ -144,6 +144,7 @@ public class Player : MonoBehaviour
     public void WinHandler(object data)
     {
         _canMove = false;
+        StartCoroutine(EventCoroutine(false));
     }
 
     private void ColourManagerHandler(object data)
