@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicProjectile : MonoBehaviour
+public class FOVProjectile : MonoBehaviour
 {
     [Header("SFX")]
     [SerializeField] private Sound _FOVProjectileSFX;
@@ -49,9 +49,8 @@ public class BasicProjectile : MonoBehaviour
             {
                 _turretParent.AlertOthers(transform.position);
                 gameObject.SetActive(false);
+                EventManager.EventTrigger(EventType.SFX, _FOVProjectileSFX);
             }
-
-            EventManager.EventTrigger(EventType.SFX, _FOVProjectileSFX);
         }
         else if (collision.tag == "Obstacle")
         {

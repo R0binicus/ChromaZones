@@ -12,7 +12,7 @@ public class ShooterTurret : MonoBehaviour
     [SerializeField] private float _fireRate;
     [SerializeField] private float _fireCD = 0f;
     [SerializeField] private bool _shootDisable = false;
-    private List<BasicProjectile> _projectiles;
+    private List<FOVProjectile> _projectiles;
     
     
     private AlertData _alertData;
@@ -26,13 +26,15 @@ public class ShooterTurret : MonoBehaviour
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
-        EventManager.EventSubscribe(EventType.LOSE, Death);
+        EventManager.EventSubscribe(EventType.LOSE, Disable);
+        EventManager.EventSubscribe(EventType.WIN, Disable);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
-        EventManager.EventUnsubscribe(EventType.LOSE, Death);
+        EventManager.EventUnsubscribe(EventType.LOSE, Disable);
+        EventManager.EventUnsubscribe(EventType.WIN, Disable);
     }
 
     private void Start()
@@ -40,9 +42,9 @@ public class ShooterTurret : MonoBehaviour
         _alertData = new AlertData(transform.position, _alertOthersRadius, 1);
         //_projectiles = ObjectPooler.CreateObjectPool(_maxPoolNum, _proj, transform);
         //_alertData = new AlertData(transform.position, _alertOthersRadius);
-        _projectiles = ObjectPooler.CreateObjectPool<BasicProjectile>(_maxPoolNum, _proj, transform);
+        _projectiles = ObjectPooler.CreateObjectPool<FOVProjectile>(_maxPoolNum, _proj, transform);
         
-        foreach (BasicProjectile projectile in _projectiles)
+        foreach (FOVProjectile projectile in _projectiles)
         {
             projectile.SetProjectileData(ProjectileData);
             projectile.SetTurrentParent(this);
@@ -68,7 +70,7 @@ public class ShooterTurret : MonoBehaviour
     void Shoot()
     {
         var list = _projectiles.Cast<MonoBehaviour>().ToList();
-        BasicProjectile projectile = ObjectPooler.GetPooledObject(list) as BasicProjectile;
+        FOVProjectile projectile = ObjectPooler.GetPooledObject(list) as FOVProjectile;
 
         if (projectile == null)
         {
@@ -96,7 +98,7 @@ public class ShooterTurret : MonoBehaviour
         } 
     }
 
-    public void Death(object data)
+    public void Disable(object data)
     {
         _shootDisable = true;
     }

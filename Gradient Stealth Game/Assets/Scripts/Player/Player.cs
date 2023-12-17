@@ -144,6 +144,7 @@ public class Player : MonoBehaviour
     public void WinHandler(object data)
     {
         _canMove = false;
+        _startSoundDisabler = true;
         StartCoroutine(EventCoroutine(false));
     }
 
