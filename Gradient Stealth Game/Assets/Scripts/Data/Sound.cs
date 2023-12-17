@@ -20,5 +20,8 @@ public enum Sound
     LevelMusic01,
     LevelMusic02,
     LevelMusic03,
-    LevelMusic04
+    LevelMusic04,
+    LevelMusic05,
+    LevelMusic06,
+    LevelMusic07,
 }

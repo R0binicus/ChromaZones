@@ -159,6 +159,7 @@ public class Player : MonoBehaviour
     // Reset Player's data
     public void StartLevelHandler(object data)
     {
+        _startSoundDisabler = true;
         NormalSprite();
         Color colourReset = new Color(0f, 0.0972971f, 0.6f);
         _spriteRenderer.color = colourReset;

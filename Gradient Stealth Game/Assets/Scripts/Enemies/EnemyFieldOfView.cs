@@ -25,7 +25,7 @@ public class EnemyFieldOfView : MonoBehaviour
     {
         if (_dontStartYet)
         {
-            StartCoroutine(DelayStart());
+             _dontStartYet = false;
         }
         else
         {
@@ -126,11 +126,5 @@ public class EnemyFieldOfView : MonoBehaviour
         }
 
         return n;
-    }
-
-    private IEnumerator DelayStart()
-    {
-        yield return new WaitForSeconds(0.1f);
-        _dontStartYet = false;
     }
 }
