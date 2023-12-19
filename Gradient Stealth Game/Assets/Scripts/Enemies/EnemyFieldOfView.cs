@@ -41,7 +41,7 @@ public class EnemyFieldOfView : MonoBehaviour
                 {
                     PlayerSpotted = true;
                     //Debug.Log(ray.point);
-                    Debug.DrawLine(ray.point, new Vector3(0,0,0), Color.red, 5f, false);
+                    //Debug.DrawLine(ray.point, new Vector3(0,0,0), Color.red, 5f, false);
                     break;
                 }
                 else
