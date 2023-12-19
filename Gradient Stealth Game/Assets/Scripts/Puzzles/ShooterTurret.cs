@@ -76,8 +76,10 @@ public class ShooterTurret : MonoBehaviour
         {
             Debug.Log("NO OBJECTS IN POOL");
         }
-
-        projectile.Go(transform);
+        else
+        {
+            projectile.Go(transform);
+        }
     }
 
     public void AlertOthers(Vector3 centre)
