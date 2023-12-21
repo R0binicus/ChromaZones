@@ -134,8 +134,10 @@ public class UIManager : MonoBehaviour
     private void ShowWinPanel(object data)
     {
         StopMusicRaiseEvent();
+        Debug.Log(_currentSceneIndex);
+        Debug.Log(_numOfScenes);
         // If last level, do not show next level button
-        if (_currentSceneIndex == _numOfScenes - 1)
+        if (_currentSceneIndex == _numOfScenes)
         {
             _nextLevelButton.SetActive(false);
         }
@@ -145,7 +147,6 @@ public class UIManager : MonoBehaviour
         }
 
         _buttonsPanel.SetActive(true);
-        _nextLevelButton.SetActive(true);
         _winPanel.SetActive(true);
     }
 

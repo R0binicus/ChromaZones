@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using Unity.VisualScripting;
 
 public class Player : MonoBehaviour
 {
@@ -55,6 +54,7 @@ public class Player : MonoBehaviour
         EventManager.EventSubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
         EventManager.EventSubscribe(EventType.PLAYER_SPAWNPOINT, SpawnPointHandler);
         EventManager.EventSubscribe(EventType.LEVEL_STARTED, StartLevelHandler);
+        EventManager.EventSubscribe(EventType.RESTART_LEVEL, ResetHandler);
     }
 
     private void OnDisable()
@@ -66,6 +66,7 @@ public class Player : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_VECT2D, MoveVect2DHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_SPAWNPOINT, SpawnPointHandler);
         EventManager.EventUnsubscribe(EventType.LEVEL_STARTED, StartLevelHandler);
+        EventManager.EventUnsubscribe(EventType.RESTART_LEVEL, ResetHandler);
         StopAllCoroutines();
     }
 
@@ -158,11 +159,25 @@ public class Player : MonoBehaviour
         _colourManager = (ColourManager)data;
     }
 
+    public void ResetHandler(object data)
+    {
+        _startSoundDisabler = true;
+    }
+
     // Reset Player's data
     public void StartLevelHandler(object data)
     {
         _startSoundDisabler = true;
-        NormalSprite();
+
+        // if (RegionState != 3)
+        // {
+        //     NormalSprite();
+        // }
+        // else
+        // {
+        //     HidingSprite();
+        // }
+
         Color colourReset = new Color(0f, 0.0972971f, 0.6f);
         _spriteRenderer.color = colourReset;
         _rb.velocity = Vector3.zero;
