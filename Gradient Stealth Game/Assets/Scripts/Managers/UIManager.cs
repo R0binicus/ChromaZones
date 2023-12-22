@@ -23,21 +23,14 @@ public class UIManager : MonoBehaviour
     [Header("Sounds")]
     [SerializeField] private Sound _buttonSFX;
 
-    // Scene Tracker
-    int _currentSceneIndex;
-    int _numOfScenes;
-
     // Internal Data
-    bool _paused;
+    bool _paused = false;
+    bool _lastLevel = false;
 
     private void Awake()
     {
         // Deactivate UI at start of game
         DeactivateUI();
-
-        // Get current Scene index and total number of scenes in game
-        _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        _numOfScenes = SceneManager.sceneCountInBuildSettings;
 
         // Create UI events
         EventManager.EventInitialise(EventType.NEXT_LEVEL);
@@ -58,6 +51,7 @@ public class UIManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.WIN, ShowWinPanel);
         EventManager.EventSubscribe(EventType.PAUSE_TOGGLE, TogglePause);
         EventManager.EventSubscribe(EventType.LEVEL_ENDED, LevelEnded);
+        EventManager.EventSubscribe(EventType.SCENE_COUNT, LastLevelHandler);
     }
 
     private void OnDisable()
@@ -66,6 +60,7 @@ public class UIManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.WIN, ShowWinPanel);
         EventManager.EventUnsubscribe(EventType.PAUSE_TOGGLE, TogglePause);
         EventManager.EventUnsubscribe(EventType.LEVEL_ENDED, LevelEnded);
+        EventManager.EventUnsubscribe(EventType.SCENE_COUNT, LastLevelHandler);
     }
 
     // Button callback to go to the next level
@@ -123,6 +118,16 @@ public class UIManager : MonoBehaviour
         _nextLevelButton.SetActive(false);
     }
 
+    public void LastLevelHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.LogError("Last Level Handler has not received a bool");
+        }
+
+        _lastLevel = (bool)data;
+    }
+
     private void ShowLosePanel(object data)
     {
         StopMusicRaiseEvent();
@@ -134,10 +139,9 @@ public class UIManager : MonoBehaviour
     private void ShowWinPanel(object data)
     {
         StopMusicRaiseEvent();
-        Debug.Log(_currentSceneIndex);
-        Debug.Log(_numOfScenes);
+
         // If last level, do not show next level button
-        if (_currentSceneIndex == _numOfScenes)
+        if (_lastLevel)
         {
             _nextLevelButton.SetActive(false);
         }

@@ -17,7 +17,7 @@ public class SceneSystemManager : MonoBehaviour
 
     // Scene Tracking
     Scene _currentLevel;
-    int _numOfScenes;
+    int _numOfScenes; // Number of total scenes in the game
     int _mainMenuIndex;
     int _gameplayIndex;
 
@@ -35,6 +35,7 @@ public class SceneSystemManager : MonoBehaviour
         EventManager.EventInitialise(EventType.LEVEL_STARTED);
         EventManager.EventInitialise(EventType.LEVEL_ENDED);
         EventManager.EventInitialise(EventType.SAVE_GAME);
+        EventManager.EventInitialise(EventType.SCENE_COUNT);
     }
 
     private void OnEnable()
@@ -155,7 +156,6 @@ public class SceneSystemManager : MonoBehaviour
         yield return StartCoroutine(LoadScene(index));
         EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
         _currentLevel = SceneManager.GetSceneByBuildIndex(index);
-        SceneManager.SetActiveScene(_currentLevel);
     }
 
     IEnumerator UnloadLevel(int index)
@@ -174,7 +174,21 @@ public class SceneSystemManager : MonoBehaviour
         while (!levelAsync.isDone)
         {
             yield return null;
-        }        
+        }
+
+        Scene scene = SceneManager.GetSceneAt(SceneManager.loadedSceneCount - 1);
+        SceneManager.SetActiveScene(scene);
+        _currentLevel = scene;
+
+        // Send event that says if this is the last level in the build
+        if (index == _numOfScenes - 1 && (index != _mainMenuIndex || index != _gameplayIndex))
+        {
+            EventManager.EventTrigger(EventType.SCENE_COUNT, true);
+        }
+        else
+        {
+            EventManager.EventTrigger(EventType.SCENE_COUNT, false);
+        }
     }
 
     IEnumerator UnloadScene(int index)
