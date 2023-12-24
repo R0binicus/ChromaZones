@@ -30,6 +30,10 @@ public class ColourRegion : MonoBehaviour
     [SerializeField] private bool _changeColourReset = false;
     [SerializeField] private bool _changeColourReverse = false;
 
+    [field: Header("Debug")]
+    [SerializeField] private bool _newBorderMode = false;
+    [SerializeField] private SpriteRenderer _crossSprite;
+
     [field: Header("Sprites")]
     [SerializeField] private SpriteRenderer _outlineSprite;
     private SpriteRenderer _backgroundSprite;
@@ -113,17 +117,43 @@ public class ColourRegion : MonoBehaviour
         }
         
         _backgroundSprite.color = Color.HSVToRGB(_localColour/360f, 0.95f, darkness);
+
+        if (_newBorderMode)
+        {
+            if (_disabledColourChange)
+            {
+                _crossSprite.enabled = true;
+            }
+            else
+            {
+                _crossSprite.enabled = false;
+            }
+        }
     }
 
     private void SetBorderColour(float borderColour)
     {
-        if (_disabledColourChange)
+        if (_newBorderMode)
         {
-            _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0f, 1f);
+            if (_disabledColourChange)
+            {
+                _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 1f);
+            }
+            else
+            {
+                _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 0.7f);
+            }
         }
         else
         {
-            _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 0.7f);
+            if (_disabledColourChange)
+            {
+                _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0f, 1f);
+            }
+            else
+            {
+                _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 0.7f);
+            }
         }
     }
 
