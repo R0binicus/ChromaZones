@@ -30,12 +30,9 @@ public class ColourRegion : MonoBehaviour
     [SerializeField] private bool _changeColourReset = false;
     [SerializeField] private bool _changeColourReverse = false;
 
-    [field: Header("Debug")]
-    [SerializeField] private bool _newBorderMode = false;
-    [SerializeField] private SpriteRenderer _crossSprite;
-
     [field: Header("Sprites")]
     [SerializeField] private SpriteRenderer _outlineSprite;
+    [SerializeField] private SpriteRenderer _crossSprite;
     private SpriteRenderer _backgroundSprite;
 
     void Awake()
@@ -47,6 +44,10 @@ public class ColourRegion : MonoBehaviour
         _localColour = H * 360;
         _originalHue = _localColour;
         _outlineSprite.size = _backgroundSprite.size;
+        if (_disabledColourChange)
+        {
+            _crossSprite.enabled = true;
+        }
     }
 
     private void OnEnable()
@@ -117,43 +118,17 @@ public class ColourRegion : MonoBehaviour
         }
         
         _backgroundSprite.color = Color.HSVToRGB(_localColour/360f, 0.95f, darkness);
-
-        if (_newBorderMode)
-        {
-            if (_disabledColourChange)
-            {
-                _crossSprite.enabled = true;
-            }
-            else
-            {
-                _crossSprite.enabled = false;
-            }
-        }
     }
 
     private void SetBorderColour(float borderColour)
     {
-        if (_newBorderMode)
+        if (_disabledColourChange)
         {
-            if (_disabledColourChange)
-            {
-                _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 1f);
-            }
-            else
-            {
-                _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 0.7f);
-            }
+            _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 1f);
         }
         else
         {
-            if (_disabledColourChange)
-            {
-                _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0f, 1f);
-            }
-            else
-            {
-                _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 0.7f);
-            }
+            _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 0.7f);
         }
     }
 
@@ -207,18 +182,43 @@ public class ColourRegion : MonoBehaviour
     {
         switch(_localColour) 
         {
-            case float x when x >= 35f && x < 55f :
-                _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
+
+            case float x when x > 30f && x < 40f :
+                _localColour = 50f;
             break;
-            case float x when x >= 155f && x < 175f :
-                _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
+            case float x when x >= 40f && x < 50f :
+                _localColour = 30f;
             break;
-            case float x when x >= 275f && x < 295f :
-                _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
+            case float x when x > 150f && x < 160f :
+                _localColour = 170f;
+            break;
+            case float x when x >= 160f && x < 170f :
+                _localColour = 150f;
+            break;
+            case float x when x > 270f && x < 280f :
+                _localColour = 290;
+            break;
+            case float x when x >= 280f && x < 290f :
+                _localColour = 270;
             break;
             default:
                 _localColour = _localColour + (_colourDiff * _localChangeMultiplier);
             break;
+
+            // Legacy Code
+
+            //case float x when x >= 35f && x < 55f :
+            //    _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
+            //break;
+            //case float x when x >= 155f && x < 175f :
+            //    _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
+            //break;
+            //case float x when x >= 275f && x < 295f :
+            //    _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
+            //break;
+            //default:
+            //    _localColour = _localColour + (_colourDiff * _localChangeMultiplier);
+            //break;
         }
     }
 
@@ -288,6 +288,7 @@ public class ColourRegion : MonoBehaviour
             if (_changeEnableDisable)
             {
                 _disabledColourChange = !_disabledColourChange;
+                _crossSprite.enabled = _disabledColourChange;
             }
             if (_changeColourReset)
             {
