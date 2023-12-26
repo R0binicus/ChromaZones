@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class SceneSystemManager : MonoBehaviour
 {
@@ -42,6 +39,7 @@ public class SceneSystemManager : MonoBehaviour
     {
         EventManager.EventSubscribe(EventType.LEVEL_SELECTED, LevelSelected);
         EventManager.EventSubscribe(EventType.NEXT_LEVEL, NextLevelHandler);
+        EventManager.EventSubscribe(EventType.WIN, WinHandler);
         EventManager.EventSubscribe(EventType.RESTART_LEVEL, RestartLevelHandler);
         EventManager.EventSubscribe(EventType.QUIT_LEVEL, QuitLevelHandler);
     }
@@ -50,6 +48,7 @@ public class SceneSystemManager : MonoBehaviour
     {
         EventManager.EventUnsubscribe(EventType.LEVEL_SELECTED, LevelSelected);
         EventManager.EventUnsubscribe(EventType.NEXT_LEVEL, NextLevelHandler);
+        EventManager.EventUnsubscribe(EventType.WIN, WinHandler);
         EventManager.EventUnsubscribe(EventType.RESTART_LEVEL, RestartLevelHandler);
         EventManager.EventUnsubscribe(EventType.QUIT_LEVEL, QuitLevelHandler);
     }
@@ -83,13 +82,22 @@ public class SceneSystemManager : MonoBehaviour
     }
 
     #region Game UI Response
+    // Listens for when game is won
+    public void WinHandler(object data)
+    {
+        // Check if last level
+        if (_currentLevel.buildIndex < _numOfScenes - 1)
+        {
+            EventManager.EventTrigger(EventType.SAVE_GAME, _currentLevel.buildIndex + 1);
+        }
+    }
+
     // Listens for when NextLevelButton is pressed
     public void NextLevelHandler(object data)
     {
         // Check if last level
         if (_currentLevel.buildIndex < _numOfScenes - 1)
         {
-            EventManager.EventTrigger(EventType.SAVE_GAME, _currentLevel.buildIndex + 1);
             StartCoroutine(LevelChanger(_currentLevel.buildIndex, _currentLevel.buildIndex + 1));
         }
     }

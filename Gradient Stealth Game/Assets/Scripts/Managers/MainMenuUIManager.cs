@@ -39,8 +39,9 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField, TextArea] private string _loadGameSuccessText;
     
     // Level Buttons
-    [Header("Level Buttons Panel")]
+    [Header("Level Panel")]
     [SerializeField] private GameObject _levelButtonPanel;
+    [SerializeField] private GameObject _bonusLevelButtonPanel;
 
     [Header("Sound")]
     [SerializeField] Sound _titleMusic; 
@@ -185,6 +186,12 @@ public class MainMenuUIManager : MonoBehaviour
             _levelButtons[i].interactable = true;
             _levelButtons[i].GetComponent<ColourRegionUI>().Enabled = true;
         }
+    }
+
+    public void BonusPanelActivate(bool flag)
+    {
+        _levelButtonPanel.SetActive(!flag);
+        _bonusLevelButtonPanel.SetActive(flag);
     }
     #endregion
 
