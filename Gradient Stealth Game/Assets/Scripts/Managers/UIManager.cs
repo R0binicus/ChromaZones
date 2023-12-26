@@ -1,11 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using UnityEngine.UIElements.Experimental;
-using Unity.Collections;
-using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
@@ -25,6 +19,7 @@ public class UIManager : MonoBehaviour
 
     // Internal Data
     bool _paused = false;
+    bool _levelEnded = false;
     bool _lastLevel = false;
 
     private void Awake()
@@ -43,6 +38,7 @@ public class UIManager : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         _paused = false;
+        _levelEnded = false;
     }
 
     private void OnEnable()
@@ -51,6 +47,7 @@ public class UIManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.WIN, ShowWinPanel);
         EventManager.EventSubscribe(EventType.PAUSE_TOGGLE, TogglePause);
         EventManager.EventSubscribe(EventType.LEVEL_ENDED, LevelEnded);
+        EventManager.EventSubscribe(EventType.LEVEL_STARTED, LevelStarted);
         EventManager.EventSubscribe(EventType.SCENE_COUNT, LastLevelHandler);
     }
 
@@ -60,6 +57,7 @@ public class UIManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.WIN, ShowWinPanel);
         EventManager.EventUnsubscribe(EventType.PAUSE_TOGGLE, TogglePause);
         EventManager.EventUnsubscribe(EventType.LEVEL_ENDED, LevelEnded);
+        EventManager.EventUnsubscribe(EventType.LEVEL_STARTED, LevelStarted);
         EventManager.EventUnsubscribe(EventType.SCENE_COUNT, LastLevelHandler);
     }
 
@@ -86,27 +84,39 @@ public class UIManager : MonoBehaviour
 
     public void TogglePause(object data)
     {
-        _paused = !_paused;
-        EventManager.EventTrigger(EventType.PAUSE_MUSIC, _paused);
+        if (!_levelEnded)
+        {
+            _paused = !_paused;
+            EventManager.EventTrigger(EventType.PAUSE_MUSIC, _paused);
 
-        if (!_paused)
-        {
-            DeactivateUI();
-            Time.timeScale = 1.0f;
+            if (!_paused)
+            {
+                DeactivateUI();
+                Time.timeScale = 1.0f;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                Time.timeScale = 0.0f;
+                _nextLevelButton.SetActive(false);
+                _buttonsPanel.SetActive(true);
+                _pausePanel.SetActive(true);
+            }
         }
-        else
-        {
-            Time.timeScale = 0.0f;
-            _nextLevelButton.SetActive(false);
-            _buttonsPanel.SetActive(true);
-            _pausePanel.SetActive(true);
-        }
+    }
+
+    public void LevelStarted(object data)
+    {
+        _paused = false;
+        _levelEnded = false;
     }
 
     public void LevelEnded(object data)
     {
         DeactivateUI();
         _paused = false;
+        _levelEnded = true;
     }
 
     private void DeactivateUI()
@@ -116,6 +126,8 @@ public class UIManager : MonoBehaviour
         _winPanel.SetActive(false);
         _buttonsPanel.SetActive(false);
         _nextLevelButton.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void LastLevelHandler(object data)
@@ -130,7 +142,10 @@ public class UIManager : MonoBehaviour
 
     private void ShowLosePanel(object data)
     {
+        _levelEnded = true;
         StopMusicRaiseEvent();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         _nextLevelButton.SetActive(false);
         _buttonsPanel.SetActive(true);
         _losePanel.SetActive(true);
@@ -139,6 +154,9 @@ public class UIManager : MonoBehaviour
     private void ShowWinPanel(object data)
     {
         StopMusicRaiseEvent();
+        _levelEnded = true;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         // If last level, do not show next level button
         if (_lastLevel)
