@@ -43,7 +43,8 @@ public class Player : MonoBehaviour
 
         _canMove = true;
         _spriteRenderer.sprite = _normalSprite;
-        SoundDisabler();
+        _startSoundDisabler = false;
+        StartCoroutine(SoundDisabler());
     }
 
     private void OnEnable()
@@ -146,7 +147,8 @@ public class Player : MonoBehaviour
     public void WinHandler(object data)
     {
         _canMove = false;
-        SoundDisabler();
+        _startSoundDisabler = true;
+        StartCoroutine(SoundDisabler());
         StartCoroutine(EventCoroutine(false));
     }
 
@@ -162,13 +164,13 @@ public class Player : MonoBehaviour
 
     public void ResetHandler(object data)
     {
-        SoundDisabler();
+        StartCoroutine(SoundDisabler());
     }
 
     // Reset Player's data
     public void StartLevelHandler(object data)
     {
-        SoundDisabler();
+        StartCoroutine(SoundDisabler());
 
         // if (RegionState != 3)
         // {
