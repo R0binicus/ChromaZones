@@ -11,6 +11,8 @@ public class SceneSystemManager : MonoBehaviour
     [SerializeField] bool _editingLevel = false;
 
     [Header("Scene Fading Data")]
+    [SerializeField] RectTransform _fadeOutImage;
+    [SerializeField] RectTransform _fadeInImage;
     [SerializeField] CanvasGroup _fadePanel;
     [SerializeField] AnimationCurve _fadeInSpeed;
     [SerializeField] AnimationCurve _fadeOutSpeed;
