@@ -112,24 +112,27 @@ public class ColourRegion : MonoBehaviour
     {
         // used 0.95 because otherwise it hurts my eyes
         float darkness = 0.95f;
-        if (_disabledColourChange)
-        {
-            darkness = 0.7f;
-        }
+        // Legacy Code
+        //if (_disabledColourChange)
+        //{
+        //    darkness = 0.7f;
+        //}
         
         _backgroundSprite.color = Color.HSVToRGB(_localColour/360f, 0.95f, darkness);
     }
 
     private void SetBorderColour(float borderColour)
     {
-        if (_disabledColourChange)
-        {
-            _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 1f);
-        }
-        else
-        {
-            _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 0.7f);
-        }
+        _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 0.7f);
+        // Legacy Code
+        //if (_disabledColourChange)
+        //{
+        //    _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 1f);
+        //}
+        //else
+        //{
+        //    _outlineSprite.color = Color.HSVToRGB(borderColour/360f, 0.8f, 0.7f);
+        //}
     }
 
     private void SetStates()

@@ -6,9 +6,9 @@ public class EnemyPatrolState : EnemyState
 
     public override void Enter()
     {
-        Enemy.FOVsIsActive(true, false);
+        Enemy.ActivateAllFOVs(true);
         Enemy.SetFOVsData(Enemy.PatrolFOVData);
-        Enemy.CreateFOVs();
+        //Enemy.CreateFOVs();
         Enemy.EnemyBehaviour.ResetBehaviour();
     }
     public override void LogicUpdate()

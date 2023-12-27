@@ -10,7 +10,7 @@ public class EnemyChaseState : EnemyState
     public override void Enter()
     {
         Enemy.SetChaseSpeed();
-        Enemy.FOVsIsActive(false, false);
+        Enemy.ActivateAllFOVs(false);
         EventManager.EventTrigger(EventType.SFX, Enemy.SoundEnemyChase);
     }
 

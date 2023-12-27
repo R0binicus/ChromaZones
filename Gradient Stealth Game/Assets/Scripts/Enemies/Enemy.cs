@@ -204,30 +204,22 @@ public class Enemy : MonoBehaviour
     }
 
     // Decide whether to activate all or one FOV
-    public void FOVsIsActive(bool isActive, bool isAlerted)
-    {
-        // Activate (all?) FOVs
-        if (isActive)
-        {
-            // If is alerted, no need to have all FOVs active, just one
-            if (isAlerted)
-            {
-                ActivateAllFOVs(false);
-                FOVs[0].IsActive(true);
-            }
-            else
-            {
-                ActivateAllFOVs(true);
-            }
-        }
-        // Deactivate all FOVs
-        else
-        {
-            ActivateAllFOVs(false);
-        }
-    }
+    //public void FOVsIsActive(bool isActive, bool isAlerted)
+    //{
+    //    // Activate (all?) FOVs
+    //    if (isActive)
+    //    {
+    //        
+    //        ActivateAllFOVs(true);
+    //    }
+    //    // Deactivate all FOVs
+    //    else
+    //    {
+    //        ActivateAllFOVs(false);
+    //    }
+    //}
 
-    private void ActivateAllFOVs(bool flag)
+    public void ActivateAllFOVs(bool flag)
     {
         foreach (EnemyFieldOfView fov in FOVs)
         {
