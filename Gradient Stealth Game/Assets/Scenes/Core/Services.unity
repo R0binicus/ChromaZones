@@ -353,8 +353,9 @@ GameObject:
   - component: {fileID: 1000779866}
   - component: {fileID: 1000779868}
   - component: {fileID: 1000779867}
+  - component: {fileID: 1000779869}
   m_Layer: 5
-  m_Name: FaderImage
+  m_Name: FadeOutImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -417,6 +418,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000779865}
   m_CullTransparentMesh: 1
+--- !u!225 &1000779869
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000779865}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1005613481
 GameObject:
   m_ObjectHideFlags: 0

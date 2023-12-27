@@ -82,6 +82,8 @@ public class MainMenuUIManager : MonoBehaviour
         _startNewGame = false;
         _activeCreditIndex = 0;
         EventManager.EventTrigger(EventType.MUSIC, _titleMusic);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
     #endregion
 
