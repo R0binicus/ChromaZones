@@ -45,4 +45,12 @@ public class InputManager : MonoBehaviour, InputActions.IGameplayActions
             EventManager.EventTrigger(EventType.PLAYER_MOVE_BOOL, false); 
         }
     }
+
+    public void OnMuteMusic(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            EventManager.EventTrigger(EventType.MUTEMUSIC_TOGGLE, null);
+        }
+    }
 }

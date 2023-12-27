@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
 
         _canMove = true;
         _spriteRenderer.sprite = _normalSprite;
+        SoundDisabler();
     }
 
     private void OnEnable()
@@ -145,7 +146,7 @@ public class Player : MonoBehaviour
     public void WinHandler(object data)
     {
         _canMove = false;
-        _startSoundDisabler = true;
+        SoundDisabler();
         StartCoroutine(EventCoroutine(false));
     }
 
@@ -161,13 +162,13 @@ public class Player : MonoBehaviour
 
     public void ResetHandler(object data)
     {
-        _startSoundDisabler = true;
+        SoundDisabler();
     }
 
     // Reset Player's data
     public void StartLevelHandler(object data)
     {
-        _startSoundDisabler = true;
+        SoundDisabler();
 
         // if (RegionState != 3)
         // {
@@ -260,6 +261,13 @@ public class Player : MonoBehaviour
         {
             EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
         }
+    }
+
+    private IEnumerator SoundDisabler()
+    {
+        _startSoundDisabler = true;
+        yield return new WaitForSeconds(0.5f);
+        _startSoundDisabler = false;
     }
 
     private void MoveVect2DHandler(object data)

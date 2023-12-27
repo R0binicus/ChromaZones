@@ -38,4 +38,5 @@ public enum EventType
     MUSIC,
     STOP_MUSIC,
     PAUSE_MUSIC,
+    MUTEMUSIC_TOGGLE,
 };

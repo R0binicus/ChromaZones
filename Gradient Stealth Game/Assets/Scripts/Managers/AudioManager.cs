@@ -15,9 +15,12 @@ public class AudioManager : MonoBehaviour
 
     private List<Sound> CurrentSoundsList = new List<Sound>();
 
+    private bool _musicMuted = false;
+
     private void Awake()
     {
         EventManager.EventInitialise(EventType.SFX);
+        EventManager.EventInitialise(EventType.MUTEMUSIC_TOGGLE);
     }
 
     private void OnEnable()
@@ -26,6 +29,7 @@ public class AudioManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.MUSIC, MusicEventHandler);
         EventManager.EventSubscribe(EventType.STOP_MUSIC, StopMusic);
         EventManager.EventSubscribe(EventType.PAUSE_MUSIC, PauseMusic);
+        EventManager.EventSubscribe(EventType.MUTEMUSIC_TOGGLE, MuteMusic);
     }
 
     private void OnDisable()
@@ -34,6 +38,7 @@ public class AudioManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.MUSIC, MusicEventHandler);
         EventManager.EventUnsubscribe(EventType.STOP_MUSIC, StopMusic);
         EventManager.EventUnsubscribe(EventType.PAUSE_MUSIC, PauseMusic);
+        EventManager.EventUnsubscribe(EventType.MUTEMUSIC_TOGGLE, MuteMusic);
         StopAllCoroutines();
     }
 
@@ -72,48 +77,67 @@ public class AudioManager : MonoBehaviour
 
     public void MusicEventHandler(object data)
     {        
-        if (data == null) return;
-
-        StopMusic(null);
-
-        Sound music = (Sound)data;
-
-        SoundAudioClip musicClip = Array.Find(MusicAudioClipArray, x => x.sound == music);
-        
-        if (musicClip == null)
+        if (!_musicMuted)
         {
-            Debug.LogError("SoundAudioClip's music track not found " + music);
-        }
-        else
-        {
-            MusicSource.clip = musicClip.audioClip;
-            MusicSource.volume = musicClip.volume;
-            MusicSource.Play();
+            if (data == null) return;
+
+            StopMusic(null);
+
+            Sound music = (Sound)data;
+
+            SoundAudioClip musicClip = Array.Find(MusicAudioClipArray, x => x.sound == music);
+
+            if (musicClip == null)
+            {
+                Debug.LogError("SoundAudioClip's music track not found " + music);
+            }
+            else
+            {
+                MusicSource.clip = musicClip.audioClip;
+                MusicSource.volume = musicClip.volume;
+                MusicSource.Play();
+            }
         }
     }
 
     public void PauseMusic(object data)
     {
-        if (data == null)
+        if (!_musicMuted)
         {
-            Debug.LogError("Pause music has not received a bool");
-        }
+            if (data == null)
+            {
+                Debug.LogError("Pause music has not received a bool");
+            }
 
-        bool paused = (bool)data;
-        
-        if (paused)
-        {
-            MusicSource.Pause();
-        }
-        else
-        {
-            MusicSource.Play();
+            bool paused = (bool)data;
+
+            if (paused)
+            {
+                MusicSource.Pause();
+            }
+            else
+            {
+                MusicSource.Play();
+            }
         }
     }
 
     public void StopMusic(object data)
     {
         MusicSource.Stop();
+    }
+
+    public void MuteMusic(object data)
+    {
+        _musicMuted = !_musicMuted;
+        if (_musicMuted)
+        {
+            StopMusic(null);
+        }
+        else
+        {
+            MusicSource.Play();
+        }
     }
 
     private IEnumerator DoNotPlayMultipleOfSame(Sound sound)
