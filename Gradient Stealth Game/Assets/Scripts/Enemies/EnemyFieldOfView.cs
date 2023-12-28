@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class EnemyFieldOfView : MonoBehaviour
 {
-    [Header("General Data")]
-    LayerMask _layerToRaycast;
+    LayerMask _layersToRaycast;
 
     // Internal Data
     float _FOVAngle;
@@ -18,7 +17,7 @@ public class EnemyFieldOfView : MonoBehaviour
 
     private void Awake()
     {
-        _layerToRaycast = LayerMask.GetMask("Player");
+        _layersToRaycast = LayerMask.GetMask("Obstacle", "Player");
     }
 
     private void FixedUpdate()
@@ -34,16 +33,21 @@ public class EnemyFieldOfView : MonoBehaviour
     
             for (int i = 0; i <= _triangleSlices; i++)
             {
-                RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(_currentAngle), _FOVDist * transform.lossyScale.x, _layerToRaycast);
+                RaycastHit2D ray = Physics2D.Raycast(transform.position, GetVectorFromAngle(_currentAngle), _FOVDist * transform.lossyScale.x, _layersToRaycast);
     
-                // Hit player
-                if (ray.collider != null)
+                // If hit
+                if (ray)
                 {
-                    PlayerSpotted = true;
-                    //Debug.Log(ray.point);
-                    //Debug.DrawLine(ray.point, new Vector3(0,0,0), Color.red, 5f, false);
-                    break;
+                    // if hit is player and NOT wall
+                    if (ray.collider.CompareTag("Player"))
+                    {
+                        PlayerSpotted = true;
+                        //Debug.Log(ray.point);
+                        //Debug.DrawLine(ray.point, new Vector3(0,0,0), Color.red, 5f, false);
+                        break;
+                    }
                 }
+                // Hit nothing
                 else
                 {
                     PlayerSpotted = false;

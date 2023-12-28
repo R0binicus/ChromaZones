@@ -63,7 +63,10 @@ public class Enemy : MonoBehaviour
     [Header("Sounds")]
     [SerializeField] public Sound SoundEnemyChase;
     [SerializeField] public Sound SoundEnemyDeAlert;
-    
+    #endregion
+
+    #region Internal Data
+    LayerMask _layersToRaycast;
     #endregion
 
     #region GameObject Refs
@@ -132,6 +135,9 @@ public class Enemy : MonoBehaviour
         // Set up nav mesh
         Agent.updateRotation = false;
         Agent.updateUpAxis = false;
+
+        // Get raycast layers
+        _layersToRaycast = LayerMask.GetMask("Obstacle", "Enemy");
     }
 
     private void OnEnable()
@@ -340,7 +346,7 @@ public class Enemy : MonoBehaviour
     {
         gameObject.layer = 1;
         Vector2 centrerDir =  callerPosition - transform.position;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, centrerDir, magnitude, LayerMask.GetMask("Obstacle", "Enemy"));
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, centrerDir, magnitude, _layersToRaycast);
         //Debug.DrawRay(transform.position, centrerDir, Color.red, 2f, true);
 
         if (hit)
@@ -358,7 +364,7 @@ public class Enemy : MonoBehaviour
     public void CheckWallsProjectile(float magnitude, Vector3 callerPosition)
     {
         Vector2 centrerDir = transform.position - callerPosition;
-        RaycastHit2D hit = Physics2D.Raycast(callerPosition, centrerDir, magnitude, LayerMask.GetMask("Obstacle", "Enemy"));
+        RaycastHit2D hit = Physics2D.Raycast(callerPosition, centrerDir, magnitude, _layersToRaycast);
         //Debug.DrawRay(callerPosition, centrerDir, Color.red, 2f, true);
 
         if (hit)
