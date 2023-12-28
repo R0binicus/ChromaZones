@@ -281,12 +281,12 @@ public class Player : MonoBehaviour
 
         if (_canMove)
         {
-            _rb.velocity = Vector2.zero;
+            //_rb.velocity = Vector2.zero;
             _moveDirection = (Vector2)data;
-            //if (_moveDirection == Vector2.zero)
-            //{
-            //    _rb.velocity = new Vector2(0, 0);
-            //}
+            if (_moveDirection == Vector2.zero)
+            {
+                _rb.velocity = new Vector2(0, 0);
+            }
 
             //if (_moveDirection.x == 0)
             //{
