@@ -138,6 +138,7 @@ public class Player : MonoBehaviour
     {
         _canMove = false;
         _rb.velocity = Vector2.zero;
+        EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
         // Player colour gets converted to Enemy!!!
         Color convertedColour = new Color(1f, 0.2983692f, 0.2509804f);
         _spriteRenderer.color = convertedColour;
