@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
 {
     // Components
     private Rigidbody2D _rb;
-    private ColourManager _colourManager;
+    private BoxCollider2D _boxCollider;
     private SpriteRenderer _spriteRenderer;
 
     // Regions
@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
         // Set values and components
         _rb = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _boxCollider = GetComponent<BoxCollider2D>();
 
         _canMove = true;
         _spriteRenderer.sprite = _normalSprite;
@@ -49,7 +50,6 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventSubscribe(EventType.LOSE, LoseHandler);
         EventManager.EventSubscribe(EventType.WIN, WinHandler);
         EventManager.EventSubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
@@ -61,7 +61,6 @@ public class Player : MonoBehaviour
 
     private void OnDisable()
     {
-        EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventUnsubscribe(EventType.LOSE, LoseHandler);
         EventManager.EventUnsubscribe(EventType.WIN, WinHandler);
         EventManager.EventUnsubscribe(EventType.PLAYER_MOVE_BOOL, MoveBoolHandler);
@@ -136,8 +135,10 @@ public class Player : MonoBehaviour
 
     public void LoseHandler(object data)
     {
+        _boxCollider.enabled = false;
         _canMove = false;
         _rb.velocity = Vector2.zero;
+        EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
         // Player colour gets converted to Enemy!!!
         Color convertedColour = new Color(1f, 0.2983692f, 0.2509804f);
         _spriteRenderer.color = convertedColour;
@@ -146,20 +147,11 @@ public class Player : MonoBehaviour
 
     public void WinHandler(object data)
     {
+        _boxCollider.enabled = false;
         _canMove = false;
         _startSoundDisabler = true;
         StartCoroutine(SoundDisabler());
         StartCoroutine(EventCoroutine(false));
-    }
-
-    private void ColourManagerHandler(object data)
-    {
-        if (data == null)
-        {
-            Debug.Log("ColourManagerHandler is null");
-        }
-
-        _colourManager = (ColourManager)data;
     }
 
     public void ResetHandler(object data)
@@ -171,21 +163,13 @@ public class Player : MonoBehaviour
     public void StartLevelHandler(object data)
     {
         StartCoroutine(SoundDisabler());
-
-        // if (RegionState != 3)
-        // {
-        //     NormalSprite();
-        // }
-        // else
-        // {
-        //     HidingSprite();
-        // }
-
+        
         Color colourReset = new Color(0f, 0.0972971f, 0.6f);
         _spriteRenderer.color = colourReset;
         _rb.velocity = Vector3.zero;
         _moveDirection = Vector2.zero;
         _canMove = true;
+        _boxCollider.enabled = true;
     }
 
     // Assign player new starting location when changing/restarting levels
@@ -287,15 +271,6 @@ public class Player : MonoBehaviour
             {
                 _rb.velocity = new Vector2(0, 0);
             }
-
-            //if (_moveDirection.x == 0)
-            //{
-            //    _rb.velocity = new Vector2(0, _rb.velocity.y);
-            //}
-            //if (_moveDirection.y == 0)
-            //{
-            //    _rb.velocity = new Vector2(_rb.velocity.x, 0);
-            //}
         }
     }
 

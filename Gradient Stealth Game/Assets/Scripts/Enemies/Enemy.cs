@@ -67,6 +67,7 @@ public class Enemy : MonoBehaviour
 
     #region Internal Data
     LayerMask _layersToRaycast;
+    private int _dontStartYet = 0;
     #endregion
 
     #region GameObject Refs
@@ -189,11 +190,18 @@ public class Enemy : MonoBehaviour
     private void FixedUpdate()
     {
         StateMachine.CurrentState.PhysicsUpdate();
+        if (_dontStartYet < 5)
+        {
+            _dontStartYet++;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        StateMachine.CurrentState.OnCollisionEnter2D(collision);
+        //if (_dontStartYet >= 5)
+        //{
+            StateMachine.CurrentState.OnCollisionEnter2D(collision);
+        //}
     }
 
     public bool PlayerSpotted()
