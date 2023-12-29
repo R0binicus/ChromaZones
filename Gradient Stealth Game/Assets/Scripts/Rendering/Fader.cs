@@ -42,7 +42,7 @@ public class Fader : MonoBehaviour
 
     public IEnumerator NormalFadeOut()
     {
-        LTDescr anim = LeanTween.alphaCanvas(_fadeOutBG, 1f, _fadeOutTime).setFrom(0f);
+        LeanTween.alphaCanvas(_fadeOutBG, 1f, _fadeOutTime).setFrom(0f);
 
         while (LeanTween.isTweening(_fadeOutBG.gameObject))
         {
@@ -52,7 +52,7 @@ public class Fader : MonoBehaviour
 
     public IEnumerator NormalFadeIn()
     {
-        LTDescr anim = LeanTween.alphaCanvas(_fadeOutBG, 0f, _fadeOutTime).setFrom(1f);
+        LeanTween.alphaCanvas(_fadeOutBG, 0f, _fadeOutTime).setFrom(1f);
 
         while (LeanTween.isTweening(_fadeOutBG.gameObject))
         {
@@ -62,10 +62,10 @@ public class Fader : MonoBehaviour
 
     public IEnumerator CircleFadeIn()
     {
-        //_test = true;
+        _fadeInCircle.LeanScale(Vector3.zero, 0f);
         _fadeInCircle.gameObject.SetActive(true);
         _fadeInCircle.position = WorldToUI(_player.transform.position);
-        LTDescr anim = LeanTween.scale(_fadeInCircle as RectTransform, new Vector3(10, 10, 10), _fadeInCircleTime).setFrom(Vector3.zero).setEase(LeanTweenType.easeInSine).setOnComplete(DisableCircle);
+        LeanTween.scale(_fadeInCircle as RectTransform, new Vector3(10, 10, 10), _fadeInCircleTime).setFrom(Vector3.zero).setEase(LeanTweenType.easeInSine).setOnComplete(DisableCircle);
         
         while (LeanTween.isTweening(_fadeInCircle.gameObject))
         {
