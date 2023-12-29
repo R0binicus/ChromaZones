@@ -84,6 +84,7 @@ public class SceneSystemManager : MonoBehaviour
                 }
             }
 
+            EventManager.EventTrigger(EventType.FADING, true);
             EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
         }
     }
