@@ -15,7 +15,7 @@ public enum EventType
     INIT_COLOUR_MANAGER,    // Sends ColourManager reference
     INIT_PLAYER,            // Sends Player reference
 
-    // Level starting/ending
+    // Scene and Level Management
     RESTART_LEVEL,          
     NEXT_LEVEL,             
     QUIT_LEVEL,             
@@ -25,6 +25,7 @@ public enum EventType
     LEVEL_SELECTED,
     LEVEL_STARTED,
     LEVEL_ENDED,
+    QUIT_GAME,
 
     // Save/load game progress
     NEW_GAME_REQUEST,

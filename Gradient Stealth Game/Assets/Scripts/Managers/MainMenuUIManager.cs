@@ -1,14 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 public class MainMenuUIManager : MonoBehaviour
 {
@@ -59,6 +54,7 @@ public class MainMenuUIManager : MonoBehaviour
     private void Awake()
     {
         EventManager.EventInitialise(EventType.LEVEL_SELECTED);
+        EventManager.EventInitialise(EventType.QUIT_GAME);
     }
 
     private void OnEnable()
@@ -134,20 +130,10 @@ public class MainMenuUIManager : MonoBehaviour
         ShowPanel(_mainMenu);
     }
 
-    // Quits the game
+    // Button to signal exiting the game
     public void QuitButton()
     {
-        StartCoroutine(QuitGame(0));
-    }
-
-    IEnumerator QuitGame(float delayTime)
-    {
-        yield return new WaitForSeconds(delayTime - 0.1f);
-#if UNITY_EDITOR
-        EditorApplication.isPlaying = false;
-#else
-		Application.Quit();
-#endif
+        EventManager.EventTrigger(EventType.QUIT_GAME, null);
     }
     #endregion
 

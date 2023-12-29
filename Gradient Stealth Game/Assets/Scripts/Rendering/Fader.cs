@@ -5,17 +5,19 @@ using UnityEngine;
 
 public class Fader : MonoBehaviour
 {
-    [SerializeField] CanvasGroup _fadeOutImage;
     [SerializeField] RectTransform _fadeInCircle;
-    [SerializeField] GameObject _fadeInBG;
+    [SerializeField] GameObject _fadeBG;
+    [SerializeField] float _fadeInTime;
+    [SerializeField] float _fadeInCircleTime;
+    [SerializeField] float _fadeOutTime;
+    private CanvasGroup _fadeOutBG;
     private Canvas _canvas;
     private Player _player;
-
-    //bool _test = false;
 
     private void Awake()
     {
         _canvas = GetComponent<Canvas>();
+        _fadeOutBG = GetComponentInChildren<CanvasGroup>();
     }
 
     private void OnEnable()
@@ -28,15 +30,6 @@ public class Fader : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.INIT_PLAYER, CachePlayer);
     }
 
-    private void Update()
-    {   
-        // while (!_test)
-        // {
-        //     StartCoroutine(CircleFadeIn(Time.time));
-        // }
-        _fadeInCircle.position = WorldToUI(_player.transform.position);
-    }
-
     public void CachePlayer(object data)
     {
         if (data == null)
@@ -47,43 +40,43 @@ public class Fader : MonoBehaviour
         _player = (Player)data;
     }
 
-    // IEnumerator NormalFadeOut(AnimationCurve fadeCurve, float startTime)
-    // {
-    //     //LTDescr anim = LeanTween.value(0, 1, 1f).setOnUpdate(UpdateAlphaFade(anim.va));
-
-    //     while (Time.time - startTime < fadeCurve.keys[fadeCurve.length - 1].time)
-    //     {
-    //         _fadeInBG.alpha = Mathf.Lerp
-    //         (
-    //             fadeCurve.keys[0].time,
-    //             fadeCurve.keys[fadeCurve.length - 1].time,
-    //             fadeCurve.Evaluate(Time.time - startTime)
-    //         );
-    //         yield return null;
-    //     }
-    //     _fadePanel.alpha = fadeCurve.keys[fadeCurve.length - 1].value;
-    // }
-
-    IEnumerator CircleFadeIn(float startTime)
+    public IEnumerator NormalFadeOut()
     {
-        //_test = true;
-        LTDescr anim = LeanTween.scale(_fadeInCircle as RectTransform, new Vector3(10, 10, 10), 1f).setOnComplete(DisableCircle);
-        
-        while (anim.time - anim.passed > 0)
+        LTDescr anim = LeanTween.alphaCanvas(_fadeOutBG, 1f, _fadeOutTime).setFrom(0f);
+
+        while (LeanTween.isTweening(_fadeOutBG.gameObject))
         {
             yield return null;
         }
     }
 
-    public void UpdateAlphaFade(float value)
+    public IEnumerator NormalFadeIn()
     {
-        _fadeOutImage.alpha = value;
+        LTDescr anim = LeanTween.alphaCanvas(_fadeOutBG, 0f, _fadeOutTime).setFrom(1f);
+
+        while (LeanTween.isTweening(_fadeOutBG.gameObject))
+        {
+            yield return null;
+        }
+    }
+
+    public IEnumerator CircleFadeIn()
+    {
+        //_test = true;
+        _fadeInCircle.gameObject.SetActive(true);
+        _fadeInCircle.position = WorldToUI(_player.transform.position);
+        LTDescr anim = LeanTween.scale(_fadeInCircle as RectTransform, new Vector3(10, 10, 10), _fadeInCircleTime).setFrom(Vector3.zero).setEase(LeanTweenType.easeInSine).setOnComplete(DisableCircle);
+        
+        while (LeanTween.isTweening(_fadeInCircle.gameObject))
+        {
+            yield return null;
+        }
     }
 
     public void DisableCircle()
     {
         _fadeInCircle.gameObject.SetActive(false);
-        _fadeInBG.SetActive(false);
+        _fadeOutBG.alpha = 0;
     }
 
     private Vector3 WorldToUI(Vector3 worldPos)

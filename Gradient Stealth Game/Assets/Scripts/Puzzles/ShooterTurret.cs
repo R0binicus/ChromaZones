@@ -22,6 +22,9 @@ public class ShooterTurret : MonoBehaviour
     [SerializeField] private GameObject _proj;
     [SerializeField] private float _alertOthersRadius;
     [field: SerializeField] public ProjectileData ProjectileData { get; private set; }
+    [SerializeField] private Sound _projectileSuccessSFX;
+    [SerializeField] private Sound _projectileFailSFX;
+
 
     private void OnEnable()
     {
@@ -57,9 +60,7 @@ public class ShooterTurret : MonoBehaviour
         {
             if (_fireCD <= 0)
             {
-
-                    Shoot();
-
+                Shoot();
                 _fireCD = _fireRate;
             }
 

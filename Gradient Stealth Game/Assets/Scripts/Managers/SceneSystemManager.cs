@@ -1,21 +1,18 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class SceneSystemManager : MonoBehaviour
 {
     [Header("Debugging")]
     [SerializeField] bool _editingLevel = false;
 
-    [Header("Scene Fading Data")]
-    [SerializeField] RectTransform _fadeOutImage;
-    [SerializeField] RectTransform _fadeInImage;
-    [SerializeField] CanvasGroup _fadePanel;
-    [SerializeField] AnimationCurve _fadeInSpeed;
-    [SerializeField] AnimationCurve _fadeOutSpeed;
+    // Scene Fader
+    Fader _fader;
 
     // Scene Tracking
     Scene _currentLevel;
@@ -28,7 +25,10 @@ public class SceneSystemManager : MonoBehaviour
         // If using the Unity editor or development build, enable debug logs
         Debug.unityLogger.logEnabled = Debug.isDebugBuild;
 
-        // Get total number of scenes in game
+        // Cache child fader
+        _fader = GetComponentInChildren<Fader>();
+
+        // Get total number of scenes in game and indexes for main menu and gameplay scenes
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
         _mainMenuIndex = GetBuildIndex("MainMenu");
         _gameplayIndex = GetBuildIndex("Gameplay");
@@ -46,6 +46,7 @@ public class SceneSystemManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.NEXT_LEVEL, NextLevelHandler);
         EventManager.EventSubscribe(EventType.RESTART_LEVEL, RestartLevelHandler);
         EventManager.EventSubscribe(EventType.QUIT_LEVEL, QuitLevelHandler);
+        EventManager.EventSubscribe(EventType.QUIT_GAME, QuitGameHandler);
     }
 
     private void OnDisable()
@@ -54,6 +55,7 @@ public class SceneSystemManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.NEXT_LEVEL, NextLevelHandler);
         EventManager.EventUnsubscribe(EventType.RESTART_LEVEL, RestartLevelHandler);
         EventManager.EventUnsubscribe(EventType.QUIT_LEVEL, QuitLevelHandler);
+        EventManager.EventUnsubscribe(EventType.QUIT_GAME, QuitGameHandler);
     }
 
     // After Services Scene is loaded in, additively load in the MainMenu scene
@@ -61,9 +63,8 @@ public class SceneSystemManager : MonoBehaviour
     {
         if (!_editingLevel)
         {
-            _fadePanel.alpha = 1f;
             StartCoroutine(LoadScene(_mainMenuIndex));
-            StartCoroutine(Fade(_fadeInSpeed, Time.time));
+            StartCoroutine(_fader.NormalFadeIn());
         }
         // Make sure current level loaded in editor is assigned as the current level
         else
@@ -126,28 +127,28 @@ public class SceneSystemManager : MonoBehaviour
     #region Scene Loading/Unloading/Ordering
     IEnumerator LevelChanger(int prevLevel, int newLevel)
     {
-        yield return StartCoroutine(Fade(_fadeOutSpeed, Time.time));
+        yield return StartCoroutine(_fader.NormalFadeOut());
         yield return StartCoroutine(UnloadLevel(prevLevel));
         yield return StartCoroutine(LoadLevel(newLevel));
-        yield return StartCoroutine(Fade(_fadeInSpeed, Time.time));
+        yield return StartCoroutine(_fader.CircleFadeIn());
     }
 
     IEnumerator LevelToMenu()
     {
-        yield return StartCoroutine(Fade(_fadeOutSpeed, Time.time));
+        yield return StartCoroutine(_fader.NormalFadeOut());
         yield return StartCoroutine(UnloadLevel(_currentLevel.buildIndex));
         yield return StartCoroutine(UnloadScene(_gameplayIndex));
         yield return StartCoroutine(LoadScene(_mainMenuIndex));
-        yield return StartCoroutine(Fade(_fadeInSpeed, Time.time));
+        yield return StartCoroutine(_fader.NormalFadeIn());
     }
 
     IEnumerator MenuToLevel(int levelSelected)
     {
-        yield return StartCoroutine(Fade(_fadeOutSpeed, Time.time));
+        yield return StartCoroutine(_fader.NormalFadeOut());
         yield return StartCoroutine(UnloadScene(_mainMenuIndex));
         yield return StartCoroutine(LoadScene(_gameplayIndex));
         yield return StartCoroutine(LoadLevel(levelSelected));
-        yield return StartCoroutine(Fade(_fadeInSpeed, Time.time));
+        yield return StartCoroutine(_fader.CircleFadeIn());
     }
     #endregion
 
@@ -204,6 +205,22 @@ public class SceneSystemManager : MonoBehaviour
         }
     }
 
+    public void QuitGameHandler(object data)
+    {
+        StartCoroutine(QuitGame());
+    }
+
+    IEnumerator QuitGame()
+    {
+        yield return StartCoroutine(_fader.NormalFadeOut());
+
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
+		Application.Quit();
+#endif
+    }
+
     public int GetBuildIndex(string name)
     {
         for (int index = 0; index < _numOfScenes; index++)
@@ -218,23 +235,6 @@ public class SceneSystemManager : MonoBehaviour
 
         Debug.LogError("Scene name not found");
         return -1;
-    }
-    #endregion
-
-    #region Scene Fading
-    IEnumerator Fade(AnimationCurve fadeCurve, float startTime)
-    {
-        while (Time.time - startTime < fadeCurve.keys[fadeCurve.length - 1].time)
-        {
-            _fadePanel.alpha = Mathf.Lerp
-            (
-                fadeCurve.keys[0].time,
-                fadeCurve.keys[fadeCurve.length - 1].time,
-                fadeCurve.Evaluate(Time.time - startTime)
-            );
-            yield return null;
-        }
-        _fadePanel.alpha = fadeCurve.keys[fadeCurve.length - 1].value;
     }
     #endregion
 }
