@@ -20,6 +20,7 @@ public enum EventType
     NEXT_LEVEL,             
     QUIT_LEVEL,             
     SCENE_LOAD,   
+    FADING,
     SCENE_COUNT,
     PLAYER_SPAWNPOINT,
     LEVEL_SELECTED,

@@ -38,6 +38,7 @@ public class SceneSystemManager : MonoBehaviour
         EventManager.EventInitialise(EventType.LEVEL_ENDED);
         EventManager.EventInitialise(EventType.SAVE_GAME);
         EventManager.EventInitialise(EventType.SCENE_COUNT);
+        EventManager.EventInitialise(EventType.FADING);
     }
 
     private void OnEnable()
@@ -138,28 +139,34 @@ public class SceneSystemManager : MonoBehaviour
     #region Scene Loading/Unloading/Ordering
     IEnumerator LevelChanger(int prevLevel, int newLevel)
     {
+        EventManager.EventTrigger(EventType.FADING, false);
         yield return StartCoroutine(_fader.NormalFadeOut());
         yield return StartCoroutine(UnloadLevel(prevLevel));
         yield return StartCoroutine(LoadLevel(newLevel));
         yield return StartCoroutine(_fader.CircleFadeIn());
+        EventManager.EventTrigger(EventType.FADING, true);
     }
 
     IEnumerator LevelToMenu()
     {
+        EventManager.EventTrigger(EventType.FADING, false);
         yield return StartCoroutine(_fader.NormalFadeOut());
         yield return StartCoroutine(UnloadLevel(_currentLevel.buildIndex));
         yield return StartCoroutine(UnloadScene(_gameplayIndex));
         yield return StartCoroutine(LoadScene(_mainMenuIndex));
         yield return StartCoroutine(_fader.NormalFadeIn());
+        EventManager.EventTrigger(EventType.FADING, true);
     }
 
     IEnumerator MenuToLevel(int levelSelected)
     {
+        EventManager.EventTrigger(EventType.FADING, false);
         yield return StartCoroutine(_fader.NormalFadeOut());
         yield return StartCoroutine(UnloadScene(_mainMenuIndex));
         yield return StartCoroutine(LoadScene(_gameplayIndex));
         yield return StartCoroutine(LoadLevel(levelSelected));
         yield return StartCoroutine(_fader.CircleFadeIn());
+        EventManager.EventTrigger(EventType.FADING, true);
     }
     #endregion
 
