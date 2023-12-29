@@ -34,8 +34,9 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField, TextArea] private string _loadGameSuccessText;
     
     // Level Buttons
-    [Header("Level Buttons Panel")]
+    [Header("Level Panel")]
     [SerializeField] private GameObject _levelButtonPanel;
+    [SerializeField] private GameObject _bonusLevelButtonPanel;
 
     [Header("Sound")]
     [SerializeField] Sound _titleMusic; 
@@ -107,7 +108,6 @@ public class MainMenuUIManager : MonoBehaviour
         {
             _title.SetActive(false);
         }
-
     }
     #endregion
 
@@ -173,6 +173,12 @@ public class MainMenuUIManager : MonoBehaviour
             _levelButtons[i].interactable = true;
             _levelButtons[i].GetComponent<ColourRegionUI>().Enabled = true;
         }
+    }
+
+    public void BonusPanelActivate(bool flag)
+    {
+        _levelButtonPanel.SetActive(!flag);
+        _bonusLevelButtonPanel.SetActive(flag);
     }
     #endregion
 
@@ -276,6 +282,8 @@ public class MainMenuUIManager : MonoBehaviour
     }
     #endregion
 
+    #region Misc
+    // Create list of level buttons
     private void CreateLists()
     {
         _panels = new List<GameObject>() { _mainMenu, _playMenu, _levelSelectMenu, _creditsMenu };
@@ -292,4 +300,5 @@ public class MainMenuUIManager : MonoBehaviour
     {
         EventManager.EventTrigger(EventType.SFX, _buttonSFX);
     }
+    #endregion
 }
