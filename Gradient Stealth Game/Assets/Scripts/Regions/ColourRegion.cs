@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,11 @@ public class ColourRegion : MonoBehaviour
 
     public int State = 0;
 
-    private Player _player;
+    private Player _player = null;
+
+    private bool _playerInRegion = false;
+
+    private ResetRegionLinkData _linkData;
     private List<Enemy> _enemies = new List<Enemy>();
 
     [field: Header("Assignment Code Stuff")]
@@ -44,6 +49,9 @@ public class ColourRegion : MonoBehaviour
         _localColour = H * 360;
         _originalHue = _localColour;
         _outlineSprite.size = _backgroundSprite.size;
+
+        _linkData = new ResetRegionLinkData(false);
+        
         if (_disabledColourChange)
         {
             _crossSprite.enabled = true;
@@ -53,6 +61,8 @@ public class ColourRegion : MonoBehaviour
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
+        EventManager.EventSubscribe(EventType.RESET_REGION_GAMEOBJECT_LINKS, LinkResetHandler);
+        EventManager.EventSubscribe(EventType.INIT_PLAYER_REGION, InitPlayerHandler);
 
         if (_assignmentCode != 0)
         {
@@ -64,6 +74,8 @@ public class ColourRegion : MonoBehaviour
     {
         EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
+        EventManager.EventUnsubscribe(EventType.RESET_REGION_GAMEOBJECT_LINKS, LinkResetHandler);
+        EventManager.EventUnsubscribe(EventType.INIT_PLAYER_REGION, InitPlayerHandler);
     }
 
     void Update()
@@ -164,7 +176,7 @@ public class ColourRegion : MonoBehaviour
 
         if (originalState != State)
         {
-            if (_player != null)
+            if (_playerInRegion == true)
             {
                 _player.NewState(State);
             }
@@ -234,16 +246,33 @@ public class ColourRegion : MonoBehaviour
         if(collision.tag == "RegionDetector")
         {
             GameObject mainObject = collision.transform.parent.gameObject;
-            if (mainObject.tag == "Player") 
+            if (mainObject.name == "Player") 
             {
-                _player = mainObject.GetComponent<Player>();
+                if (_player == null)
+                {
+                    _player = mainObject.GetComponent<Player>();
+                    EventManager.EventTrigger(EventType.INIT_PLAYER_REGION, _player);
+                }
+                //
+                _playerInRegion = true;
+
                 _player.NewState(State);
+
+
+                _linkData._isPlayer = true;
+                EventManager.EventTrigger(EventType.RESET_REGION_GAMEOBJECT_LINKS, _linkData);
+                ResetLinkObject();
             }
             else if (mainObject.tag == "Enemy")
             {
                 var enemyObject = mainObject.GetComponent<Enemy>();
                 enemyObject.NewState(State);
                 _enemies.Add(enemyObject);
+
+
+                _linkData._enemy = enemyObject;
+                EventManager.EventTrigger(EventType.RESET_REGION_GAMEOBJECT_LINKS, _linkData);
+                ResetLinkObject();
             }
         }
     }
@@ -258,15 +287,21 @@ public class ColourRegion : MonoBehaviour
             // If region layer is 0, it should be in NO region
             // so it needs to be manually told to reset the object's
             // regionState to zero (no region)
-            if (mainObject.tag == "Player") 
+            if (mainObject.name == "Player") 
             {
-                _player = null;
+                _playerInRegion = false;
             }
             else if (mainObject.tag == "Enemy")
             {
                 _enemies.Remove(mainObject.GetComponent<Enemy>());
             }
         }
+    }
+
+    private void ResetLinkObject()
+    {
+        _linkData._isPlayer = false;
+        _linkData._enemy = null;
     }
 
     private void ColourManagerHandler(object data)
@@ -277,6 +312,46 @@ public class ColourRegion : MonoBehaviour
         }
 
         _colourManager = (ColourManager)data;
+    }
+
+    private void LinkResetHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.Log("LinkResetHandler is null");
+        }
+
+        ResetRegionLinkData linkObject = (ResetRegionLinkData)data;
+
+        if (linkObject._isPlayer)
+        {
+            _playerInRegion = false;
+        }
+        else if (linkObject._enemy != null)
+        {
+            if (_enemies.Contains(linkObject._enemy))
+            {
+                _enemies.Remove(linkObject._enemy);
+            }
+            else
+            {
+                //Debug.Log("WTF have you done LinkResetHandler");
+            }
+        }
+        else 
+        {
+            Debug.LogError("WTF have you done LinkResetHandler");
+        }
+    }
+
+    private void InitPlayerHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.Log("InitPlayerHandler is null");
+        }
+
+        _player = (Player)data;
     }
 
     private void AssignmentCodeHandler(object data)

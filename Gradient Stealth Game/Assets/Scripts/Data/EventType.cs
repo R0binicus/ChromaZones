@@ -9,11 +9,13 @@ public enum EventType
     PLAYER_MOVE_BOOL,
     PLAYER_MOVE_VECT2D,
     REBUILD_NAVMESH,
+    RESET_REGION_GAMEOBJECT_LINKS,
 
     //Gameobject inits
     ADD_ENEMY,              // Broadcasts an instantiated Enemy to the EnemyManager to add to its list
     INIT_COLOUR_MANAGER,    // Sends ColourManager reference
-    INIT_PLAYER,            // Sends Player reference
+    INIT_PLAYER,            // Sends Player reference on game start
+    INIT_PLAYER_REGION,     // Sends Player reference on level start
 
     // Scene and Level Management
     RESTART_LEVEL,          
