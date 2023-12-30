@@ -13,6 +13,7 @@ public class ColourManager : MonoBehaviour
     {
         EventManager.EventInitialise(EventType.INIT_COLOUR_MANAGER);
         EventManager.EventInitialise(EventType.RESET_REGION_GAMEOBJECT_LINKS);
+        EventManager.EventInitialise(EventType.REGION_CHECK_AGAIN);
     }
 
     private void OnEnable()

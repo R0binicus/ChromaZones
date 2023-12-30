@@ -2,14 +2,19 @@ public enum EventType
 {
     LOSE,                   // Broadcasts when game is lost
     WIN,                    // Broadcasts when game is won     
-    COLOUR_CHANGE_BOOL,     // 
+    
     ASSIGNMENT_CODE_TRIGGER,     // 
     AREA_CHASE_TRIGGER,     // 
     PAUSE_TOGGLE,           // Broadcasts when pause is toggled on or off
     PLAYER_MOVE_BOOL,
     PLAYER_MOVE_VECT2D,
     REBUILD_NAVMESH,
+    
+
+    // Colour Region events
     RESET_REGION_GAMEOBJECT_LINKS,
+    COLOUR_CHANGE_BOOL,     // Region sends event to enemies and player that is on top of it
+    REGION_CHECK_AGAIN,     
 
     //Gameobject inits
     ADD_ENEMY,              // Broadcasts an instantiated Enemy to the EnemyManager to add to its list

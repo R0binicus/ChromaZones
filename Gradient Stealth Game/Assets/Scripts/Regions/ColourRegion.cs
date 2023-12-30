@@ -27,6 +27,7 @@ public class ColourRegion : MonoBehaviour
     private bool _playerInRegion = false;
 
     private ResetRegionLinkData _linkData;
+    private bool _resetLink = true;
     private List<Enemy> _enemies = new List<Enemy>();
 
     [field: Header("Assignment Code Stuff")]
@@ -63,6 +64,7 @@ public class ColourRegion : MonoBehaviour
         EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventSubscribe(EventType.RESET_REGION_GAMEOBJECT_LINKS, LinkResetHandler);
         EventManager.EventSubscribe(EventType.INIT_PLAYER_REGION, InitPlayerHandler);
+        EventManager.EventSubscribe(EventType.REGION_CHECK_AGAIN, CheckAgainHandler);
 
         if (_assignmentCode != 0)
         {
@@ -76,6 +78,7 @@ public class ColourRegion : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
         EventManager.EventUnsubscribe(EventType.RESET_REGION_GAMEOBJECT_LINKS, LinkResetHandler);
         EventManager.EventUnsubscribe(EventType.INIT_PLAYER_REGION, InitPlayerHandler);
+        EventManager.EventUnsubscribe(EventType.REGION_CHECK_AGAIN, CheckAgainHandler);
     }
 
     void Update()
@@ -259,9 +262,10 @@ public class ColourRegion : MonoBehaviour
                 _player.NewState(State);
 
 
-                _linkData._isPlayer = true;
-                EventManager.EventTrigger(EventType.RESET_REGION_GAMEOBJECT_LINKS, _linkData);
-                ResetLinkObject();
+                //_linkData._isPlayer = true;
+                //StartCoroutine(DisableLinkReset());
+                //EventManager.EventTrigger(EventType.RESET_REGION_GAMEOBJECT_LINKS, _linkData);
+                //ResetLinkObject();
             }
             else if (mainObject.tag == "Enemy")
             {
@@ -270,9 +274,10 @@ public class ColourRegion : MonoBehaviour
                 _enemies.Add(enemyObject);
 
 
-                _linkData._enemy = enemyObject;
-                EventManager.EventTrigger(EventType.RESET_REGION_GAMEOBJECT_LINKS, _linkData);
-                ResetLinkObject();
+                //_linkData._enemy = enemyObject;
+                //StartCoroutine(DisableLinkReset());
+                //EventManager.EventTrigger(EventType.RESET_REGION_GAMEOBJECT_LINKS, _linkData);
+                //ResetLinkObject();
             }
         }
     }
@@ -289,12 +294,27 @@ public class ColourRegion : MonoBehaviour
             // regionState to zero (no region)
             if (mainObject.name == "Player") 
             {
+                _linkData._isPlayer = true;
+                //StartCoroutine(DisableLinkReset());
+                //EventManager.EventTrigger(EventType.RESET_REGION_GAMEOBJECT_LINKS, _linkData);
+                LinkResetHandler(_linkData);
+                ResetLinkObject();
+
                 _playerInRegion = false;
             }
             else if (mainObject.tag == "Enemy")
             {
-                _enemies.Remove(mainObject.GetComponent<Enemy>());
+                var enemyObject = mainObject.GetComponent<Enemy>();
+
+                _linkData._enemy = enemyObject;
+                //StartCoroutine(DisableLinkReset());
+                //EventManager.EventTrigger(EventType.RESET_REGION_GAMEOBJECT_LINKS, _linkData);
+                LinkResetHandler(_linkData);
+                ResetLinkObject();
+
+                _enemies.Remove(enemyObject);
             }
+            EventManager.EventTrigger(EventType.REGION_CHECK_AGAIN, null);
         }
     }
 
@@ -316,31 +336,48 @@ public class ColourRegion : MonoBehaviour
 
     private void LinkResetHandler(object data)
     {
-        if (data == null)
+        if (_resetLink)
         {
-            Debug.Log("LinkResetHandler is null");
-        }
-
-        ResetRegionLinkData linkObject = (ResetRegionLinkData)data;
-
-        if (linkObject._isPlayer)
-        {
-            _playerInRegion = false;
-        }
-        else if (linkObject._enemy != null)
-        {
-            if (_enemies.Contains(linkObject._enemy))
+            if (data == null)
             {
-                _enemies.Remove(linkObject._enemy);
+                Debug.Log("LinkResetHandler is null");
             }
-            else
+
+            ResetRegionLinkData linkObject = (ResetRegionLinkData)data;
+
+            if (linkObject._isPlayer)
             {
-                //Debug.Log("WTF have you done LinkResetHandler");
+                _playerInRegion = false;
+            }
+            else if (linkObject._enemy != null)
+            {
+                if (_enemies.Contains(linkObject._enemy))
+                {
+                    _enemies.Remove(linkObject._enemy);
+                }
+                else
+                {
+                    //Debug.Log("WTF have you done LinkResetHandler");
+                }
+            }
+            else 
+            {
+                Debug.LogError("WTF have you done LinkResetHandler");
             }
         }
-        else 
+    }
+    
+    private void CheckAgainHandler(object data)
+    {
+        //Debug.Log("_playerInRegion" + _playerInRegion);
+        if (_playerInRegion)
         {
-            Debug.LogError("WTF have you done LinkResetHandler");
+            _player.NewState(State);
+            Debug.Log(State);
+        }
+        foreach (var enemy in _enemies)
+        {
+            enemy.NewState(State);
         }
     }
 
@@ -377,5 +414,12 @@ public class ColourRegion : MonoBehaviour
                 _reversedColourChange = !_reversedColourChange;
             }
         }
+    }
+
+    private IEnumerator DisableLinkReset()
+    {
+        _resetLink = false;
+        yield return new WaitForSeconds(0.5f);
+        _resetLink = true;
     }
 }
