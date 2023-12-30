@@ -10,7 +10,7 @@ public class PressurePlate : MonoBehaviour
     [field: SerializeField] private bool _disabled = false;
     [field: SerializeField] private bool _playerMode = false;
 
-    private bool _resetOnRecieved = false;
+    private bool _resetOnRecieved = true;
 
 
     [field: Header("Sprites")]
@@ -101,6 +101,7 @@ public class PressurePlate : MonoBehaviour
         }
         if (_recievedCode == (int)data)
         {
+            
             StartCoroutine(DelayAssignmentCheck());
         }
     }
