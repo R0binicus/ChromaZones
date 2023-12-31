@@ -62,7 +62,7 @@ public class ColourRegion : MonoBehaviour
     private void OnEnable()
     {
         EventManager.EventSubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
-        EventManager.EventSubscribe(EventType.RESET_REGION_GAMEOBJECT_LINKS, LinkResetHandler);
+        //EventManager.EventSubscribe(EventType.RESET_REGION_GAMEOBJECT_LINKS, LinkResetHandler);
         EventManager.EventSubscribe(EventType.INIT_PLAYER_REGION, InitPlayerHandler);
         EventManager.EventSubscribe(EventType.REGION_CHECK_AGAIN, CheckAgainHandler);
 
@@ -76,7 +76,7 @@ public class ColourRegion : MonoBehaviour
     {
         EventManager.EventUnsubscribe(EventType.INIT_COLOUR_MANAGER, ColourManagerHandler);
         EventManager.EventUnsubscribe(EventType.ASSIGNMENT_CODE_TRIGGER, AssignmentCodeHandler);
-        EventManager.EventUnsubscribe(EventType.RESET_REGION_GAMEOBJECT_LINKS, LinkResetHandler);
+        //EventManager.EventUnsubscribe(EventType.RESET_REGION_GAMEOBJECT_LINKS, LinkResetHandler);
         EventManager.EventUnsubscribe(EventType.INIT_PLAYER_REGION, InitPlayerHandler);
         EventManager.EventUnsubscribe(EventType.REGION_CHECK_AGAIN, CheckAgainHandler);
     }
@@ -296,7 +296,7 @@ public class ColourRegion : MonoBehaviour
                 _linkData._isPlayer = true;
                 //StartCoroutine(DisableLinkReset());
                 //EventManager.EventTrigger(EventType.RESET_REGION_GAMEOBJECT_LINKS, _linkData);
-                LinkResetHandler(_linkData);
+                LinkResetExit(_linkData);
                 ResetLinkObject();
 
                 _playerInRegion = false;
@@ -309,7 +309,7 @@ public class ColourRegion : MonoBehaviour
                 _linkData._enemy = enemyObject;
                 //StartCoroutine(DisableLinkReset());
                 //EventManager.EventTrigger(EventType.RESET_REGION_GAMEOBJECT_LINKS, _linkData);
-                LinkResetHandler(_linkData);
+                LinkResetExit(_linkData);
                 ResetLinkObject();
 
                 _enemies.Remove(enemyObject);
@@ -355,15 +355,30 @@ public class ColourRegion : MonoBehaviour
                 {
                     _enemies.Remove(linkObject._enemy);
                 }
-                else
-                {
-                    //Debug.Log("WTF have you done LinkResetHandler");
-                }
             }
             else 
             {
                 Debug.LogError("WTF have you done LinkResetHandler");
             }
+        }
+    }
+
+    private void LinkResetExit(ResetRegionLinkData LinkData)
+    {
+        if (LinkData._isPlayer)
+        {
+            _playerInRegion = false;
+        }
+        else if (LinkData._enemy != null)
+        {
+            if (_enemies.Contains(LinkData._enemy))
+            {
+                _enemies.Remove(LinkData._enemy);
+            }
+        }
+        else 
+        {
+            Debug.LogError("WTF have you done LinkResetExit");
         }
     }
     

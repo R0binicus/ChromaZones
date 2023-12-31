@@ -12,7 +12,7 @@ public enum EventType
     
 
     // Colour Region events
-    RESET_REGION_GAMEOBJECT_LINKS,
+    //RESET_REGION_GAMEOBJECT_LINKS,
     COLOUR_CHANGE_BOOL,     // Region sends event to enemies and player that is on top of it
     REGION_CHECK_AGAIN,     
 

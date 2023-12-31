@@ -12,7 +12,7 @@ public class ColourManager : MonoBehaviour
     void Awake()
     {
         EventManager.EventInitialise(EventType.INIT_COLOUR_MANAGER);
-        EventManager.EventInitialise(EventType.RESET_REGION_GAMEOBJECT_LINKS);
+        //EventManager.EventInitialise(EventType.RESET_REGION_GAMEOBJECT_LINKS);
         EventManager.EventInitialise(EventType.REGION_CHECK_AGAIN);
     }
 

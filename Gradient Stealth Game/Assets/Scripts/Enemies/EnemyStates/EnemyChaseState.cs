@@ -14,6 +14,12 @@ public class EnemyChaseState : EnemyState
         EventManager.EventTrigger(EventType.SFX, Enemy.SoundEnemyChase);
     }
 
+    public override void Exit()
+    {
+        Enemy.Agent.ResetPath();
+        Enemy.RB.velocity = Vector2.zero;
+    }
+
     public override void LogicUpdate()
     {
         _moveDir = (Enemy.Player.transform.position - Enemy.transform.position).normalized;
