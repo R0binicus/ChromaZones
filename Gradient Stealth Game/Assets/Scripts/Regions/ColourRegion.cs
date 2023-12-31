@@ -24,7 +24,7 @@ public class ColourRegion : MonoBehaviour
 
     private Player _player = null;
 
-    private bool _playerInRegion = false;
+    public bool _playerInRegion = false;
 
     private ResetRegionLinkData _linkData;
     private bool _resetLink = true;
@@ -261,7 +261,6 @@ public class ColourRegion : MonoBehaviour
 
                 _player.NewState(State);
 
-
                 //_linkData._isPlayer = true;
                 //StartCoroutine(DisableLinkReset());
                 //EventManager.EventTrigger(EventType.RESET_REGION_GAMEOBJECT_LINKS, _linkData);
@@ -301,6 +300,7 @@ public class ColourRegion : MonoBehaviour
                 ResetLinkObject();
 
                 _playerInRegion = false;
+                EventManager.EventTrigger(EventType.REGION_CHECK_AGAIN, "Player");
             }
             else if (mainObject.tag == "Enemy")
             {
@@ -313,8 +313,8 @@ public class ColourRegion : MonoBehaviour
                 ResetLinkObject();
 
                 _enemies.Remove(enemyObject);
+                EventManager.EventTrigger(EventType.REGION_CHECK_AGAIN, "Enemy");
             }
-            EventManager.EventTrigger(EventType.REGION_CHECK_AGAIN, null);
         }
     }
 
@@ -369,11 +369,18 @@ public class ColourRegion : MonoBehaviour
     
     private void CheckAgainHandler(object data)
     {
+        if (data == null)
+            {
+                Debug.Log("CheckAgainHandler is null");
+            }
+
+        String objectType = (String)data;
+
         //Debug.Log("_playerInRegion" + _playerInRegion);
         if (_playerInRegion)
         {
             _player.NewState(State);
-            Debug.Log(State);
+            //Debug.Log(State);
         }
         foreach (var enemy in _enemies)
         {
