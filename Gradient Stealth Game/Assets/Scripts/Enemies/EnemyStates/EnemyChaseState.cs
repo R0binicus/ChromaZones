@@ -17,7 +17,8 @@ public class EnemyChaseState : EnemyState
     public override void Exit()
     {
         Enemy.Agent.ResetPath();
-        Enemy.RB.velocity = Vector2.zero;
+        Enemy.Agent.velocity = Vector2.zero;
+        //Enemy.RB.velocity = Vector2.zero;
     }
 
     public override void LogicUpdate()
