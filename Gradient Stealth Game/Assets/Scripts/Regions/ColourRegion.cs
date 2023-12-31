@@ -14,7 +14,7 @@ public class ColourRegion : MonoBehaviour
     
 
     private float _colourDiff;               // Colour from game manager
-    private float _localColour;              // Colour of this region specifically
+    [SerializeField] private float _localColour;              // Colour of this region specifically -- SERIALIZED FOR BUG DETECTION, PLEASE GET RID OF WHEN FIXED
     private float _originalHue;              // Original colour value when the level started
 
     [SerializeField] private bool _disabledColourChange = false;
