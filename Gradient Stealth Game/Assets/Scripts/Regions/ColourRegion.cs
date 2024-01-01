@@ -9,12 +9,11 @@ public class ColourRegion : MonoBehaviour
     private ColourManager _colourManager;
     
     [field: Header("Colour Region Settings")]
-    [SerializeField] private float _transitionMultiplier = 2f;
     [SerializeField] private float _localChangeMultiplier = 1f;
     
 
     private float _colourDiff;               // Colour from game manager
-    [SerializeField] private float _localColour;              // Colour of this region specifically -- SERIALIZED FOR BUG DETECTION, PLEASE GET RID OF WHEN FIXED
+    private float _localColour;              // Colour of this region specifically
     private float _originalHue;              // Original colour value when the level started
 
     [SerializeField] private bool _disabledColourChange = false;
@@ -222,21 +221,6 @@ public class ColourRegion : MonoBehaviour
             default:
                 _localColour = _localColour + (_colourDiff * _localChangeMultiplier);
             break;
-
-            // Legacy Code
-
-            //case float x when x >= 35f && x < 55f :
-            //    _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
-            //break;
-            //case float x when x >= 155f && x < 175f :
-            //    _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
-            //break;
-            //case float x when x >= 275f && x < 295f :
-            //    _localColour = _localColour + (_colourDiff * _transitionMultiplier * _localChangeMultiplier);
-            //break;
-            //default:
-            //    _localColour = _localColour + (_colourDiff * _localChangeMultiplier);
-            //break;
         }
     }
 

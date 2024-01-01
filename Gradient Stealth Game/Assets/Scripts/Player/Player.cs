@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _moveDecel;
     private Vector2 _moveDirection;
     private bool _moveBool = false;
+    private bool _colourChangingBool = false;
 
     // Data
     private bool _canMove;
@@ -79,7 +80,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         EventManager.EventTrigger(EventType.INIT_PLAYER, this);
-        EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+        _colourChangingBool = false;
+        EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, _colourChangingBool);
     }
 
     private void FixedUpdate()
@@ -128,7 +130,8 @@ public class Player : MonoBehaviour
     public void LoseHandler(object data)
     {
         PlayerDisable();
-        EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+        _colourChangingBool = false;
+        EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, _colourChangingBool);
         // Player colour gets converted to Enemy!!!
         Color convertedColour = new Color(1f, 0.2983692f, 0.2509804f);
         _spriteRenderer.color = convertedColour;
@@ -173,7 +176,8 @@ public class Player : MonoBehaviour
         RegionState = input;
         if (RegionState == 3)
         {
-            EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+            _colourChangingBool = false;
+            EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, _colourChangingBool);
             if (!_isPlayerHiding)
             {
                 HidingSprite();
@@ -182,6 +186,8 @@ public class Player : MonoBehaviour
         }
         else 
         {
+            MoveBoolHandler(_moveBool);
+            EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, _colourChangingBool);
             if (_isPlayerHiding)
             {
                 NormalSprite();
@@ -220,16 +226,20 @@ public class Player : MonoBehaviour
         {
             if (RegionState == 3)
             {
-                EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+                _colourChangingBool = false;
+                EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, _colourChangingBool);
+
             }
             else
             {
-                EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, true);
+                _colourChangingBool = true;
+                EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, _colourChangingBool);
             }
         }
         else
         {
-            EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, false);
+            _colourChangingBool = false;
+            EventManager.EventTrigger(EventType.COLOUR_CHANGE_BOOL, _colourChangingBool);
         }
     }
 
