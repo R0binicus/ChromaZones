@@ -6,7 +6,7 @@ using UnityEngine;
 public class ColourRegionUI : MonoBehaviour
 {
     private UnityEngine.UI.Image _spriteRenderer;
-    private UIColourScript _UIColourChanger;
+    private UIColourUpdater _UIColourChanger;
 
     [SerializeField] private float _transitionMultiplier = 2f;
     [SerializeField] private float _localChangeMultiplier = 1f;
@@ -20,7 +20,7 @@ public class ColourRegionUI : MonoBehaviour
         // Set values and components
         Color.RGBToHSV(GetComponent<UnityEngine.UI.Image>().color, out var H, out var S, out var V);
         _localColour = H * 360;
-        _UIColourChanger = GameObject.FindGameObjectWithTag("Manager").GetComponent<UIColourScript>();
+        _UIColourChanger = GameObject.FindGameObjectWithTag("Manager").GetComponent<UIColourUpdater>();
         _spriteRenderer = GetComponent<UnityEngine.UI.Image>();
     }
 

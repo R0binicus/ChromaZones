@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class UIColourScript : MonoBehaviour
+public class UIColourUpdater : MonoBehaviour
 {
     public float Colour;        // Final colour value for other things to access
 
