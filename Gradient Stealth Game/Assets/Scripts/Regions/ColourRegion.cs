@@ -199,24 +199,23 @@ public class ColourRegion : MonoBehaviour
     {
         switch(_localColour) 
         {
-
-            case float x when x > 30f && x < 40f :
-                _localColour = 50f;
-            break;
-            case float x when x >= 40f && x < 50f :
+            case float x when x >= 40f && x < 60f :
                 _localColour = 30f;
             break;
-            case float x when x > 150f && x < 160f :
+            case float x when x > 30f && x < 40f :
+                _localColour = 60f;
+            break;
+            case float x when x >= 165f && x < 170f :
+                _localColour = 160f;
+            break;
+            case float x when x > 160f && x < 165f :
                 _localColour = 170f;
-            break;
-            case float x when x >= 160f && x < 170f :
-                _localColour = 150f;
-            break;
-            case float x when x > 270f && x < 280f :
-                _localColour = 290;
             break;
             case float x when x >= 280f && x < 290f :
                 _localColour = 270;
+            break;
+            case float x when x > 270f && x < 280f :
+                _localColour = 290;
             break;
             default:
                 _localColour = _localColour + (_colourDiff * _localChangeMultiplier);
