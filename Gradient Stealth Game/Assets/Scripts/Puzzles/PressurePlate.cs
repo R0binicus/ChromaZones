@@ -52,19 +52,28 @@ public class PressurePlate : MonoBehaviour
     {
         if (_sentCode != 0)
         {
-            if(collision.tag == "RegionDetector")
+            if(collision.tag == "Enemy" && !_playerMode)
             {
-                GameObject mainObject = collision.transform.parent.gameObject;
-
-                if (mainObject.tag == "Enemy" && !_playerMode) 
-                {
-                    ActivatePlate();
-                }
-                else if (mainObject.tag == "Player" && _playerMode)
-                {
-                    ActivatePlate();
-                }
+                ActivatePlate();
             }
+            else if (collision.tag == "Player" && _playerMode)
+            {
+                ActivatePlate();
+            }
+
+            //if(collision.tag == "RegionDetector")
+            //{
+            //    GameObject mainObject = collision.transform.parent.gameObject;
+//
+            //    if (mainObject.tag == "Enemy" && !_playerMode) 
+            //    {
+            //        ActivatePlate();
+            //    }
+            //    else if (mainObject.tag == "Player" && _playerMode)
+            //    {
+            //        ActivatePlate();
+            //    }
+            //}
         }
     }
 
