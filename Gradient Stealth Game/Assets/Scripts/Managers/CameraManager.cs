@@ -1,31 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CameraManager : MonoBehaviour
 {
     private Camera _mainCamera;
-    [SerializeField] float _orthoSize169 = 5f;
-    [SerializeField] float _orthoSize1610 = 5.9f;
-    [SerializeField] float _orthoSize32 = 6.2f;
+    [SerializeField] float _aspect15 = 6.2f;
+    [SerializeField] float _aspect16 = 5.9f;
+    [SerializeField] float _aspect17 = 5.5f;
+    [SerializeField] float _aspect18 = 5f;
 
     void Awake()
     {
         _mainCamera = GetComponentInChildren<Camera>();
+        Debug.Log(Math.Round(_mainCamera.aspect, 1));
 
-        switch (_mainCamera.aspect)
+        switch (Math.Round(_mainCamera.aspect, 1))
         {
-            case (16f / 9f): 
-                _mainCamera.orthographicSize = _orthoSize169;
+            case 1.5f: 
+                _mainCamera.orthographicSize = _aspect15;
                 break;
-            case (16f / 10f):
-                _mainCamera.orthographicSize = _orthoSize1610;
+            case 1.6f:
+                _mainCamera.orthographicSize = _aspect16;
                 break;
-            case (3f / 2f):
-                _mainCamera.orthographicSize = _orthoSize32;
+            case 1.7f:
+                _mainCamera.orthographicSize = _aspect17;
+                break;
+            case 1.8f:
+                _mainCamera.orthographicSize = _aspect18;
                 break;
             default:
-                _mainCamera.orthographicSize = _orthoSize169;
+                _mainCamera.orthographicSize = _aspect16;
                 break;
         }
     }
