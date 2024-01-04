@@ -12,7 +12,6 @@ public class CameraManager : MonoBehaviour
     void Awake()
     {
         _mainCamera = GetComponentInChildren<Camera>();
-        Debug.Log(Math.Round(_mainCamera.aspect, 1));
 
         switch (Math.Round(_mainCamera.aspect, 1))
         {
