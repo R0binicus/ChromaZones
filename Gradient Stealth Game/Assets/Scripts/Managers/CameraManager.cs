@@ -16,16 +16,16 @@ public class CameraManager : MonoBehaviour
 
         switch (Math.Round(_mainCamera.aspect, 1))
         {
-            case 1.5f: 
+            case 1.5: 
                 _mainCamera.orthographicSize = _aspect15;
                 break;
-            case 1.6f:
+            case 1.6:
                 _mainCamera.orthographicSize = _aspect16;
                 break;
-            case 1.7f:
+            case 1.7:
                 _mainCamera.orthographicSize = _aspect17;
                 break;
-            case 1.8f:
+            case 1.8:
                 _mainCamera.orthographicSize = _aspect18;
                 break;
             default:
