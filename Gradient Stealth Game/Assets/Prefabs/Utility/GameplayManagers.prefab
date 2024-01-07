@@ -819,6 +819,7 @@ GameObject:
   - component: {fileID: 5973364815963447618}
   - component: {fileID: 967849988218909932}
   - component: {fileID: 2546909711317606898}
+  - component: {fileID: 6362737479883481766}
   m_Layer: 0
   m_Name: GameplayManagers
   m_TagString: Manager
@@ -905,6 +906,19 @@ MonoBehaviour:
   _soundPlayerLose: 2
   _player: {fileID: 0}
   surfaceSingle: {fileID: 730072706651310791}
+--- !u!114 &6362737479883481766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744751833684656018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac68d0cb8dfe98e469c25e0339b6916b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Colour: 0
 --- !u!1 &4806120295657309396
 GameObject:
   m_ObjectHideFlags: 0
@@ -1630,7 +1644,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7922063717982998351}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0.7069834, y: -0, z: -0, w: 0.70723015}
   m_LocalPosition: {x: 8.89, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1663,7 +1677,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.11666667
+  m_VoxelSize: 0.1
   m_BuildHeightMesh: 0
   m_HideEditorLogs: 0
   m_NavMeshData: {fileID: 23800000, guid: 8ec799896ae7bbb4bbd64d23525b082a, type: 2}
