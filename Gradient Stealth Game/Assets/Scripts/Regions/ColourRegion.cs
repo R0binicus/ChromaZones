@@ -19,11 +19,11 @@ public class ColourRegion : MonoBehaviour
     [SerializeField] private bool _disabledColourChange = false;
     [SerializeField] private bool _reversedColourChange = false;
 
-    public int State = 0;
+    private int _state = 0;
 
     private Player _player = null;
 
-    public bool _playerInRegion = false;
+    private bool _playerInRegion = false;
 
     private ResetRegionLinkData _linkData;
     private bool _resetLink = true;
@@ -151,43 +151,43 @@ public class ColourRegion : MonoBehaviour
 
     private void SetStates()
     {
-        int originalState = State;
+        int originalState = _state;
         switch(_localColour) 
         {
             case float x when x < 45f: 
-                State = 1;
+                _state = 1;
                 SetBorderColour(330f);
             break;
             case float x when x >= 45f && x < 165f :
-                State = 2;
+                _state = 2;
                 SetBorderColour(90f);
             break;
             case float x when x >= 165f && x < 285f :
-                State = 3;
+                _state = 3;
                 SetBorderColour(210f);
             break;
             case float x when x >= 285f && x <= 360f :
-                State = 1;
+                _state = 1;
                 SetBorderColour(330f);
             break;
             default:
-                State = 2;
+                _state = 2;
                 SetBorderColour(90f);
             break;
         }
 
-        if (originalState != State)
+        if (originalState != _state)
         {
             if (_playerInRegion == true)
             {
-                _player.NewState(State);
+                _player.NewState(_state);
             }
 
             if (_enemies != null)
             {
                 foreach (Enemy enemy in _enemies)
                 {
-                    enemy.NewState(State);
+                    enemy.NewState(_state);
                 }
             }
         }
@@ -242,7 +242,7 @@ public class ColourRegion : MonoBehaviour
                 //
                 _playerInRegion = true;
 
-                _player.NewState(State);
+                _player.NewState(_state);
 
                 //_linkData._isPlayer = true;
                 //StartCoroutine(DisableLinkReset());
@@ -252,7 +252,7 @@ public class ColourRegion : MonoBehaviour
             else if (mainObject.tag == "Enemy")
             {
                 var enemyObject = mainObject.GetComponent<Enemy>();
-                enemyObject.NewState(State);
+                enemyObject.NewState(_state);
                 _enemies.Add(enemyObject);
 
 
@@ -377,12 +377,12 @@ public class ColourRegion : MonoBehaviour
         //Debug.Log("_playerInRegion" + _playerInRegion);
         if (_playerInRegion)
         {
-            _player.NewState(State);
+            _player.NewState(_state);
             //Debug.Log(State);
         }
         foreach (var enemy in _enemies)
         {
-            enemy.NewState(State);
+            enemy.NewState(_state);
         }
     }
 
