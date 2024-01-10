@@ -12,13 +12,13 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     [SerializeField] RotateType _rotateType;
 
     [Header("Return to Start Data")]
-    public Vector2 _originWaypoint; //SHOULD BE PRIVATE only public for debugging
+    private Vector2 _originWaypoint; //SHOULD BE PRIVATE only public for debugging
     private Quaternion _originAngle;
     private Vector2 _destinationDirection;
     private bool _rotatingToOrigin = false;
     private bool _reachedDestination = true;
 
-    public Vector3 _endRotEuler; //SHOULD BE DELETED AND MADE LOCAL only public for debugging 
+    private Vector3 _endRotEuler; //SHOULD BE DELETED AND MADE LOCAL only public for debugging 
 
     //Components
     private Rigidbody2D rb;
