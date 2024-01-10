@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
@@ -21,6 +20,7 @@ public class UIManager : MonoBehaviour
     bool _paused = false;
     bool _levelEnded = false;
     bool _lastLevel = false;
+    bool _buttonPressed = false;
 
     private void Awake()
     {
@@ -39,6 +39,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1.0f;
         _paused = false;
         _levelEnded = false;
+        _buttonPressed = false;
     }
 
     private void OnEnable()
@@ -65,21 +66,36 @@ public class UIManager : MonoBehaviour
     public void NextLevel()
     {
         Time.timeScale = 1.0f;
-        EventManager.EventTrigger(EventType.NEXT_LEVEL, null);
+
+        if (!_buttonPressed)
+        {
+            EventManager.EventTrigger(EventType.NEXT_LEVEL, null);
+            _buttonPressed = true;
+        }
     }
 
     // Button callback to restart level
     public void Restart()
     {
         Time.timeScale = 1.0f;
-        EventManager.EventTrigger(EventType.RESTART_LEVEL, null);
+
+        if (!_buttonPressed)
+        {
+            EventManager.EventTrigger(EventType.RESTART_LEVEL, null);
+            _buttonPressed = true;
+        }
     }
 
     //Button callback to go back to main menu
     public void Quit()
     {
         Time.timeScale = 1.0f;
-        EventManager.EventTrigger(EventType.QUIT_LEVEL, null);
+
+        if (!_buttonPressed)
+        {
+            EventManager.EventTrigger(EventType.QUIT_LEVEL, null);
+            _buttonPressed = true;
+        }
     }
 
     public void TogglePause(object data)
@@ -110,6 +126,7 @@ public class UIManager : MonoBehaviour
     {
         _paused = false;
         _levelEnded = false;
+        _buttonPressed = false;
     }
 
     public void LevelEnded(object data)

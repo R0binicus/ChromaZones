@@ -50,6 +50,7 @@ public class MainMenuUIManager : MonoBehaviour
     private bool _startNewGame;
     private Button[] _levelButtonsArr;
     private List<Button> _levelButtons;
+    private bool _buttonPressed = false; // Stops multiple clicking of same button
 
     #region Init
     private void Awake()
@@ -77,6 +78,7 @@ public class MainMenuUIManager : MonoBehaviour
         ConfirmBoxToggle(false);
         ShowPanel(_mainMenu);
         _startNewGame = false;
+        _buttonPressed = false;
         _activeCreditIndex = 0;
         EventManager.EventTrigger(EventType.MUSIC, _titleMusic);
         Cursor.lockState = CursorLockMode.None;
@@ -154,7 +156,11 @@ public class MainMenuUIManager : MonoBehaviour
     #region Level Select Menu
     public void LevelSelectButton(int levelNum)
     {
-        EventManager.EventTrigger(EventType.LEVEL_SELECTED, levelNum);
+        if (!_buttonPressed)
+        {
+            EventManager.EventTrigger(EventType.LEVEL_SELECTED, levelNum);
+            _buttonPressed = true;
+        }
     }
 
     public void DeactivateAllLevelButtons()
