@@ -373,7 +373,7 @@ public class Enemy : MonoBehaviour
     {
         Vector2 centrerDir = transform.position - callerPosition;
         RaycastHit2D hit = Physics2D.Raycast(callerPosition, centrerDir, magnitude, _layersToRaycast);
-        Debug.DrawRay(callerPosition, centrerDir, Color.red, 5f, true);
+        //Debug.DrawRay(callerPosition, centrerDir, Color.red, 5f, true);
 
         if (hit)
         {

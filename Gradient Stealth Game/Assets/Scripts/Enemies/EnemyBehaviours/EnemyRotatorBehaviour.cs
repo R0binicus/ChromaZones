@@ -11,20 +11,22 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     [SerializeField] float _timeToRotate;
     [SerializeField] RotateType _rotateType;
 
-    [Header("Return to Start Data")]
+    // Returning to waypoint data
     private Vector2 _originWaypoint; //SHOULD BE PRIVATE only public for debugging
     private Quaternion _originAngle;
     private Vector2 _destinationDirection;
     private bool _rotatingToOrigin = false;
+    private bool _rotatingToPrevAngle = false;
     private bool _reachedDestination = true;
 
     private Vector3 _endRotEuler; //SHOULD BE DELETED AND MADE LOCAL only public for debugging 
+    private Quaternion _endRot;
 
-    //Components
+    // Components
     private Rigidbody2D rb;
     private UnityEngine.AI.NavMeshAgent Agent;
 
-    // Internal Data
+    // Timer
     private float _timer;
 
     private void Awake()
@@ -42,20 +44,17 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         _originWaypoint = transform.position;
         _originAngle = transform.rotation;
         GetLocation(_originWaypoint);
-
-        //Do this because otherwise the rotators aren't in their starting
-        //position for some reason???
-        StartCoroutine(ResetPosition());
     }
 
     public override void ResetBehaviour()
     {
         ResetTimer();
+        StopAllCoroutines();
     }
 
     public override void UpdateLogicBehaviour()
     {
-        // If Enemy is at their origin waypoint, start rotating
+        // If Enemy is at their origin waypoint
         if ((_originWaypoint - (Vector2)transform.position).magnitude < 0.05f)
         {
             // Stay still
@@ -65,33 +64,51 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
                 Agent.ResetPath();
                 rb.velocity = Vector2.zero;
                 transform.position = _originWaypoint;
-            }
-            
-            // If Enemy needs to rotate back to original angle
-            if (_rotatingToOrigin)
-            {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, _originAngle, _returnRotateSpeed * Time.deltaTime);
+            }            
 
-                if (Mathf.Abs(Quaternion.Angle(_originAngle, transform.rotation)) < 0.1f)
-                {
-                    _rotatingToOrigin = false;
-                }
-            }
-            // Else, start rotation patrol
-            else
+            // If enemy is not static
+            if (_rotateSpeed != 0)    
             {
-                if (_timer > _timeToRotate)
+                // On return to origin, make sure angle is last angle used
+                if (_rotatingToPrevAngle)
                 {
-                    ResetTimer();
-                    StopAllCoroutines();
-                    StartCoroutine(Rotate());
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _returnRotateSpeed * Time.deltaTime);
+
+                    if (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) < 0.1f)
+                    {
+                        _rotatingToPrevAngle = false;
+                        transform.rotation = _endRot;
+                    }
                 }
-                else
+                // Start rotation patrol
+                else 
                 {
-                    _timer += Time.deltaTime;
+                    if (_timer > _timeToRotate)
+                    {
+                        ResetTimer();
+                        StopAllCoroutines();
+                        StartCoroutine(Rotate());
+                    }
+                    else
+                    {
+                        _timer += Time.deltaTime;
+                    }
                 }
-            }
-            
+            }   
+            // Else if it's static, just rotate back to original angle
+            else 
+            {
+                if (_rotatingToOrigin)
+                {
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, _originAngle, _returnRotateSpeed * Time.deltaTime);
+
+                    if (Mathf.Abs(Quaternion.Angle(_originAngle, transform.rotation)) < 0.1f)
+                    {
+                        _rotatingToOrigin = false;
+                        transform.rotation = _originAngle;
+                    }
+                }
+            }         
         } 
         // If Enemy is not at origin waypoint, move back to it
         else 
@@ -101,12 +118,12 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
                 _reachedDestination = false;
             }
             _rotatingToOrigin = true;
+            _rotatingToPrevAngle = true;
             GetLocation(_originWaypoint);
             Quaternion fullRotatation = Quaternion.LookRotation(transform.forward, _destinationDirection);
             Quaternion lookRot = Quaternion.identity;
             lookRot.eulerAngles = new Vector3(0,0,fullRotatation.eulerAngles.z);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, _returnRotateSpeed * Time.deltaTime);
-            //rb.velocity = _destinationDirection;
             Agent.SetDestination(_originWaypoint);
         }
     }
@@ -121,9 +138,10 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         _timer = 0;
     }
 
+    // Patrolling rotate
     IEnumerator Rotate()
     {
-        Quaternion _currentRot = transform.rotation;
+        Quaternion currentRot = transform.rotation;
 
         int signChange = 1;
 
@@ -141,18 +159,20 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
             signChange = Random.Range(0, 2) == 0 ? -1 : 1;
         }
 
-        Quaternion _endRot = _currentRot * Quaternion.Euler(0f, 0f, 90f * signChange);
+        // Calculate new angle to rotate to
+        _endRot = currentRot * Quaternion.Euler(0f, 0f, 90f * signChange);
         _endRotEuler = _endRot.eulerAngles;
         _endRotEuler.z = Mathf.Round(_endRotEuler.z / 90) * 90;
         _endRot = Quaternion.Euler(_endRotEuler.x, _endRotEuler.y, _endRotEuler.z);
 
+        // Keep rotating until enemy has reached new angle
         while (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) > 0.05f)
         {
-            
             transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _rotateSpeed * Time.deltaTime);
             yield return null;
         }
 
+        // Make sure enemy is still at its waypoint to complete turn
         if ((_originWaypoint - (Vector2)transform.position).magnitude < 0.1f)
         {
             transform.rotation = _endRot;
