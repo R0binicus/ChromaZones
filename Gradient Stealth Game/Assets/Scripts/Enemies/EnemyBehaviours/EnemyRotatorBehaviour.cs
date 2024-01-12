@@ -44,6 +44,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         _originWaypoint = transform.position;
         _originAngle = transform.rotation;
         GetLocation(_originWaypoint);
+        StopAllCoroutines();
     }
 
     public override void ResetBehaviour()
