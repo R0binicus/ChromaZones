@@ -18,7 +18,7 @@ public class UIColourUpdater : MonoBehaviour
     {
         if (_tmpMousePosition != Mouse.current.position.ReadValue())
         {
-            Colour = 45f * Time.deltaTime;
+            Colour = 45f * Time.unscaledDeltaTime;
             _tmpMousePosition = Mouse.current.position.ReadValue();
         }
         else
