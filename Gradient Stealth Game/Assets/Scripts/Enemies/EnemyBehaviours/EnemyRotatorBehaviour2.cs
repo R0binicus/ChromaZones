@@ -1,9 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public enum RotateType { Clockwise, CounterClockwise, Random }
-
-public class EnemyRotatorBehaviour : EnemyBehaviour
+public class EnemyRotatorBehaviour2 : EnemyBehaviour
 {
     [Header("Rotation Data")]
     [SerializeField] float _rotateSpeed;
@@ -19,7 +17,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     private bool _rotatingToPrevAngle = false;
     private bool _reachedDestination = true;
 
-    private Vector3 _endRotEuler;
+    private Vector3 _endRotEuler; //SHOULD BE DELETED AND MADE LOCAL only public for debugging 
     private Quaternion _endRot;
 
     // Components
@@ -43,10 +41,8 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
         // Retrieve origin transform data so Enemy can return to it if necessary
         _originWaypoint = transform.position;
         _originAngle = transform.rotation;
-        _endRot = _originAngle;
         GetLocation(_originWaypoint);
-        //StopAllCoroutines();
-        StartCoroutine(ResetPosition());
+        StopAllCoroutines();
     }
 
     public override void ResetBehaviour()
