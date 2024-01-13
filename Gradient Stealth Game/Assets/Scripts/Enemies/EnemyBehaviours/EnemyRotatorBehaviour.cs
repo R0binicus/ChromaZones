@@ -12,8 +12,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     [SerializeField] RotateType _rotateType;
 
     // Returning to waypoint data
-    private Vector2 _originWaypoint; //SHOULD BE PRIVATE only public for debugging
-    private Quaternion _originAngle;
+    private Vector2 _originWaypoint;
     private Vector2 _destinationDirection;
     private bool _rotatingToOrigin = false;
     private bool _rotatingToPrevAngle = false;
@@ -42,8 +41,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
 
         // Retrieve origin transform data so Enemy can return to it if necessary
         _originWaypoint = transform.position;
-        _originAngle = transform.rotation;
-        _endRot = _originAngle;
+        _endRot = transform.rotation;
         GetLocation(_originWaypoint);
         //StopAllCoroutines();
         StartCoroutine(ResetPosition());
@@ -103,12 +101,12 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
             {
                 if (_rotatingToOrigin)
                 {
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, _originAngle, _returnRotateSpeed * Time.deltaTime);
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _returnRotateSpeed * Time.deltaTime);
 
-                    if (Mathf.Abs(Quaternion.Angle(_originAngle, transform.rotation)) < 0.1f)
+                    if (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) < 0.1f)
                     {
                         _rotatingToOrigin = false;
-                        transform.rotation = _originAngle;
+                        transform.rotation = _endRot;
                     }
                 }
             }         
