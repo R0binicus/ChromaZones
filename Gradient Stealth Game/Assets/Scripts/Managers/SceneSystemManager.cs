@@ -19,6 +19,7 @@ public class SceneSystemManager : MonoBehaviour
     int _numOfScenes; // Number of total scenes in the game
     int _mainMenuIndex;
     int _gameplayIndex;
+    const int _lastMainLevelIndex = 14;
 
     private void Awake()
     {
@@ -86,6 +87,8 @@ public class SceneSystemManager : MonoBehaviour
 
             EventManager.EventTrigger(EventType.FADING, true);
             EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
+            CheckLevelIndex(_currentLevel.buildIndex);
+
         }
     }
 
@@ -171,7 +174,7 @@ public class SceneSystemManager : MonoBehaviour
     }
     #endregion
 
-    #region Level Loading/Unloading
+    #region Level-Related Functions
     // Only loads levels, does not load MainMenu scene or core scenes
     IEnumerator LoadLevel(int index)
     {
@@ -180,10 +183,34 @@ public class SceneSystemManager : MonoBehaviour
         _currentLevel = SceneManager.GetSceneByBuildIndex(index);
     }
 
+    // Only unloads levels
     IEnumerator UnloadLevel(int index)
     {
         EventManager.EventTrigger(EventType.LEVEL_ENDED, null);
         yield return StartCoroutine(UnloadScene(index));
+    }
+
+    void CheckLevelIndex(int index)
+    {
+        // Send event that says if this is the last main level before bonus levels start
+        if (index == _lastMainLevelIndex)
+        {
+            EventManager.EventTrigger(EventType.BONUS_LEVEL_START, true);
+        }
+        else
+        {
+            EventManager.EventTrigger(EventType.BONUS_LEVEL_START, false);
+        }
+
+        // Send event that says if this is the last level in the build
+        if (index == _numOfScenes - 1 && (index != _mainMenuIndex || index != _gameplayIndex))
+        {
+            EventManager.EventTrigger(EventType.SCENE_COUNT, true);
+        }
+        else
+        {
+            EventManager.EventTrigger(EventType.SCENE_COUNT, false);
+        }
     }
     #endregion
 
@@ -202,15 +229,7 @@ public class SceneSystemManager : MonoBehaviour
         SceneManager.SetActiveScene(scene);
         _currentLevel = scene;
 
-        // Send event that says if this is the last level in the build
-        if (index == _numOfScenes - 1 && (index != _mainMenuIndex || index != _gameplayIndex))
-        {
-            EventManager.EventTrigger(EventType.SCENE_COUNT, true);
-        }
-        else
-        {
-            EventManager.EventTrigger(EventType.SCENE_COUNT, false);
-        }
+        CheckLevelIndex(index);
     }
 
     IEnumerator UnloadScene(int index)

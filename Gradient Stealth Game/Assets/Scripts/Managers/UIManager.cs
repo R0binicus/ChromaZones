@@ -1,29 +1,36 @@
+using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
     // UI Panels
     [Header("Canvases")]
-    [SerializeField] GameObject _gameCanvas;
+    [SerializeField] private GameObject _gameCanvas;
     [Header("Game Panels")]
-    [SerializeField] GameObject _winPanel;
-    [SerializeField] GameObject _losePanel;
-    [SerializeField] GameObject _pausePanel;
-    [SerializeField] GameObject _buttonsPanel;
+    [SerializeField] private GameObject _winPanel;
+    [SerializeField] private GameObject _losePanel;
+    [SerializeField] private GameObject _pausePanel;
+    [SerializeField] private GameObject _buttonsPanel;
     [Header("Buttons")]
-    [SerializeField] GameObject _nextLevelButton;
+    [SerializeField] private GameObject _nextLevelButton;
 
     [Header("Sounds")]
     [SerializeField] private Sound _buttonSFX;
 
     // Internal Data
-    bool _paused = false;
-    bool _levelEnded = false;
-    bool _lastLevel = false;
-    bool _buttonPressed = false;
+    private bool _paused = false;
+    private bool _levelEnded = false;
+    private bool _lastLevel = false;
+    private bool _lastMainLevel = false;
+    private bool _buttonPressed = false;
+    private TextMeshProUGUI _nextLevelButtonText;
 
     private void Awake()
     {
+        // Get NextLevelButton Text and assign string
+        _nextLevelButtonText = _nextLevelButton.GetComponentInChildren<TextMeshProUGUI>();
+        _nextLevelButtonText.text = "Next Level";
+        
         // Deactivate UI at start of game
         DeactivateUI();
 
@@ -50,6 +57,7 @@ public class UIManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.LEVEL_ENDED, LevelEnded);
         EventManager.EventSubscribe(EventType.LEVEL_STARTED, LevelStarted);
         EventManager.EventSubscribe(EventType.SCENE_COUNT, LastLevelHandler);
+        EventManager.EventSubscribe(EventType.BONUS_LEVEL_START, LastMainLevelHandler);
     }
 
     private void OnDisable()
@@ -60,6 +68,7 @@ public class UIManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LEVEL_ENDED, LevelEnded);
         EventManager.EventUnsubscribe(EventType.LEVEL_STARTED, LevelStarted);
         EventManager.EventUnsubscribe(EventType.SCENE_COUNT, LastLevelHandler);
+        EventManager.EventUnsubscribe(EventType.BONUS_LEVEL_START, LastMainLevelHandler);
     }
 
     // Button callback to go to the next level
@@ -157,6 +166,16 @@ public class UIManager : MonoBehaviour
         _lastLevel = (bool)data;
     }
 
+    public void LastMainLevelHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.LogError("Last Main Level Handler has not received a bool");
+        }
+
+        _lastMainLevel = (bool)data;
+    }
+
     private void ShowLosePanel(object data)
     {
         _levelEnded = true;
@@ -182,6 +201,14 @@ public class UIManager : MonoBehaviour
         }
         else
         {
+            if (_lastMainLevel)
+            {
+                _nextLevelButtonText.text = "Bonus";
+            }
+            else
+            {
+                _nextLevelButtonText.text = "Next Level";
+            }
             _nextLevelButton.SetActive(true);
         }
 

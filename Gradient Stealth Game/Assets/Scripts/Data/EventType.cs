@@ -29,6 +29,7 @@ public enum EventType
     SCENE_LOAD,   
     FADING,
     SCENE_COUNT,
+    BONUS_LEVEL_START,
     PLAYER_SPAWNPOINT,
     LEVEL_SELECTED,
     LEVEL_STARTED,

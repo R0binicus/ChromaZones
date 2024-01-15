@@ -11,10 +11,12 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private Sound _soundPlayerWin;
     [SerializeField] private Sound _soundPlayerLose;
 
-    // GameObject References
+    [Header("GameObject References")]
     [SerializeField] private Player _player;
     [SerializeField] private NavMeshPlus.Components.NavMeshSurface surfaceSingle;
-    
+    [Header("Debugging")]
+    [SerializeField] private bool _killAllEnemies = false;
+
     private void Awake()
     {
         _enemies = new List<Enemy>();
@@ -48,6 +50,11 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         RebuildNavMesh(null);
+
+        if (_killAllEnemies)
+        {
+            CheckEnemiesLeft();
+        }
     }
 
     // Called once a level is loaded
@@ -85,10 +92,17 @@ public class EnemyManager : MonoBehaviour
         Enemy enemy = data as Enemy;
         if (enemy == null) return;
 
-        // Assign EnemyManager and Player to enemy then add to list of enemies
-        enemy.EnemyManager = this;
-        enemy.Player = _player;
-        _enemies.Add(enemy);
+        if (!_killAllEnemies)
+        {
+            // Assign EnemyManager and Player to enemy then add to list of enemies
+            enemy.EnemyManager = this;
+            enemy.Player = _player;
+            _enemies.Add(enemy);
+        }
+        else
+        {
+            enemy.gameObject.SetActive(false);
+        }
     }
 
     // To assign player to enemies that have already been added to the enemy list before the player init
