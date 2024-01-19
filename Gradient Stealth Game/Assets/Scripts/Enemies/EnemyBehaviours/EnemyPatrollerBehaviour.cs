@@ -12,12 +12,10 @@ public class EnemyPatrollerBehaviour : EnemyBehaviour
     private int waypointIndex = 1;
     [SerializeField] private int roationSpeed = 100;
 
-    private Rigidbody2D rb;
     private UnityEngine.AI.NavMeshAgent _agent;
 
     public void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         _agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         originWaypoint = transform.position;
         UpdateWaypoint();
