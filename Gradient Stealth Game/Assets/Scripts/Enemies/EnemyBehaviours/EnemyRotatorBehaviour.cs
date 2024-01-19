@@ -14,7 +14,6 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     // Returning to waypoint data
     private Vector2 _originWaypoint;
     private Vector2 _destinationDirection;
-    private bool _rotatingToOrigin = false;
     private bool _rotatingToPrevAngle = false;
     private bool _reachedDestination = true;
 
@@ -66,50 +65,31 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
                 rb.velocity = Vector2.zero;
                 transform.position = _originWaypoint;
             }            
-
-            // If enemy is not static
-            if (_rotateSpeed != 0)    
+            // On return to origin, make sure angle is last angle used
+            else if (_rotatingToPrevAngle)
             {
-                // On return to origin, make sure angle is last angle used
-                if (_rotatingToPrevAngle)
-                {
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _returnRotateSpeed * Time.deltaTime);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _returnRotateSpeed * Time.deltaTime);
 
-                    if (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) < 0.1f)
-                    {
-                        _rotatingToPrevAngle = false;
-                        transform.rotation = _endRot;
-                    }
-                }
-                // Start rotation patrol
-                else 
+                if (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) < 0.1f)
                 {
-                    if (_timer > _timeToRotate)
-                    {
-                        ResetTimer();
-                        StopAllCoroutines();
-                        StartCoroutine(Rotate());
-                    }
-                    else
-                    {
-                        _timer += Time.deltaTime;
-                    }
+                    _rotatingToPrevAngle = false;
+                    transform.rotation = _endRot;
                 }
-            }   
-            // Then once still, rotate back to original angle
+            }
+            // Start rotation patrol
             else 
             {
-                if (_rotatingToOrigin)
+                if (_timer > _timeToRotate)
                 {
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, _endRot, _returnRotateSpeed * Time.deltaTime);
-
-                    if (Mathf.Abs(Quaternion.Angle(_endRot, transform.rotation)) < 0.1f)
-                    {
-                        _rotatingToOrigin = false;
-                        transform.rotation = _endRot;
-                    }
+                    ResetTimer();
+                    StopAllCoroutines();
+                    StartCoroutine(Rotate());
                 }
-            }         
+                else
+                {
+                    _timer += Time.deltaTime;
+                }
+            }    
         } 
         // If Enemy is not at origin waypoint, move back to it
         else 
@@ -118,7 +98,6 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
             {
                 _reachedDestination = false;
             }
-            _rotatingToOrigin = true;
             _rotatingToPrevAngle = true;
             GetLocation(_originWaypoint);
             Quaternion fullRotatation = Quaternion.LookRotation(transform.forward, _destinationDirection);
