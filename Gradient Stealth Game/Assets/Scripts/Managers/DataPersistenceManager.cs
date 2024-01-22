@@ -67,9 +67,13 @@ public class DataPersistenceManager : MonoBehaviour
 
         if (_gameSaveData != null)
         {
-            // Need to minus 2 since data is the buildIndex NOT the level number
-            _gameSaveData.LevelUnlocked = (int)data - 2;
-            _fileHandler.Save(_gameSaveData);
+            // Check current progress so no later levels unlocked are overridden and locked again
+            // Also need to minus 2 since data is the buildIndex NOT the level number
+            if (_gameSaveData.LevelUnlocked < (int)data - 2)
+            {
+                _gameSaveData.LevelUnlocked = (int)data - 2;
+                _fileHandler.Save(_gameSaveData);
+            }
         }
         else
         {
