@@ -49,4 +49,8 @@ public enum EventType
     STOP_MUSIC,
     PAUSE_MUSIC,
     MUTEMUSIC_TOGGLE,
+
+    // Debugging
+    DEBUG_GAME,
+    KILL_ALL_ENEMIES
 };

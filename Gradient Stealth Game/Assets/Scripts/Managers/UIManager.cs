@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
 
     [Header("Sounds")]
     [SerializeField] private Sound _buttonSFX;
+    [Header("Debugging")]
+    [SerializeField] private GameObject _debugCanvas;
 
     // Internal Data
     private bool _paused = false;
@@ -30,6 +32,7 @@ public class UIManager : MonoBehaviour
         // Get NextLevelButton Text and assign string
         _nextLevelButtonText = _nextLevelButton.GetComponentInChildren<TextMeshProUGUI>();
         _nextLevelButtonText.text = "Next Level";
+        _debugCanvas.SetActive(false);
         
         // Deactivate UI at start of game
         DeactivateUI();
@@ -58,6 +61,7 @@ public class UIManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.LEVEL_STARTED, LevelStarted);
         EventManager.EventSubscribe(EventType.SCENE_COUNT, LastLevelHandler);
         EventManager.EventSubscribe(EventType.BONUS_LEVEL_START, LastMainLevelHandler);
+        EventManager.EventSubscribe(EventType.DEBUG_GAME, DebuggingHandler);
     }
 
     private void OnDisable()
@@ -69,6 +73,7 @@ public class UIManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LEVEL_STARTED, LevelStarted);
         EventManager.EventUnsubscribe(EventType.SCENE_COUNT, LastLevelHandler);
         EventManager.EventUnsubscribe(EventType.BONUS_LEVEL_START, LastMainLevelHandler);
+        EventManager.EventUnsubscribe(EventType.DEBUG_GAME, DebuggingHandler);
     }
 
     // Button callback to go to the next level
@@ -154,6 +159,16 @@ public class UIManager : MonoBehaviour
         _nextLevelButton.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    public void DebuggingHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.LogError("DebuggingHandler has not received a bool");
+        }
+        
+        _debugCanvas.SetActive((bool)data);
     }
 
     public void LastLevelHandler(object data)

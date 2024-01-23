@@ -53,6 +53,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DebugKillAllEnemies"",
+                    ""type"": ""Button"",
+                    ""id"": ""12c45d62-db1a-47f4-a3eb-d2c7a03f5b16"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -209,6 +218,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""MuteMusic"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf428ac5-eead-495e-a65f-56ce92b84654"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DebugKillAllEnemies"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -248,6 +268,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Gameplay_PauseToggle = m_Gameplay.FindAction("PauseToggle", throwIfNotFound: true);
         m_Gameplay_Move = m_Gameplay.FindAction("Move", throwIfNotFound: true);
         m_Gameplay_MuteMusic = m_Gameplay.FindAction("MuteMusic", throwIfNotFound: true);
+        m_Gameplay_DebugKillAllEnemies = m_Gameplay.FindAction("DebugKillAllEnemies", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Newaction = m_UI.FindAction("New action", throwIfNotFound: true);
@@ -315,6 +336,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_PauseToggle;
     private readonly InputAction m_Gameplay_Move;
     private readonly InputAction m_Gameplay_MuteMusic;
+    private readonly InputAction m_Gameplay_DebugKillAllEnemies;
     public struct GameplayActions
     {
         private @InputActions m_Wrapper;
@@ -322,6 +344,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @PauseToggle => m_Wrapper.m_Gameplay_PauseToggle;
         public InputAction @Move => m_Wrapper.m_Gameplay_Move;
         public InputAction @MuteMusic => m_Wrapper.m_Gameplay_MuteMusic;
+        public InputAction @DebugKillAllEnemies => m_Wrapper.m_Gameplay_DebugKillAllEnemies;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -340,6 +363,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @MuteMusic.started += instance.OnMuteMusic;
             @MuteMusic.performed += instance.OnMuteMusic;
             @MuteMusic.canceled += instance.OnMuteMusic;
+            @DebugKillAllEnemies.started += instance.OnDebugKillAllEnemies;
+            @DebugKillAllEnemies.performed += instance.OnDebugKillAllEnemies;
+            @DebugKillAllEnemies.canceled += instance.OnDebugKillAllEnemies;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -353,6 +379,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @MuteMusic.started -= instance.OnMuteMusic;
             @MuteMusic.performed -= instance.OnMuteMusic;
             @MuteMusic.canceled -= instance.OnMuteMusic;
+            @DebugKillAllEnemies.started -= instance.OnDebugKillAllEnemies;
+            @DebugKillAllEnemies.performed -= instance.OnDebugKillAllEnemies;
+            @DebugKillAllEnemies.canceled -= instance.OnDebugKillAllEnemies;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -421,6 +450,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnPauseToggle(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnMuteMusic(InputAction.CallbackContext context);
+        void OnDebugKillAllEnemies(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

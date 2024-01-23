@@ -15,7 +15,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private Player _player;
     [SerializeField] private NavMeshPlus.Components.NavMeshSurface surfaceSingle;
     [Header("Debugging")]
-    [SerializeField] private bool _killAllEnemies = false;
+    [SerializeField] private bool _killAllEnemies;
 
     private void Awake()
     {
@@ -25,6 +25,7 @@ public class EnemyManager : MonoBehaviour
         EventManager.EventInitialise(EventType.ASSIGNMENT_CODE_TRIGGER);
         EventManager.EventInitialise(EventType.AREA_CHASE_TRIGGER);
         EventManager.EventInitialise(EventType.REBUILD_NAVMESH);
+        EventManager.EventInitialise(EventType.DEBUG_GAME);
     }
 
     private void OnEnable()
@@ -35,6 +36,7 @@ public class EnemyManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.INIT_PLAYER, PlayerInitHandler);
         EventManager.EventSubscribe(EventType.LEVEL_STARTED, LevelStart);
         EventManager.EventSubscribe(EventType.LEVEL_ENDED, LevelEnd);
+        EventManager.EventSubscribe(EventType.KILL_ALL_ENEMIES, KillAllEnemies);
     }
 
     private void OnDisable()
@@ -45,16 +47,14 @@ public class EnemyManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.INIT_PLAYER, PlayerInitHandler);
         EventManager.EventUnsubscribe(EventType.LEVEL_STARTED, LevelStart);
         EventManager.EventUnsubscribe(EventType.LEVEL_ENDED, LevelEnd);
+        EventManager.EventUnsubscribe(EventType.KILL_ALL_ENEMIES, KillAllEnemies);
     }
 
     private void Start()
     {
+        EventManager.EventTrigger(EventType.DEBUG_GAME, _killAllEnemies);
+        
         RebuildNavMesh(null);
-
-        if (_killAllEnemies)
-        {
-            CheckEnemiesLeft();
-        }
     }
 
     // Called once a level is loaded
@@ -92,17 +92,10 @@ public class EnemyManager : MonoBehaviour
         Enemy enemy = data as Enemy;
         if (enemy == null) return;
 
-        if (!_killAllEnemies)
-        {
-            // Assign EnemyManager and Player to enemy then add to list of enemies
-            enemy.EnemyManager = this;
-            enemy.Player = _player;
-            _enemies.Add(enemy);
-        }
-        else
-        {
-            enemy.gameObject.SetActive(false);
-        }
+        // Assign EnemyManager and Player to enemy then add to list of enemies
+        enemy.EnemyManager = this;
+        enemy.Player = _player;
+        _enemies.Add(enemy);
     }
 
     // To assign player to enemies that have already been added to the enemy list before the player init
@@ -182,5 +175,15 @@ public class EnemyManager : MonoBehaviour
         // Signal game won
         EventManager.EventTrigger(EventType.SFX, _soundPlayerWin);
         EventManager.EventTrigger(EventType.WIN, null);
+    }
+
+    public void KillAllEnemies(object data)
+    {
+        foreach(Enemy enemy in _enemies)
+        {
+            enemy.gameObject.SetActive(false);
+        }
+
+        CheckEnemiesLeft();
     }
 }
