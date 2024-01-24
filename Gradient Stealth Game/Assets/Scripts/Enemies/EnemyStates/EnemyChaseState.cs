@@ -12,6 +12,8 @@ public class EnemyChaseState : EnemyState
         Enemy.SetChaseSpeed();
         Enemy.ActivateAllFOVs(false);
         EventManager.EventTrigger(EventType.SFX, Enemy.SoundEnemyChase);
+        Enemy.Chasing(true);
+        Enemy.NewState(Enemy.RegionState);
     }
 
     public override void Exit()
@@ -19,6 +21,8 @@ public class EnemyChaseState : EnemyState
         Enemy.Agent.ResetPath();
         Enemy.Agent.velocity = Vector2.zero;
         //Enemy.RB.velocity = Vector2.zero;
+        Enemy.Chasing(false);
+        Enemy.NewState(Enemy.RegionState);
     }
 
     public override void LogicUpdate()

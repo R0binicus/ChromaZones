@@ -68,6 +68,8 @@ public class Enemy : MonoBehaviour
     #region Internal Data
     LayerMask _layersToRaycast;
     private int _dontStartYet = 0;
+
+    private bool _isChasing = false;
     #endregion
 
     #region GameObject Refs
@@ -300,23 +302,31 @@ public class Enemy : MonoBehaviour
         RegionState = input;
         if (!InvulnerableState)
         {
-            if (RegionState == 1)
+            Debug.Log(StateMachine.CurrentState);
+            if (_isChasing)
             {
-                if (!_isEnemyHiding)
-                {
-                    HidingSprite();
-                    _isEnemyHiding = true;
-                }
-                else {HidingSprite();}
+                HidingSprite();
             }
-            else 
+            else
             {
-                if (_isEnemyHiding)
+                if (RegionState == 1)
                 {
-                    NormalSprite();
-                    _isEnemyHiding = false;
+                    if (!_isEnemyHiding)
+                    {
+                        HidingSprite();
+                        _isEnemyHiding = true;
+                    }
+                    else {HidingSprite();}
                 }
-                else {NormalSprite();}
+                else 
+                {
+                    if (_isEnemyHiding)
+                    {
+                        NormalSprite();
+                        _isEnemyHiding = false;
+                    }
+                    else {NormalSprite();}
+                }
             }
         }
         else 
@@ -390,5 +400,10 @@ public class Enemy : MonoBehaviour
     {
         StateMachine.ChangeState(CaughtState);
         EnemyManager.PlayerCaught();
+    }
+
+    public void Chasing(bool isChasing)
+    {
+        _isChasing = isChasing;
     }
 }
