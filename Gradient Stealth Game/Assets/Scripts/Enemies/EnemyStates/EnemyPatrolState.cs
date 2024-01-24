@@ -8,7 +8,6 @@ public class EnemyPatrolState : EnemyState
     {
         Enemy.ActivateAllFOVs(true);
         Enemy.SetFOVsData(Enemy.PatrolFOVData);
-        //Enemy.CreateFOVs();
         Enemy.EnemyBehaviour.ResetBehaviour();
     }
     public override void LogicUpdate()
@@ -33,6 +32,11 @@ public class EnemyPatrolState : EnemyState
     public override void Exit()
     {
 
+    }
+
+    public override void Check()
+    {
+        Enemy.UpdateSprite();
     }
 
     public override void OnCollisionEnter2D(Collision2D collision)

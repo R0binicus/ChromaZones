@@ -10,5 +10,7 @@ public abstract class State
 
     public virtual void Exit() {}
 
+    public virtual void Check() {}
+
     public virtual void OnCollisionEnter2D(Collision2D collision) {}
 }

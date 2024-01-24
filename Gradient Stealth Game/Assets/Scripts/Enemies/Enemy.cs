@@ -68,8 +68,6 @@ public class Enemy : MonoBehaviour
     #region Internal Data
     LayerMask _layersToRaycast;
     private int _dontStartYet = 0;
-
-    private bool _isChasing = false;
     #endregion
 
     #region GameObject Refs
@@ -200,10 +198,7 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //if (_dontStartYet >= 5)
-        //{
-            StateMachine.CurrentState.OnCollisionEnter2D(collision);
-        //}
+        StateMachine.CurrentState.OnCollisionEnter2D(collision);
     }
 
     public bool PlayerSpotted()
@@ -218,22 +213,6 @@ public class Enemy : MonoBehaviour
 
         return false;
     }
-
-    // Decide whether to activate all or one FOV
-    //public void FOVsIsActive(bool isActive, bool isAlerted)
-    //{
-    //    // Activate (all?) FOVs
-    //    if (isActive)
-    //    {
-    //        
-    //        ActivateAllFOVs(true);
-    //    }
-    //    // Deactivate all FOVs
-    //    else
-    //    {
-    //        ActivateAllFOVs(false);
-    //    }
-    //}
 
     public void ActivateAllFOVs(bool flag)
     {
@@ -300,33 +279,30 @@ public class Enemy : MonoBehaviour
     public void NewState(int input)
     {
         RegionState = input;
+        StateMachine.CurrentState.Check();
+    }
+
+    public void UpdateSprite()
+    {
         if (!InvulnerableState)
         {
-            Debug.Log(StateMachine.CurrentState);
-            if (_isChasing)
+            if (RegionState == 1)
             {
-                HidingSprite();
+                if (!_isEnemyHiding)
+                {
+                    HidingSprite();
+                    _isEnemyHiding = true;
+                }
+                else {HidingSprite();}
             }
-            else
+            else 
             {
-                if (RegionState == 1)
+                if (_isEnemyHiding)
                 {
-                    if (!_isEnemyHiding)
-                    {
-                        HidingSprite();
-                        _isEnemyHiding = true;
-                    }
-                    else {HidingSprite();}
+                    NormalSprite();
+                    _isEnemyHiding = false;
                 }
-                else 
-                {
-                    if (_isEnemyHiding)
-                    {
-                        NormalSprite();
-                        _isEnemyHiding = false;
-                    }
-                    else {NormalSprite();}
-                }
+                else {NormalSprite();}
             }
         }
         else 
@@ -400,10 +376,5 @@ public class Enemy : MonoBehaviour
     {
         StateMachine.ChangeState(CaughtState);
         EnemyManager.PlayerCaught();
-    }
-
-    public void Chasing(bool isChasing)
-    {
-        _isChasing = isChasing;
     }
 }

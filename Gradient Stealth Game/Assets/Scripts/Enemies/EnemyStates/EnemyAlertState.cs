@@ -40,6 +40,11 @@ public class EnemyAlertState : EnemyState
         //Debug.Log("Leaving Enemy Alert State");
     }
 
+    public override void Check()
+    {
+        Enemy.UpdateSprite();
+    }
+
     // If player touches Enemy whilst in hiding
     public override void OnCollisionEnter2D(Collision2D collision)
     {
