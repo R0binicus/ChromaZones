@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _losePanel;
     [SerializeField] private GameObject _pausePanel;
     [SerializeField] private GameObject _buttonsPanel;
+    [SerializeField] private GameObject _timerPanel;
     [Header("Buttons")]
     [SerializeField] private GameObject _nextLevelButton;
 
@@ -130,6 +131,7 @@ public class UIManager : MonoBehaviour
                 Cursor.visible = true;
                 Time.timeScale = 0.0f;
                 _nextLevelButton.SetActive(false);
+                _timerPanel.SetActive(true);
                 _buttonsPanel.SetActive(true);
                 _pausePanel.SetActive(true);
             }
@@ -155,6 +157,7 @@ public class UIManager : MonoBehaviour
         _pausePanel.SetActive(false);
         _losePanel.SetActive(false);
         _winPanel.SetActive(false);
+        _timerPanel.SetActive(false);
         _buttonsPanel.SetActive(false);
         _nextLevelButton.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
@@ -198,6 +201,7 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         _nextLevelButton.SetActive(false);
+        _timerPanel.SetActive(true);
         _buttonsPanel.SetActive(true);
         _losePanel.SetActive(true);
     }
@@ -227,6 +231,7 @@ public class UIManager : MonoBehaviour
             _nextLevelButton.SetActive(true);
         }
 
+        _timerPanel.SetActive(true);
         _buttonsPanel.SetActive(true);
         _winPanel.SetActive(true);
     }

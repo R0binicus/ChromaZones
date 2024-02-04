@@ -248,8 +248,11 @@ public class Enemy : MonoBehaviour
     // Change between visible and 'hiding'
     public void HidingSprite()
     {
-        SpriteRenderer.sprite = _hidingSprite;
-        _fillSprite.enabled = false;
+        if (!InvulnerableState)
+        {
+            SpriteRenderer.sprite = _hidingSprite;
+            _fillSprite.enabled = false;
+        }
     }
 
     public void NormalSprite()
