@@ -2,19 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TimerManager : MonoBehaviour
 {
     private float _currentTimer = 0f;
-    private float _bestTimer = 0f;
+    private List<float> _bestTimers = new List<float>();
     [SerializeField] private TMP_Text _currentTimerText;
     [SerializeField] private TMP_Text _bestTimerText;
     private bool _timerPaused = false;
     private bool _gameOver = false;
 
+    // Scene Tracking
+    private int _numOfScenes;
+    private Scene _currentLevel;
+    private int _currentTimerInt;
+
     private void Awake()
     {
+        _numOfScenes = SceneManager.sceneCountInBuildSettings;
+        int count = SceneManager.loadedSceneCount;
 
+        for (int i = 0; i < count; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+
+            if (scene.name != "Gameplay" && scene.name != "Services")
+            {
+                _currentLevel = scene;
+            }
+        }
+        int x = 3;
+        while (_numOfScenes > x)
+        {
+            _bestTimers.Add(0f);
+            x++;
+        }
+        _currentTimerInt = _currentLevel.buildIndex + 3;
     }
 
     private void OnEnable()
@@ -35,7 +59,7 @@ public class TimerManager : MonoBehaviour
     
     void Start()
     {
-        DisplayTime(_bestTimer, _bestTimerText);
+        
     }
 
     // Update is called once per frame
@@ -60,20 +84,18 @@ public class TimerManager : MonoBehaviour
         TMP.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-    
-
     public void WinHandler(object data)
     {
         _gameOver = true;
-        if (_currentTimer < _bestTimer)
+        if (_currentTimer < _bestTimers[_currentTimerInt])
         {
-            _bestTimer = _currentTimer;
-            DisplayTime(_bestTimer, _bestTimerText);
+            _bestTimers[_currentTimerInt] = _currentTimer;
+            DisplayTime(_bestTimers[_currentTimerInt], _bestTimerText);
         }
-        else if (_bestTimer == 0f)
+        else if (_bestTimers[_currentTimerInt] == 0f)
         {
-            _bestTimer = _currentTimer;
-            DisplayTime(_bestTimer, _bestTimerText);
+            _bestTimers[_currentTimerInt] = _currentTimer;
+            DisplayTime(_bestTimers[_currentTimerInt], _bestTimerText);
         }
     }
 
@@ -84,9 +106,25 @@ public class TimerManager : MonoBehaviour
 
     public void LevelStart(object data)
     {
+        int count = SceneManager.loadedSceneCount;
+
+        for (int i = 0; i < count; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+
+            if (scene.name != "Gameplay" && scene.name != "Services")
+            {
+                _currentLevel = scene;
+            }
+        }
+
+        _currentTimerInt = _currentLevel.buildIndex + 3;
+        
         _currentTimer = 0f;
         _gameOver = false;
         _timerPaused = false;
+
+        DisplayTime(_bestTimers[_currentTimerInt], _bestTimerText);
     }
 
     public void TogglePause(object data)
