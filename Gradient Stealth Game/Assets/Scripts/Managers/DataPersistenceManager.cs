@@ -11,10 +11,14 @@ public class DataPersistenceManager : MonoBehaviour
     private SaveData _gameSaveData;
     private FileDataHandler _fileHandler;
 
+    private List<float> _bestTimers = new List<float>();
+
     private void Awake()
     {
         EventManager.EventInitialise(EventType.LOAD_GAME_SUCCESS);
         EventManager.EventInitialise(EventType.LOAD_GAME_FAILED);
+        EventManager.EventInitialise(EventType.TIMER_SAVE);
+        EventManager.EventInitialise(EventType.TIMER_LOAD);
     }
 
     private void OnEnable()
@@ -22,6 +26,7 @@ public class DataPersistenceManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.NEW_GAME_REQUEST, NewGameHandler);
         EventManager.EventSubscribe(EventType.LOAD_GAME_REQUEST, LoadGameHandler);
         EventManager.EventSubscribe(EventType.SAVE_GAME, SaveGameHandler);
+        EventManager.EventSubscribe(EventType.TIMER_SAVE, TimerSaveHandler);
     }
 
     private void OnDisable()
@@ -29,6 +34,7 @@ public class DataPersistenceManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.NEW_GAME_REQUEST, NewGameHandler);
         EventManager.EventUnsubscribe(EventType.LOAD_GAME_REQUEST, LoadGameHandler);
         EventManager.EventUnsubscribe(EventType.SAVE_GAME, SaveGameHandler);
+        EventManager.EventUnsubscribe(EventType.TIMER_SAVE, TimerSaveHandler);
     }
 
     private void Start()
@@ -40,6 +46,7 @@ public class DataPersistenceManager : MonoBehaviour
     {
         // Create new save data and save to file
         _gameSaveData = new SaveData();
+        _bestTimers = _gameSaveData.LevelTimers;
         _fileHandler.Save(_gameSaveData);
     }
 
@@ -55,6 +62,7 @@ public class DataPersistenceManager : MonoBehaviour
         else
         {
             EventManager.EventTrigger(EventType.LOAD_GAME_SUCCESS, _gameSaveData);
+            _gameSaveData.LevelTimers = _bestTimers;
         }
     }
 
@@ -72,12 +80,26 @@ public class DataPersistenceManager : MonoBehaviour
             if (_gameSaveData.LevelUnlocked < (int)data - 2)
             {
                 _gameSaveData.LevelUnlocked = (int)data - 2;
-                _fileHandler.Save(_gameSaveData);
             }
+            _gameSaveData.LevelTimers = _bestTimers;
+            _fileHandler.Save(_gameSaveData);
         }
         else
         {
             Debug.Log("No save game data, possibly in leveleditormode");
+        }
+    }
+
+    public void TimerSaveHandler(object data)
+    {
+        if (data == null)
+        {
+            EventManager.EventTrigger(EventType.TIMER_LOAD, _bestTimers);
+        }
+        else
+        {
+            _bestTimers = (List<float>)data;
+            EventManager.EventTrigger(EventType.SAVE_GAME, _gameSaveData.LevelUnlocked);
         }
     }
 }

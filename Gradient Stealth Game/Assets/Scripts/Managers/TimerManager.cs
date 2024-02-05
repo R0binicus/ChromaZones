@@ -21,24 +21,15 @@ public class TimerManager : MonoBehaviour
     private void Awake()
     {
         _numOfScenes = SceneManager.sceneCountInBuildSettings;
-        int count = SceneManager.loadedSceneCount;
 
-        for (int i = 0; i < count; i++)
-        {
-            Scene scene = SceneManager.GetSceneAt(i);
+        CheckCurrentLevel();
 
-            if (scene.name != "Gameplay" && scene.name != "Services")
-            {
-                _currentLevel = scene;
-            }
-        }
         int x = 3;
         while (_numOfScenes > x)
         {
             _bestTimers.Add(0f);
             x++;
         }
-        _currentTimerInt = _currentLevel.buildIndex + 3;
     }
 
     private void OnEnable()
@@ -47,6 +38,7 @@ public class TimerManager : MonoBehaviour
         EventManager.EventSubscribe(EventType.LOSE, LoseHandler);
         EventManager.EventSubscribe(EventType.LEVEL_STARTED, LevelStart);
         EventManager.EventSubscribe(EventType.PAUSE_TOGGLE, TogglePause);
+        EventManager.EventSubscribe(EventType.TIMER_LOAD, TimerLoadHandler);
     }
 
     private void OnDisable()
@@ -55,11 +47,12 @@ public class TimerManager : MonoBehaviour
         EventManager.EventUnsubscribe(EventType.LOSE, LoseHandler);
         EventManager.EventUnsubscribe(EventType.LEVEL_STARTED, LevelStart);
         EventManager.EventUnsubscribe(EventType.PAUSE_TOGGLE, TogglePause);
+        EventManager.EventUnsubscribe(EventType.TIMER_LOAD, TimerLoadHandler);
     }
     
     void Start()
     {
-        
+        EventManager.EventTrigger(EventType.TIMER_SAVE, null);
     }
 
     // Update is called once per frame
@@ -97,6 +90,7 @@ public class TimerManager : MonoBehaviour
             _bestTimers[_currentTimerInt] = _currentTimer;
             DisplayTime(_bestTimers[_currentTimerInt], _bestTimerText);
         }
+        EventManager.EventTrigger(EventType.TIMER_SAVE, _bestTimers);
     }
 
     public void LoseHandler(object data)
@@ -106,19 +100,7 @@ public class TimerManager : MonoBehaviour
 
     public void LevelStart(object data)
     {
-        int count = SceneManager.loadedSceneCount;
-
-        for (int i = 0; i < count; i++)
-        {
-            Scene scene = SceneManager.GetSceneAt(i);
-
-            if (scene.name != "Gameplay" && scene.name != "Services")
-            {
-                _currentLevel = scene;
-            }
-        }
-
-        _currentTimerInt = _currentLevel.buildIndex + 3;
+        CheckCurrentLevel();
         
         _currentTimer = 0f;
         _gameOver = false;
@@ -130,5 +112,45 @@ public class TimerManager : MonoBehaviour
     public void TogglePause(object data)
     {
         _timerPaused = !_timerPaused;
+    }
+
+    public void CheckCurrentLevel()
+    {
+        
+        int count = SceneManager.loadedSceneCount;
+
+        for (int i = 0; i < count; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+
+            if (scene.name != "Gameplay" && scene.name != "Services")
+            {
+                _currentLevel = scene;
+            }
+        }
+        
+        _currentTimerInt = _currentLevel.buildIndex - 3;
+        Debug.Log(_currentLevel.name + " " + _currentTimerInt);
+    }
+
+    public void TimerLoadHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.LogError("TimerLoadHandler is null");
+        }
+        
+        _bestTimers = (List<float>)data;
+        
+        if(_bestTimers.Count == 0)
+        {
+            int x = 3;
+            while (_numOfScenes > x)
+            {
+                
+                _bestTimers.Add(0f);
+                x++;
+            }
+        }
     }
 }

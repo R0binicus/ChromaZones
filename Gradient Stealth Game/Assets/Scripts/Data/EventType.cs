@@ -43,6 +43,10 @@ public enum EventType
     LOAD_GAME_FAILED,
     SAVE_GAME,
 
+    // Timer saing and loading to file
+    TIMER_SAVE,
+    TIMER_LOAD,
+
     // Music and sound
     SFX,
     MUSIC,
