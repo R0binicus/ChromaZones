@@ -84,11 +84,13 @@ public class TimerManager : MonoBehaviour
         {
             _bestTimers[_currentTimerInt] = _currentTimer;
             DisplayTime(_bestTimers[_currentTimerInt], _bestTimerText);
+            _bestTimerText.color = Color.HSVToRGB(210/360f, 1f, 1f);
         }
         else if (_bestTimers[_currentTimerInt] == 0f)
         {
             _bestTimers[_currentTimerInt] = _currentTimer;
             DisplayTime(_bestTimers[_currentTimerInt], _bestTimerText);
+            _bestTimerText.color = Color.HSVToRGB(210/360f, 1f, 1f);
         }
         EventManager.EventTrigger(EventType.TIMER_SAVE, _bestTimers);
     }
@@ -101,6 +103,7 @@ public class TimerManager : MonoBehaviour
     public void LevelStart(object data)
     {
         CheckCurrentLevel();
+        _bestTimerText.color = Color.HSVToRGB(210/360f, 0f, 1f);
         
         _currentTimer = 0f;
         _gameOver = false;
