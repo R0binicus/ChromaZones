@@ -232,7 +232,26 @@ public class MainMenuUIManager : MonoBehaviour
         }
 
         _loadData = (SaveData)data;
-        ConfirmBoxPopulate(false, true, _loadGameSuccessText);
+        //ConfirmBoxPopulate(false, true, _loadGameSuccessText);
+        DeactivateAllLevelButtons();
+        
+        if (_unlockAllLevels)
+        {
+            ActivateLevelButtons(_levelButtons.Count);
+        }
+        else
+        {
+            
+            if (_loadData != null)
+            {
+                ActivateLevelButtons(_loadData.LevelUnlocked);
+            }
+            else
+            {
+                Debug.LogError("Load has failed when confirming.");
+            }
+        }
+        ShowPanel(_levelSelectMenu);
     }
 
     public void LoadFailedHandler(object data)
