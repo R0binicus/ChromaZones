@@ -7,11 +7,10 @@ public class SaveData
 {
     public int LevelUnlocked;
 
-    public List<float> LevelTimers;
+    public List<float> LevelTimers = new List<float>();
 
     public SaveData()
     {
         LevelUnlocked = 1;
-        LevelTimers = new List<float>();
     }
 }

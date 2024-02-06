@@ -130,7 +130,6 @@ public class TimerManager : MonoBehaviour
         }
         
         _currentTimerInt = _currentLevel.buildIndex - 3;
-        Debug.Log(_currentLevel.name + " " + _currentTimerInt);
     }
 
     public void TimerLoadHandler(object data)

@@ -41,7 +41,6 @@ public class FileDataHandler
                 Debug.LogError("Error, cannot load from file: " + fullPath + "\n" + e);
             }
         }
-
         return saveData;
     }
 
