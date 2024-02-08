@@ -8,9 +8,6 @@ using UnityEditor;
 
 public class SceneSystemManager : MonoBehaviour
 {
-    [Header("Debugging")]
-    [SerializeField] bool _editingLevel = false;
-
     // Scene Fader
     Fader _fader;
 
@@ -65,31 +62,37 @@ public class SceneSystemManager : MonoBehaviour
     // After Services Scene is loaded in, additively load in the MainMenu scene
     private void Start()
     {
-        if (!_editingLevel)
-        {
+        #if UNITY_EDITOR // Game is in editor
+            int count = SceneManager.loadedSceneCount;
+            if (count <= 1) // If services only, load main menu
+            {
+                StartCoroutine(LoadScene(_mainMenuIndex));
+                StartCoroutine(_fader.NormalFadeIn());
+            }
+            else if (count == 2)  // If Main menu only, fade in
+            {
+                StartCoroutine(_fader.NormalFadeIn());
+            }
+            else // If a level open, set current level and fade in
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    Scene scene = SceneManager.GetSceneAt(i);
+
+                    if (scene.name != "Gameplay" && scene.name != "Services")
+                    {
+                        _currentLevel = scene;
+                    }
+                }
+
+                EventManager.EventTrigger(EventType.FADING, true);
+                EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
+                CheckLevelIndex(_currentLevel.buildIndex);
+            }
+        #else   // Game is in build
             StartCoroutine(LoadScene(_mainMenuIndex));
             StartCoroutine(_fader.NormalFadeIn());
-        }
-        // Make sure current level loaded in editor is assigned as the current level
-        else
-        {
-            int count = SceneManager.loadedSceneCount;
-
-            for (int i = 0; i < count; i++)
-            {
-                Scene scene = SceneManager.GetSceneAt(i);
-
-                if (scene.name != "Gameplay" && scene.name != "Services")
-                {
-                    _currentLevel = scene;
-                }
-            }
-
-            EventManager.EventTrigger(EventType.FADING, true);
-            EventManager.EventTrigger(EventType.LEVEL_STARTED, null);
-            CheckLevelIndex(_currentLevel.buildIndex);
-
-        }
+        #endif
     }
 
     #region Game UI Response
