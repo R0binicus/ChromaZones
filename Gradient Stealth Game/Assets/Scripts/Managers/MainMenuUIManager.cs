@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using System;
+using Unity.VisualScripting;
 
 public class MainMenuUIManager : MonoBehaviour
 {
@@ -28,6 +30,8 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] private GameObject _confirmBox;
     [SerializeField] private GameObject _cbContinueButton;
     [SerializeField] private GameObject _cbBackButton;
+    [SerializeField] private GameObject _levelContinueButton;
+    [SerializeField] private GameObject _levelBackButton;
     [SerializeField] private TextMeshProUGUI _cbText;
     [SerializeField, TextArea] private string _newGameText;
     [SerializeField, TextArea] private string _loadGameFailedText;
@@ -51,6 +55,8 @@ public class MainMenuUIManager : MonoBehaviour
     private Button[] _levelButtonsArr;
     private List<Button> _levelButtons;
     private bool _buttonPressed = false; // Stops multiple clicking of same button
+    private int _selectedLevel;
+    private List<float> _bestTimers = new List<float>();
 
     #region Init
     private void Awake()
@@ -63,12 +69,14 @@ public class MainMenuUIManager : MonoBehaviour
     {
         EventManager.EventSubscribe(EventType.LOAD_GAME_SUCCESS, LoadSuccessHandler);
         EventManager.EventSubscribe(EventType.LOAD_GAME_FAILED, LoadFailedHandler);
+        EventManager.EventSubscribe(EventType.TIMER_LOAD, TimerLoadHandler);
     }
 
     private void OnDisable()
     {
         EventManager.EventUnsubscribe(EventType.LOAD_GAME_SUCCESS, LoadSuccessHandler);
         EventManager.EventUnsubscribe(EventType.LOAD_GAME_FAILED, LoadFailedHandler);
+        EventManager.EventUnsubscribe(EventType.TIMER_LOAD, TimerLoadHandler);
     }
 
     private void Start()
@@ -156,9 +164,34 @@ public class MainMenuUIManager : MonoBehaviour
     #region Level Select Menu
     public void LevelSelectButton(int levelNum)
     {
-        if (!_buttonPressed)
+        if (_loadData != null)
+        {
+            Debug.Log(_levelButtons.Count);
+            if (levelNum < _loadData.LevelUnlocked || _levelButtons.Count == levelNum)
+            {
+                _selectedLevel = levelNum;
+                string tempText = "Your current time for Level " + levelNum + " is: " + _bestTimers[levelNum - 1] + " seconds";
+
+                ConfirmBoxPopulate(false, false, true, true, tempText);
+            }
+            else if (!_buttonPressed)
+            {
+                EventManager.EventTrigger(EventType.LEVEL_SELECTED, levelNum);
+                _buttonPressed = true;
+            }
+        }
+        else if (!_buttonPressed)
         {
             EventManager.EventTrigger(EventType.LEVEL_SELECTED, levelNum);
+            _buttonPressed = true;
+        }
+    }
+
+    public void ContinuelevelButton()
+    {
+        if (!_buttonPressed)
+        {
+            EventManager.EventTrigger(EventType.LEVEL_SELECTED, _selectedLevel);
             _buttonPressed = true;
         }
     }
@@ -216,11 +249,13 @@ public class MainMenuUIManager : MonoBehaviour
         _confirmBox.SetActive(toggle);
     }
 
-    private void ConfirmBoxPopulate(bool showBack, bool showContinue, string text)
+    private void ConfirmBoxPopulate(bool showBack, bool showContinue, bool showBack2, bool showContinue2, string text)
     {
         _cbText.text = text;
         _cbBackButton.SetActive(showBack);
         _cbContinueButton.SetActive(showContinue);
+        _levelBackButton.SetActive(showBack2);
+        _levelContinueButton.SetActive(showContinue2);
         ConfirmBoxToggle(true);
     }
 
@@ -252,18 +287,19 @@ public class MainMenuUIManager : MonoBehaviour
             }
         }
         ShowPanel(_levelSelectMenu);
+        EventManager.EventTrigger(EventType.TIMER_SAVE, null);
     }
 
     public void LoadFailedHandler(object data)
     {
         _loadData = null;
-        ConfirmBoxPopulate(true, false, _loadGameFailedText);
+        ConfirmBoxPopulate(true, false, false, false, _loadGameFailedText);
     }
 
     // Confirm box pop up for clicking on New Game button
     public void ConfirmBoxNewGame()
     {
-        ConfirmBoxPopulate(true, true, _newGameText);
+        ConfirmBoxPopulate(true, true, false, false, _newGameText);
     }
 
     // If continue is pressed when confirm box pops up, send to level select menu
@@ -281,6 +317,7 @@ public class MainMenuUIManager : MonoBehaviour
             {
                 _loadData = null;
                 EventManager.EventTrigger(EventType.NEW_GAME_REQUEST, null);
+                EventManager.EventTrigger(EventType.TIMER_SAVE, null);
                 ActivateLevelButtons(1);
             }
             else
@@ -324,6 +361,28 @@ public class MainMenuUIManager : MonoBehaviour
     public void ButtonSFX()
     {
         EventManager.EventTrigger(EventType.SFX, _buttonSFX);
+    }
+
+    public void TimerLoadHandler(object data)
+    {
+        if (data == null)
+        {
+            Debug.LogError("TimerLoadHandler is null");
+        }
+        
+        
+        _bestTimers = (List<float>)data;
+        
+        if(_bestTimers.Count == 0)
+        {
+            int x = 3;
+            while (20 > x)
+            {
+                
+                _bestTimers.Add(0f);
+                x++;
+            }
+        }
     }
     #endregion
 }

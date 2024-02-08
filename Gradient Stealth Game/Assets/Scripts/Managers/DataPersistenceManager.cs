@@ -61,8 +61,8 @@ public class DataPersistenceManager : MonoBehaviour
         }
         else
         {
-            EventManager.EventTrigger(EventType.LOAD_GAME_SUCCESS, _gameSaveData);
             _bestTimers = _gameSaveData.LevelTimers;
+            EventManager.EventTrigger(EventType.LOAD_GAME_SUCCESS, _gameSaveData);
         }
     }
 
