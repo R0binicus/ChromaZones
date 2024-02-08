@@ -10,6 +10,8 @@ public class TimerManager : MonoBehaviour
     private List<float> _bestTimers = new List<float>();
     [SerializeField] private TMP_Text _currentTimerText;
     [SerializeField] private TMP_Text _bestTimerText;
+    [SerializeField] private TMP_Text _currentTimerLabel;
+    [SerializeField] private TMP_Text _bestTimerLabel;
     private bool _timerPaused = false;
     private bool _gameOver = false;
 
@@ -80,16 +82,23 @@ public class TimerManager : MonoBehaviour
     public void WinHandler(object data)
     {
         _gameOver = true;
-        if (_currentTimer < _bestTimers[_currentTimerInt])
+        if (_bestTimers[_currentTimerInt] == 0f)
         {
+            _bestTimerLabel.text = "New Best: ";
+            _currentTimerLabel.text = "Old Best: ";
             _bestTimers[_currentTimerInt] = _currentTimer;
             DisplayTime(_bestTimers[_currentTimerInt], _bestTimerText);
+            _currentTimerText.text = "None";
             _bestTimerText.color = Color.HSVToRGB(210/360f, 1f, 1f);
         }
-        else if (_bestTimers[_currentTimerInt] == 0f)
+        else if (_currentTimer < _bestTimers[_currentTimerInt])
         {
+            _bestTimerLabel.text = "New Best: ";
+            _currentTimerLabel.text = "Old Best: ";
+            float tempBest = _bestTimers[_currentTimerInt];
             _bestTimers[_currentTimerInt] = _currentTimer;
             DisplayTime(_bestTimers[_currentTimerInt], _bestTimerText);
+            DisplayTime(tempBest, _currentTimerText);
             _bestTimerText.color = Color.HSVToRGB(210/360f, 1f, 1f);
         }
         EventManager.EventTrigger(EventType.TIMER_SAVE, _bestTimers);
@@ -104,12 +113,21 @@ public class TimerManager : MonoBehaviour
     {
         CheckCurrentLevel();
         _bestTimerText.color = Color.HSVToRGB(210/360f, 0f, 1f);
+        _currentTimerLabel.text = "Current Time: ";
+        _bestTimerLabel.text = "Best Time: ";
         
         _currentTimer = 0f;
         _gameOver = false;
         _timerPaused = false;
 
-        DisplayTime(_bestTimers[_currentTimerInt], _bestTimerText);
+        if (_bestTimers[_currentTimerInt] == 0f)
+        {
+            _bestTimerText.text = "None";
+        }
+        else
+        {
+            DisplayTime(_bestTimers[_currentTimerInt], _bestTimerText);
+        }
     }
 
     public void TogglePause(object data)

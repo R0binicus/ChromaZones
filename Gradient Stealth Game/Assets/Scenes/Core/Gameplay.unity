@@ -606,14 +606,6 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: c0815a0a01551e3448a3ea4b172135d9, type: 3}
-    - target: {fileID: 918317902019749045, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}
-      propertyPath: _bestTimerText
-      value: 
-      objectReference: {fileID: 7146949628852092634}
-    - target: {fileID: 918317902019749045, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}
-      propertyPath: _currentTimerText
-      value: 
-      objectReference: {fileID: 7146949628852092635}
     - target: {fileID: 1206393292532517581, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -670,10 +662,6 @@ PrefabInstance:
       propertyPath: _player
       value: 
       objectReference: {fileID: 556899841}
-    - target: {fileID: 2546909711317606898, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}
-      propertyPath: _killAllEnemies
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2567207626467436742, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}
       propertyPath: m_SizeDelta.x
       value: -250
@@ -1019,6 +1007,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8117084928039920401, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}
+      propertyPath: m_text
+      value: 'Current Time: '
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117084928039920401, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}
       propertyPath: m_fontSize
       value: 30
       objectReference: {fileID: 0}
@@ -1103,6 +1095,10 @@ PrefabInstance:
       value: 150.00006
       objectReference: {fileID: 0}
     - target: {fileID: 8839873249153626241, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}
+      propertyPath: m_text
+      value: 'Best Time: '
+      objectReference: {fileID: 0}
+    - target: {fileID: 8839873249153626241, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}
       propertyPath: m_fontSize
       value: 30
       objectReference: {fileID: 0}
@@ -1156,28 +1152,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7146949628852092640}
   m_SourcePrefab: {fileID: 100100000, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}
---- !u!114 &7146949628852092634 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4899643694245670132, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}
-  m_PrefabInstance: {fileID: 7146949628852092633}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7146949628852092635 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5654519142664718726, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}
-  m_PrefabInstance: {fileID: 7146949628852092633}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7146949628852092636 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3600559124588866068, guid: f75acebb1734eab41b828bb1b622cfcb, type: 3}

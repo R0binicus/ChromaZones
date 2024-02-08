@@ -166,7 +166,6 @@ public class MainMenuUIManager : MonoBehaviour
     {
         if (_loadData != null)
         {
-            Debug.Log(_levelButtons.Count);
             if (levelNum < _loadData.LevelUnlocked || _levelButtons.Count == levelNum)
             {
                 _selectedLevel = levelNum;
