@@ -26,6 +26,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
 
     // Timer
     private float _timer;
+    private bool _isRotating = false;
 
     private void Awake()
     {
@@ -85,7 +86,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
                     StopAllCoroutines();
                     StartCoroutine(Rotate());
                 }
-                else
+                else if (_isRotating == false)
                 {
                     _timer += Time.deltaTime;
                 }
@@ -121,6 +122,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
     // Patrolling rotate
     IEnumerator Rotate()
     {
+        _isRotating = true;
         Quaternion currentRot = transform.rotation;
 
         int signChange = 1;
@@ -158,6 +160,7 @@ public class EnemyRotatorBehaviour : EnemyBehaviour
             transform.rotation = _endRot;
             transform.position = _originWaypoint;
         }
+        _isRotating = false;
     }
 
     private void GetLocation(Vector2 point)
